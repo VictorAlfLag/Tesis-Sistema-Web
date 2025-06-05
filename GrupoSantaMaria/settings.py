@@ -10,12 +10,40 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SITE_ID = 1 # O el ID de tu sitio si tienes varios
 
+LOGIN_REDIRECT_URL = '/' # Donde redirigir después del login exitoso
+ACCOUNT_LOGOUT_REDIRECT_URL = '/login/' # Donde redirigir después del logout
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email' # Permite login con username o email
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False # No es necesario que los usuarios tengan un username si solo usan email
+ACCOUNT_SESSION_REMEMBER = True # Permite "recordarme"
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True # Pide confirmar contraseña al registrarse
+ACCOUNT_UNIQUE_EMAIL = True # Asegura que el email sea único
+
+# Configuraciones de Social Account (específicas para Google)
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': 'YOUR_GOOGLE_CLIENT_ID', # <-- ¡IMPORTANTE! Reemplaza con tu ID de cliente de Google
+            'secret': 'YOUR_GOOGLE_SECRET',       # <-- ¡IMPORTANTE! Reemplaza con tu secreto de cliente de Google
+            'key': ''
+        },
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -32,17 +60,27 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django.contrib.sites', 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'Aplicaciones.Principal', 
+    'Aplicaciones.Modulo1',   
+    'Aplicaciones.Modulo2', 
+    'Aplicaciones.Modulo3',   
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -77,10 +115,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'GrupoSantaMaria',
-        'USER': 'tu_usuario',         # Cambia por tu usuario de PostgreSQL
-        'PASSWORD': 'tu_contraseña',  # Cambia por tu contraseña de PostgreSQL
-        'HOST': 'localhost',          # o 127.0.0.1
-        'PORT': '5432',               # Puerto por defecto de PostgreSQL
+        'USER': 'postgres',         
+        'PASSWORD': '123456',  
+        'HOST': 'localhost',          
+        'PORT': '5432',               
     }
 }
 
@@ -102,26 +140,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+LANGUAGE_CODE = 'es-ec'
+TIME_ZONE = 'America/Guayaquil'
 USE_I18N = True
-
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'), 
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
