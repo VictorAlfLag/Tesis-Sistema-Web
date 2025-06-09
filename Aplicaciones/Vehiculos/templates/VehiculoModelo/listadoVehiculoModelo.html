@@ -1,0 +1,47 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %} 
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4">
+        <h6 class="mb-4 text-white text-center">Listado de Modelos de Vehículo</h6> 
+        
+        <div class="d-flex justify-content-center mb-3"> 
+            <a href="{% url 'nuevo_vehiculo_modelo' %}" class="btn btn-primary">Agregar Modelo de Vehículo</a> 
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover text-center" id="tbl-data"> 
+                <thead>
+                    <tr>
+                        <th>Id del Modelo</th>
+                        <th>Marca</th>
+                        <th>Nombre del Modelo</th>
+                        <th>Año Inicio Producción</th>
+                        <th>Año Fin Producción</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for modeloTemporal in vehiculo_modelos %}
+                    <tr>
+                        <td>{{ modeloTemporal.id }}</td>
+                        <td>{{ modeloTemporal.marca.nombre }}</td>
+                        <td>{{ modeloTemporal.nombre }}</td>
+                        <td>{{ modeloTemporal.anio_inicio_produccion|default:"N/A" }}</td>
+                        <td>{{ modeloTemporal.anio_fin_produccion|default:"N/A" }}</td>
+                        <td>{{ modeloTemporal.descripcion|default:"N/A" }}</td>
+                        <td>
+                            <a href="{% url 'editar_vehiculo_modelo' modeloTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_vehiculo_modelo' modeloTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar este modelo?')" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %} 
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4">
+        <h6 class="mb-4 text-white text-center">Registrar Nuevo Modelo de Vehículo</h6> 
+        
+        <form method="POST" action="{% url 'guardar_vehiculo_modelo' %}">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="marca" class="form-label text-white">Marca</label>
+                <select class="form-select" id="marca" name="marca" required>
+                    <option value="">Seleccione una marca</option>
+                    {% for marca in vehiculo_marcas %}
+                        <option value="{{ marca.id }}" {% if marca.id == marca_seleccionada %}selected{% endif %}>
+                            {{ marca.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="nombre" class="form-label text-white">Nombre del Modelo</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" 
+                       value="{{ nombre_anterior|default:'' }}" required>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="anio_inicio_produccion" class="form-label text-white">Año Inicio Producción</label>
+                    <input type="number" class="form-control" id="anio_inicio_produccion" name="anio_inicio_produccion" 
+                           value="{{ anio_inicio_anterior|default:'' }}" 
+                           min="1900" max="2100">
+                </div>
+                <div class="col-md-6">
+                    <label for="anio_fin_produccion" class="form-label text-white">Año Fin Producción</label>
+                    <input type="number" class="form-control" id="anio_fin_produccion" name="anio_fin_produccion" 
+                           value="{{ anio_fin_anterior|default:'' }}" 
+                           min="1900" max="2100">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="descripcion" class="form-label text-white">Descripción del Modelo</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" rows="3">{{ descripcion_anterior|default:'' }}</textarea>
+            </div>
+
+            <div class="d-flex justify-content-center mt-4">
+                <button type="submit" class="btn btn-success me-2">Guardar Modelo</button>
+                <a href="{% url 'listado_vehiculo_modelo' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

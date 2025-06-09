@@ -1,0 +1,45 @@
+{% extends "plantilla_admin.html" %}
+{% block body %}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4 mb-4">
+        <div class="card-title text-center">
+            <h3 class="mb-0 text-white"><b>Nuevo Tipo de Parte de Vehículo</b></h3>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="bg-secondary rounded p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'guardar_tipo_parte_vehiculo' %}" method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label text-white">Nombre:</label>
+                        <input type="text" name="nombre" class="form-control" id="nombre" 
+                               placeholder="Ingrese el nombre del tipo de parte de vehículo" 
+                               value="{{ nombre_anterior|default:'' }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label text-white">Descripción:</label>
+                        <textarea name="descripcion" id="descripcion" class="form-control" rows="3" 
+                                 placeholder="Ingrese la descripción">{{ descripcion_anterior|default:'' }}</textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-danger me-2">Guardar</button>
+                    <a href="{% url 'listado_tipos_parte_vehiculo' %}" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

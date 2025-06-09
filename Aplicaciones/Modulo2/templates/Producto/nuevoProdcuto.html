@@ -1,0 +1,126 @@
+{% extends "plantilla_admin.html" %}
+{% block body %}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4 mb-4">
+        <div class="card-title text-center">
+            <h3 class="mb-0 text-white"><b>Nuevo Producto</b></h3>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="bg-secondary rounded p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'guardar_producto' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label text-white">Nombre:</label>
+                        <input type="text" name="nombre" class="form-control" id="nombre" 
+                               placeholder="Ingrese el nombre del producto" 
+                               value="{{ nombre_anterior|default:'' }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label text-white">Descripción:</label>
+                        <textarea name="descripcion" id="descripcion" class="form-control" rows="3" 
+                                 placeholder="Ingrese la descripción detallada del producto">{{ descripcion_anterior|default:'' }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="precio" class="form-label text-white">Precio Unitario:</label>
+                        <input type="number" name="precio" class="form-control" id="precio" 
+                               placeholder="Ingrese el precio" step="0.01" min="0.01"
+                               value="{{ precio_anterior|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="stock" class="form-label text-white">Cantidad en Stock:</label>
+                        <input type="number" name="stock" class="form-control" id="stock" 
+                               placeholder="Ingrese la cantidad en stock" min="0"
+                               value="{{ stock_anterior|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="sku" class="form-label text-white">SKU:</label>
+                        <input type="text" name="sku" class="form-control" id="sku" 
+                               placeholder="Ingrese el SKU (opcional)" 
+                               value="{{ sku_anterior|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="marca_fabricante" class="form-label text-white">Marca del Fabricante:</label>
+                        <input type="text" name="marca_fabricante" class="form-control" id="marca_fabricante" 
+                               placeholder="Ej: Bosch, Brembo, NGK (opcional)" 
+                               value="{{ marca_fabricante_anterior|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categoria" class="form-label text-white">Categoría:</label>
+                        <select name="categoria" id="categoria" class="form-select">
+                            <option value="">Seleccione una categoría</option>
+                            {% for cat in categorias %}
+                                <option value="{{ cat.id }}" {% if cat.id == categoria_seleccionada %}selected{% endif %}>{{ cat.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="tipo_parte" class="form-label text-white">Tipo de Parte de Vehículo:</label>
+                        <select name="tipo_parte" id="tipo_parte" class="form-select">
+                            <option value="">Seleccione un tipo de parte</option>
+                            {% for tp in tipos_parte %}
+                                <option value="{{ tp.id }}" {% if tp.id == tipo_parte_seleccionado %}selected{% endif %}>{{ tp.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="compatibilidad_marcas" class="form-label text-white">Marcas Compatibles:</label>
+                        <select name="compatibilidad_marcas" id="compatibilidad_marcas" class="form-select" multiple>
+                            {% for marca in vehiculo_marcas %}
+                                <option value="{{ marca.id }}" {% if marca.id in compatibilidad_marcas_seleccionadas %}selected{% endif %}>{{ marca.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="compatibilidad_modelos" class="form-label text-white">Modelos Compatibles:</label>
+                        <select name="compatibilidad_modelos" id="compatibilidad_modelos" class="form-select" multiple>
+                            {% for modelo in vehiculo_modelos %}
+                                <option value="{{ modelo.id }}" {% if modelo.id in compatibilidad_modelos_seleccionados %}selected{% endif %}>{{ modelo.nombre }} ({{ modelo.marca.nombre }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="tipo_motor_compatible" class="form-label text-white">Tipo de Motor Compatible:</label>
+                        <select name="tipo_motor_compatible" id="tipo_motor_compatible" class="form-select">
+                            <option value="">Seleccione el tipo de motor</option>
+                            {% for choice_value, choice_label in tipo_motor_choices %}
+                                <option value="{{ choice_value }}" {% if choice_value == tipo_motor_compatible_seleccionado %}selected{% endif %}>{{ choice_label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="activo" class="form-check-input" id="activo" {% if activo_anterior %}checked{% endif %}>
+                        <label class="form-check-label text-white" for="activo">Producto Activo</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-danger me-2">Guardar</button>
+                    <a href="{% url 'listado_productos' %}" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

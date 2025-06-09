@@ -1,0 +1,51 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %} 
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4">
+        <h6 class="mb-4 text-white text-center">Listado de Imágenes de Productos</h6> 
+        
+        <div class="d-flex justify-content-center mb-3"> 
+            <a href="{% url 'nueva_imagen_producto' %}" class="btn btn-primary">Agregar Imagen de Producto</a> 
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover text-center" id="tbl-data"> 
+                <thead>
+                    <tr>
+                        <th>Id de la Imagen</th>
+                        <th>Producto</th>
+                        <th>Imagen</th>
+                        <th>Es Principal</th>
+                        <th>Orden</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for imagenTemporal in imagenes_producto %}
+                    <tr>
+                        <td>{{ imagenTemporal.id }}</td>
+                        <td>{{ imagenTemporal.producto.nombre }}</td>
+                        <td>
+                            {% if imagenTemporal.imagen %}
+                                <img src="{{ imagenTemporal.imagen.url }}" alt="Imagen de {{ imagenTemporal.producto.nombre }}" style="max-width: 100px; max-height: 100px;">
+                            {% else %}
+                                Sin Imagen
+                            {% endif %}
+                        </td>
+                        <td>{% if imagenTemporal.es_principal %}Sí{% else %}No{% endif %}</td>
+                        <td>{{ imagenTemporal.orden|default:"N/A" }}</td>
+                        <td>
+                            <a href="{% url 'editar_imagen_producto' imagenTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_imagen_producto' imagenTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

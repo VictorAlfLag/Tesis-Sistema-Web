@@ -4,93 +4,88 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido - Iniciar Sesión / Registro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}"> 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido - Iniciar Sesión / Registro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet" href="/static/css/styles.css"> 
 </head>
 <body>
-    <div class="video-background">
-        <video autoplay muted loop id="bgVideo">
-                        <source src="{% static 'media/your_video.mp4' %}" type="video/mp4"> 
-            Tu navegador no soporta video.
-        </video>
-        <div class="video-overlay"></div> </div>
-
-    <div class="container" id="container">
-        <div class="form-container sign-up-container">
-            <form action="#" method="post">
-                <h1>¡Crea una Cuenta!</h1>
-                <div class="social-login">
-                    <div id="g_id_onload"
-                        data-client_id="YOUR_GOOGLE_CLIENT_ID" {# Replace with your actual Google Client ID #}
-                        data-context="signup"
-                        data-callback="handleCredentialResponse"
-                        data-auto_prompt="false">
-                    </div>
-                    <div class="g_id_signin"
-                        data-type="standard"
-                        data-shape="pill"
-                        data-theme="outline"
-                        data-text="continue_with"
-                        data-size="large"
-                        data-locale="es">
-                    </div>
-                </div>
-                <span>o usa tu correo electrónico para registrarte</span>
-                <input type="text" placeholder="Nombre" required />
-                <input type="email" placeholder="Correo electrónico" required />
-                <input type="password" placeholder="Contraseña" required />
-                <button type="submit">Regístrate</button>
-            </form>
-        </div>
-
-        <div class="form-container sign-in-container">
-            <form action="#" method="post">
-                <h1>Iniciar Sesión</h1>
-                <div class="social-login">
-                    <div id="g_id_onload"
-                        data-client_id="YOUR_GOOGLE_CLIENT_ID" {# Replace with your actual Google Client ID #}
-                        data-context="signin"
-                        data-callback="handleCredentialResponse"
-                        data-auto_prompt="false">
-                    </div>
-                    <div class="g_id_signin"
-                        data-type="standard"
-                        data-shape="pill"
-                        data-theme="outline"
-                        data-text="sign_in_with"
-                        data-size="large"
-                        data-locale="es">
-                    </div>
-                </div>
-                <span>o usa tu cuenta</span>
-                <input type="email" placeholder="Correo electrónico" required />
-                <input type="password" placeholder="Contraseña" required />
-                <a href="#">¿Olvidaste tu contraseña?</a>
-                <button type="submit">Iniciar Sesión</button>
-            </form>
-        </div>
-
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>¡Bienvenido de nuevo!</h1>
-                    <p>Para mantenerte conectado con nosotros, por favor inicia sesión con tu cuenta personal.</p>
-                    <button class="ghost" id="signIn">Iniciar Sesión</button>
-                </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>¡Hola, amigo!</h1>
-                    <p>Ingresa tus datos personales y comienza tu viaje con nosotros.</p>
-                    <button class="ghost" id="signUp">Regístrate</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="{% static 'js/main.js' %}"></script>
+    <div class="video-background">
+        <video autoplay muted loop id="bgVideo">
+            <source src="your_video.mp4" type="video/mp4">
+            Tu navegador no soporta video.
+        </video>
+        <div class="video-overlay"></div> </div>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="#" method="post">
+                <h1>¡Crea una Cuenta!</h1>
+                <div class="social-login">
+                    <div id="g_id_onload"
+                        data-client_id="YOUR_GOOGLE_CLIENT_ID" {# Replace with your actual Google Client ID #}
+                        data-context="signup"
+                        data-callback="handleCredentialResponse"
+                        data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin"
+                        data-type="standard"
+                        data-shape="pill"
+                        data-theme="outline"
+                        data-text="continue_with"
+                        data-size="large"
+                        data-locale="es">
+                    </div>
+                </div>
+                <span>o usa tu correo electrónico para registrarte</span>
+                <input type="text" placeholder="Nombre" required />
+                <input type="email" placeholder="Correo electrónico" required />
+                <input type="password" placeholder="Contraseña" required />
+                <button type="submit">Regístrate</button>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form action="#" method="post">
+                <h1>Iniciar Sesión</h1>
+                <div class="social-login">
+                    <div id="g_id_onload"
+                        data-client_id="YOUR_GOOGLE_CLIENT_ID" {# Replace with your actual Google Client ID #}
+                        data-context="signin"
+                        data-callback="handleCredentialResponse"
+                        data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin"
+                        data-type="standard"
+                        data-shape="pill"
+                        data-theme="outline"
+                        data-text="sign_in_with"
+                        data-size="large"
+                        data-locale="es">
+                    </div>
+                </div>
+                <span>o usa tu cuenta</span>
+                <input type="email" placeholder="Correo electrónico" required />
+                <input type="password" placeholder="Contraseña" required />
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                <button type="submit">Iniciar Sesión</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>¡Bienvenido de nuevo!</h1>
+                    <p>Para mantenerte conectado con nosotros, por favor inicia sesión con tu cuenta personal.</p>
+                    <button class="ghost" id="signIn">Iniciar Sesión</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>¡Hola, amigo!</h1>
+                    <p>Ingresa tus datos personales y comienza tu viaje con nosotros.</p>
+                    <button class="ghost" id="signUp">Regístrate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

@@ -1,16 +1,17 @@
+// Este es el contenido de GrupoSantaMaria/GrupoSantaMaria/static/js/main.js
 
-        const signUpButton = document.getElementById('signUp');
-        const signInButton = document.getElementById('signIn');
-        const container = document.getElementById('container');
+const signUpButton = document.getElementById('signUp');
+const signInButton = document.getElementById('signIn');
+const container = document.getElementById('container');
 
-        signUpButton.addEventListener('click', () => {
-            container.classList.add("right-panel-active");
-        });
+signUpButton.addEventListener('click', () => {
+    container.classList.add("right-panel-active");
+});
 
-        signInButton.addEventListener('click', () => {
-            container.classList.remove("right-panel-active");
-        });
+signInButton.addEventListener('click', () => {
+    container.classList.remove("right-panel-active");
+});
 
-        function handleCredentialResponse(response) {
-            console.log("Google ID Token: " + response.credential);
-        }
+function handleCredentialResponse(response) {
+    console.log("Google ID Token: " + response.credential);
+}

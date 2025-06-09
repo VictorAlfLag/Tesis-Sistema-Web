@@ -1,0 +1,53 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %} 
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4">
+        <h6 class="mb-4 text-white text-center">Listado de Productos</h6> 
+        
+        <div class="d-flex justify-content-center mb-3"> 
+            <a href="{% url 'nuevo_producto' %}" class="btn btn-primary">Agregar Producto</a> 
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover text-center" id="tbl-data"> 
+                <thead>
+                    <tr>
+                        <th>Id del Producto</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Categoría</th>
+                        <th>Tipo de Parte</th>
+                        <th>Marca Fabricante</th>
+                        <th>SKU</th>
+                        <th>Activo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for productoTemporal in productos %}
+                    <tr>
+                        <td>{{ productoTemporal.id }}</td>
+                        <td>{{ productoTemporal.nombre }}</td>
+                        <td>${{ productoTemporal.precio|floatformat:2 }}</td>
+                        <td>{{ productoTemporal.stock }}</td>
+                        <td>{{ productoTemporal.categoria.nombre|default:"N/A" }}</td>
+                        <td>{{ productoTemporal.tipo_parte.nombre|default:"N/A" }}</td>
+                        <td>{{ productoTemporal.marca_fabricante|default:"N/A" }}</td>
+                        <td>{{ productoTemporal.sku|default:"N/A" }}</td>
+                        <td>{% if productoTemporal.activo %}Sí{% else %}No{% endif %}</td>
+                        <td>
+                            <a href="{% url 'editar_producto' productoTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_producto' productoTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
