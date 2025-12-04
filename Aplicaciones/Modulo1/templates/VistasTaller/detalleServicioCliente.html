@@ -1,0 +1,191 @@
+{% extends "plantilla.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="row g-5">
+            <div class="col-lg-8">
+                <h1 class="display-4 mb-4 text-primary">{{ servicio.nombre_sem_mod1 }}</h1>
+                <div class="mb-4">
+                    <h3>Precio de Referencia: <strong class="text-secondary">${{ servicio.precio_referencia_sem_mod1|floatformat:2 }}</strong></h3>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><i class="fa fa-wrench text-primary me-2"></i> <strong>Tipo de Mantenimiento:</strong> {{ servicio.tipo_mantenimiento_sem_mod1.nombre_tim_mod1|default:"N/A" }}</p>
+                        <p><i class="fa fa-clock text-primary me-2"></i> <strong>Duración Estimada:</strong> {{ servicio.duracion_estimada_horas_sem_mod1 }} horas</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><i class="fa fa-check-circle text-primary me-2"></i> <strong>Activo:</strong> 
+                            {% if servicio.activo_sem_mod1 %}
+                                <span class="badge bg-success">Sí</span>
+                            {% else %}
+                                <span class="badge bg-danger">No</span>
+                            {% endif %}
+                        </p>
+                        <p><i class="fa fa-id-card text-primary me-2"></i> <strong>ID Servicio:</strong> {{ servicio.id }}</p>
+                    </div>
+                </div>
+                <p class="mb-4">
+                    <strong>Descripción Corta:</strong>
+                    {% if servicio.descripcion_corta_sem_mod1 %}
+                        {{ servicio.descripcion_corta_sem_mod1|linebreaksbr }}
+                    {% else %}
+                        No hay una descripción corta disponible para este servicio.
+                    {% endif %}
+                </p>
+
+                ---
+                <h4 class="mb-3">Galería de Imágenes del Servicio</h4>
+                <div class="row g-3">
+                    {% for imagen in imagenes_del_servicio %}
+                        <div class="col-sm-6 col-md-4 col-lg-3">
+                            <a href="{{ imagen.imagen_ims_mod1.url }}" target="_blank">
+                                <img src="{{ imagen.imagen_ims_mod1.url }}" class="img-fluid rounded shadow-sm" alt="Imagen de {{ servicio.nombre_sem_mod1 }}">
+                            </a>
+                            {% if imagen.es_principal_ims_mod1 %}
+                                <p class="text-center mt-1"><span class="badge bg-primary">Imagen Principal</span></p>
+                            {% endif %}
+                        </div>
+                    {% empty %}
+                        <div class="col-12">
+                            <p class="text-secondary">No hay imágenes disponibles para este servicio.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <hr class="my-5">
+                <div class="d-flex justify-content-start mt-5">
+                    <a href="{% url 'login_register_slider' %}" onclick="return confirm('¿Está seguro de registrarse para agendar este servicio?')" class="btn btn-primary btn-lg me-3">
+                        <span class="me-2">Agendar este Servicio</span> <i class="fa fa-calendar-check"></i>
+                    </a>
+                    <a href="" class="btn btn-secondary btn-lg"> 
+                        <span class="me-2">Volver al Catálogo</span> <i class="fa fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="bg-light rounded p-4 shadow-sm">
+                    <h5 class="mb-4">Información Adicional del Servicio</h5>
+                    <p><strong>Fecha de Creación:</strong> {{ servicio.fecha_creacion_sem_mod1|date:"d M Y H:i" }}</p>
+                    <p><strong>Última Actualización:</strong> {{ servicio.fecha_actualizacion_sem_mod1|date:"d M Y H:i" }}</p>
+                    <hr>
+                    <p class="mb-0 text-muted">¿Interesado? ¡Contáctanos para agendar tu mantenimiento!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- JavaScript for Service Features Section (similar to original vehicle detail) ---
+        const itemsPerPageSelectFeatures = document.getElementById('entries_per_page_features');
+        const searchInputFeatures = document.getElementById('search_input_features');
+        const cardsContainerFeatures = document.getElementById('feature_cards_container');
+        const cardsFeatures = Array.from(cardsContainerFeatures.getElementsByClassName('col-md-6'));
+        const paginationInfoFeatures = document.getElementById('pagination_info_features');
+        const prevButtonFeatures = document.getElementById('prev_page_btn_features');
+        const nextButtonFeatures = document.getElementById('next_page_btn_features');
+        const pageNumbersContainerFeatures = document.getElementById('page_numbers_features');
+        let currentPageFeatures = 1;
+        let itemsPerPageFeatures = parseInt(itemsPerPageSelectFeatures.value);
+
+        function filterAndPaginateFeatures() {
+            const searchTerm = searchInputFeatures.value.toLowerCase().trim();
+            const filteredCards = cardsFeatures.filter(card => {
+                const cardText = card.getAttribute('data-search-term');
+                return cardText.includes(searchTerm);
+            });
+            const totalItems = filteredCards.length;
+            const totalPages = itemsPerPageFeatures === -1 ? 1 : Math.ceil(totalItems / itemsPerPageFeatures);
+            
+            if (currentPageFeatures > totalPages && totalPages > 0) {
+                currentPageFeatures = totalPages;
+            } else if (totalPages === 0) {
+                currentPageFeatures = 1;
+            }
+
+            const startIndex = itemsPerPageFeatures === -1 ? 0 : (currentPageFeatures - 1) * itemsPerPageFeatures;
+            const endIndex = itemsPerPageFeatures === -1 ? totalItems : Math.min(startIndex + itemsPerPageFeatures, totalItems);
+            
+            cardsFeatures.forEach(card => card.style.display = 'none'); 
+            for (let i = 0; i < filteredCards.length; i++) {
+                if (itemsPerPageFeatures === -1 || (i >= startIndex && i < endIndex)) {
+                    filteredCards[i].style.display = ''; 
+                } else {
+                    filteredCards[i].style.display = 'none';
+                }
+            }
+            
+            if (totalItems === 0) {
+                paginationInfoFeatures.textContent = "Mostrando 0 a 0 de 0 entradas";
+            } else {
+                paginationInfoFeatures.textContent = `Mostrando ${startIndex + 1} a ${endIndex} de ${totalItems} entradas`;
+            }
+            updatePaginationControlsFeatures(totalPages);
+        }
+
+        function updatePaginationControlsFeatures(totalPages) {
+            pageNumbersContainerFeatures.innerHTML = ''; 
+            prevButtonFeatures.classList.toggle('disabled', currentPageFeatures === 1 || totalPages === 0);
+            nextButtonFeatures.classList.toggle('disabled', currentPageFeatures === totalPages || totalPages === 0);
+            
+            if (totalPages > 0) {
+                for (let i = 1; i <= totalPages; i++) {
+                    const li = document.createElement('li');
+                    li.classList.add('paginate_button', 'page-item');
+                    if (i === currentPageFeatures) {
+                        li.classList.add('active');
+                    }
+                    const a = document.createElement('a');
+                    a.href = "#";
+                    a.classList.add('page-link');
+                    a.textContent = i;
+                    a.dataset.page = i;
+                    a.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        currentPageFeatures = parseInt(this.dataset.page);
+                        filterAndPaginateFeatures();
+                    });
+                    li.appendChild(a);
+                    pageNumbersContainerFeatures.appendChild(li);
+                }
+            }
+        }
+
+        itemsPerPageSelectFeatures.addEventListener('change', function() {
+            itemsPerPageFeatures = parseInt(this.value);
+            currentPageFeatures = 1; 
+            filterAndPaginateFeatures();
+        });
+
+        searchInputFeatures.addEventListener('keyup', filterAndPaginateFeatures);
+
+        prevButtonFeatures.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (currentPageFeatures > 1) {
+                currentPageFeatures--;
+                filterAndPaginateFeatures();
+            }
+        });
+
+        nextButtonFeatures.addEventListener('click', function(e) {
+            e.preventDefault();
+            const totalItems = cardsFeatures.filter(card => {
+                const cardText = card.getAttribute('data-search-term');
+                return cardText.includes(searchInputFeatures.value.toLowerCase().trim());
+            }).length;
+            const totalPages = itemsPerPageFeatures === -1 ? 1 : Math.ceil(totalItems / itemsPerPageFeatures);
+            if (currentPageFeatures < totalPages) {
+                currentPageFeatures++;
+                filterAndPaginateFeatures();
+            }
+        });
+
+        filterAndPaginateFeatures();
+    });
+</script>
+{% endblock %}

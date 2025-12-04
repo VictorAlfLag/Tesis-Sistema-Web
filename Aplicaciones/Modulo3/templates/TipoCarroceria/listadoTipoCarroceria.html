@@ -1,0 +1,39 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %} 
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4">
+        <h6 class="mb-4 text-white text-center">Listado de Tipos de Carrocería</h6> 
+        
+        <div class="d-flex justify-content-center mb-3"> 
+            <a href="{% url 'nuevo_tipo_carroceria' %}" class="btn btn-primary">Agregar Tipo de Carrocería</a> 
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover text-center" id="tbl-data-tipo-carroceria"> 
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre del Tipo de Carrocería</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tipoCarroceriaTemporal in tipos_carroceria %}
+                    <tr>
+                        <td>{{ tipoCarroceriaTemporal.id }}</td>
+                        <td>{{ tipoCarroceriaTemporal.nombre }}</td>
+                        <td>
+                            <a href="{% url 'editar_tipo_carroceria' tipoCarroceriaTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_tipo_carroceria' tipoCarroceriaTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar este tipo de carrocería?')" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

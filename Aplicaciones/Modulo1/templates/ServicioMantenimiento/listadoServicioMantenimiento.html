@@ -1,0 +1,51 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4">
+        <h6 class="mb-4 text-white text-center">Listado de Servicios de Mantenimiento</h6>
+
+        <div class="d-flex justify-content-center mb-3">
+            <a href="{% url 'nuevo_servicio_mantenimiento' %}" class="btn btn-primary">Agregar Servicio de Mantenimiento</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover text-center" id="tbl-data">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre del Servicio</th>
+                        <th>Descripción Corta</th>
+                        <th>Precio de Referencia</th>
+                        <th>Duración Estimada (horas)</th>
+                        <th>Tipo de Mantenimiento</th>
+                        <th>Activo</th> 
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for servicioMantenimientoTemporal in servicios_mantenimiento %}
+                    <tr>
+                        <td>{{ servicioMantenimientoTemporal.id }}</td>
+                        <td>{{ servicioMantenimientoTemporal.nombre_sem_mod1 }}</td>
+                        <td>{{ servicioMantenimientoTemporal.descripcion_corta_sem_mod1 }}</td>
+                        <td>${{ servicioMantenimientoTemporal.precio_referencia_sem_mod1 }}</td>
+                        <td>{{ servicioMantenimientoTemporal.duracion_estimada_horas_sem_mod1 }}</td>
+                        {# Accediendo al nombre del TipoMantenimiento a través de la relación #}
+                        <td>{{ servicioMantenimientoTemporal.tipo_mantenimiento_sem_mod1.nombre_tim_mod1 }}</td>
+                        {# Muestra el valor directo del campo 'activo_sem_mod1' #}
+                        <td>{{ servicioMantenimientoTemporal.activo_sem_mod1|capfirst }}</td> {# 'activo' -> 'Activo', 'inactivo' -> 'Inactivo' #}
+                        <td>
+                            <a href="{% url 'editar_servicio_mantenimiento' servicioMantenimientoTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_servicio_mantenimiento' servicioMantenimientoTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

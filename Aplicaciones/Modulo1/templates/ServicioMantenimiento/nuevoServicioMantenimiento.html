@@ -1,0 +1,121 @@
+{% extends "plantilla_admin.html" %}
+{% block body %}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4 mb-4">
+        <div class="card-title text-center">
+            <h3 class="mb-0 text-white"><b>Nuevo Servicio de Mantenimiento</b></h3>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="bg-secondary rounded p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'guardar_servicio_mantenimiento' %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label text-white">Nombre del Servicio:</label>
+                        <input type="text" name="nombre" class="form-control" id="nombre"
+                               placeholder="Ingrese el nombre del servicio"
+                               value="{{ nombre_anterior|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion_corta" class="form-label text-white">Descripción Corta del Servicio:</label>
+                        <textarea name="descripcion_corta" id="descripcion_corta" class="form-control" rows="2"
+                                  placeholder="Ingrese una descripción corta del servicio">{{ descripcion_corta_anterior|default:'' }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion_larga" class="form-label text-white">Descripción Detallada del Servicio:</label>
+                        <textarea name="descripcion_larga" id="descripcion_larga" class="form-control" rows="5"
+                                  placeholder="Ingrese una descripción detallada del servicio" required>{{ descripcion_larga_anterior|default:'' }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="precio_referencia" class="form-label text-white">Precio de Referencia/Desde:</label>
+                        <input type="number" step="0.01" name="precio_referencia" class="form-control" id="precio_referencia"
+                               placeholder="Ej: 50.00" min="0.01" value="{{ precio_referencia_anterior|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="duracion_estimada_horas" class="form-label text-white">Duración Estimada (horas):</label>
+                        <input type="number" step="0.1" name="duracion_estimada_horas" class="form-control" id="duracion_estimada_horas"
+                               placeholder="Ej: 2.5" min="0.1" value="{{ duracion_estimada_horas_anterior|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="tipo_mantenimiento" class="form-label text-white">Tipo de Mantenimiento:</label>
+                        <select name="tipo_mantenimiento" id="tipo_mantenimiento" class="form-select" required>
+                            <option value="">Seleccione un tipo de mantenimiento</option>
+                            {% for tipo in tipos_mantenimiento_disponibles %}
+                                <option value="{{ tipo.id }}" {% if tipo.id|stringformat:"s" == tipo_mantenimiento_anterior|default:'' %}selected{% endif %}>
+                                    {{ tipo.nombre_tim_mod1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="compatibilidad_marcas" class="form-label text-white">Marcas Compatibles:</label>
+                        <select name="compatibilidad_marcas" id="compatibilidad_marcas" class="form-select" multiple>
+                            {% for marca in marcas_disponibles %}
+                                <option value="{{ marca.id }}" {% if marca.id|stringformat:"s" in compatibilidad_marcas_anterior|default:'' %}selected{% endif %}>
+                                    {{ marca.nombre }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-white-50">Mantén 'Ctrl' (Windows) o 'Cmd' (Mac) para seleccionar múltiples.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="compatibilidad_modelos" class="form-label text-white">Modelos Compatibles:</label>
+                        <select name="compatibilidad_modelos" id="compatibilidad_modelos" class="form-select" multiple>
+                            {% for modelo in modelos_disponibles %}
+                                <option value="{{ modelo.id }}" {% if modelo.id|stringformat:"s" in compatibilidad_modelos_anterior|default:'' %}selected{% endif %}>
+                                    {{ modelo.nombre }} ({{ modelo.marca.nombre }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-white-50">Mantén 'Ctrl' (Windows) o 'Cmd' (Mac) para seleccionar múltiples.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="caracteristicas_detalladas" class="form-label text-white">Características Detalladas:</label>
+                        <select name="caracteristicas_detalladas" id="caracteristicas_detalladas" class="form-select" multiple>
+                            {% for caracteristica in caracteristicas_disponibles %}
+                                <option value="{{ caracteristica.id }}" {% if caracteristica.id|stringformat:"s" in caracteristicas_detalladas_anterior|default:'' %}selected{% endif %}>
+                                    {{ caracteristica.nombre_cas_mod1 }} {# CORRECCIÓN: Accede al nombre correcto de CaracteristicaServicio #}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-white-50">Mantén 'Ctrl' (Windows) o 'Cmd' (Mac) para seleccionar múltiples.</small>
+                    </div>
+
+                    {# Cambiamos el checkbox por un select para el estado 'Activo'/'Inactivo' #}
+                    <div class="mb-3">
+                        <label for="activo_sem_mod1" class="form-label text-white">Estado del Servicio en Catálogo:</label>
+                        <select name="activo_sem_mod1" id="activo_sem_mod1" class="form-select">
+                            <option value="activo" {% if activo_anterior == 'activo' %}selected{% endif %}>Activo</option>
+                            <option value="inactivo" {% if activo_anterior == 'inactivo' %}selected{% endif %}>Inactivo</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger me-2">Guardar</button>
+                    <a href="{% url 'listado_servicio_mantenimiento' %}" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

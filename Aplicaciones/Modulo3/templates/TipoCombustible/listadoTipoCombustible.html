@@ -1,0 +1,39 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %} 
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4">
+        <h6 class="mb-4 text-white text-center">Listado de Tipos de Combustible</h6> 
+        
+        <div class="d-flex justify-content-center mb-3"> 
+            <a href="{% url 'nuevo_tipo_combustible' %}" class="btn btn-primary">Agregar Tipo de Combustible</a> 
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover text-center" id="tbl-data-tipo-combustible"> 
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre del Tipo de Combustible</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tipoCombustibleTemporal in tipos_combustible %}
+                    <tr>
+                        <td>{{ tipoCombustibleTemporal.id }}</td>
+                        <td>{{ tipoCombustibleTemporal.nombre }}</td>
+                        <td>
+                            <a href="{% url 'editar_tipo_combustible' tipoCombustibleTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_tipo_combustible' tipoCombustibleTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar este tipo de combustible?')" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

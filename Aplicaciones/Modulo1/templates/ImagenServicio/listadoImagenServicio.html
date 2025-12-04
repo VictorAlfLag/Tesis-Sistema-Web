@@ -1,0 +1,64 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4">
+        <h6 class="mb-4 text-white text-center">Listado de Imágenes de Servicios</h6>
+
+        <div class="d-flex justify-content-center mb-3">
+            <a href="{% url 'nueva_imagen_servicio' %}" class="btn btn-primary">Agregar Imagen de Servicio</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover text-center" id="tbl-data">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Servicio</th>
+                        <th>Imagen</th>
+                        <th>Descripción</th>
+                        <th>Es Principal</th>
+                        <th>Orden</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for imagenServicioTemporal in imagenes_servicio %}
+                    <tr>
+                        <td>{{ imagenServicioTemporal.id }}</td>
+                        {# CORRECCIÓN AQUÍ: Usar servicio_ims_mod1 y nombre_sem_mod1 #}
+                        <td>{{ imagenServicioTemporal.servicio_ims_mod1.nombre_sem_mod1 }}</td> 
+                        <td>
+                            {# CORRECCIÓN AQUÍ: Usar imagen_ims_mod1.url y descripcion_ims_mod1 #}
+                            {% if imagenServicioTemporal.imagen_ims_mod1 %}
+                                <img src="{{ imagenServicioTemporal.imagen_ims_mod1.url }}" alt="{{ imagenServicioTemporal.descripcion_ims_mod1 }}" style="max-width: 100px; max-height: 100px;">
+                            {% else %}
+                                No hay imagen
+                            {% endif %}
+                        </td>
+                        {# CORRECCIÓN AQUÍ: Usar descripcion_ims_mod1 #}
+                        <td>{{ imagenServicioTemporal.descripcion_ims_mod1 }}</td>
+                        <td>
+                            {# CORRECCIÓN AQUÍ: Usar es_principal_ims_mod1 #}
+                            {% if imagenServicioTemporal.es_principal_ims_mod1 %}
+                                Sí
+                            {% else %}
+                                No
+                            {% endif %}
+                        </td>
+                        {# CORRECCIÓN AQUÍ: Usar orden_ims_mod1 #}
+                        <td>{{ imagenServicioTemporal.orden_ims_mod1 }}</td>
+                        <td>
+                            <a href="{% url 'editar_imagen_servicio' imagenServicioTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_imagen_servicio' imagenServicioTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

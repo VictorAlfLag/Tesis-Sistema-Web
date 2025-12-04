@@ -1,0 +1,62 @@
+{% extends "plantilla_admin.html" %}
+{% block body %}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4 mb-4">
+        <div class="card-title text-center">
+            <h3 class="mb-0 text-white"><b>Nuevo Tipo de Mantenimiento</b></h3>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="bg-secondary rounded p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'guardar_tipo_mantenimiento' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="nombre_tim_mod1" class="form-label text-white">Nombre:</label>
+                        <input type="text" name="nombre_tim_mod1" class="form-control" id="nombre_tim_mod1"
+                               placeholder="Ingrese el nombre del tipo de mantenimiento"
+                               value="{{ nombre_anterior|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion_corta_tim_mod1" class="form-label text-white">Descripción Corta:</label>
+                        <textarea name="descripcion_corta_tim_mod1" id="descripcion_corta_tim_mod1" class="form-control" rows="3"
+                                  placeholder="Ingrese una descripción corta">{{ descripcion_corta_anterior|default:'' }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="imagen_destacada_tim_mod1" class="form-label text-white">Imagen Destacada del Tipo:</label>
+                        <input type="file" name="imagen_destacada_tim_mod1" class="form-control bg-dark text-white" id="imagen_destacada_tim_mod1">
+                        {% if imagen_destacada_anterior %}
+                            <small class="text-white-50 mt-2">Archivo seleccionado anteriormente: {{ imagen_destacada_anterior.name }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="activo_tim_mod1" class="form-label text-white">Estado del Tipo de Mantenimiento:</label>
+                        <select name="activo_tim_mod1" id="activo_tim_mod1" class="form-select bg-dark text-white">
+                            <option value="activo" {% if activo_anterior == 'activo' %}selected{% endif %}>Activo</option>
+                            <option value="inactivo" {% if activo_anterior == 'inactivo' %}selected{% endif %}>Inactivo</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger me-2">Guardar</button>
+                    <a href="{% url 'listado_tipo_mantenimiento' %}" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

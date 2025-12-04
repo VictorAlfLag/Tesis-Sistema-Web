@@ -1,0 +1,92 @@
+{% extends "plantilla.html" %}
+
+{% block body %}
+
+<div class="container-fluid blog py-5">
+    <div class="container py-5">
+        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+            <h4 class="text-primary">Nuestros Tipos de Mantenimiento</h4>
+            <h1 class="display-4 mb-4">Descubre nuestros servicios de mantenimiento</h1>
+            <p class="mb-0">Explora los diferentes tipos de mantenimiento que ofrecemos para asegurar el óptimo funcionamiento de tus sistemas y equipos.</p>
+        </div>
+
+        {# Controles de búsqueda y paginación (arriba de los cuadritos) #}
+        <div class="row mb-4 wow fadeInUp" data-wow-delay="0.3s">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <div class="dataTables_length" id="length_selector_container">
+                    <label>Mostrar
+                        <select name="entries_length" aria-controls="catalog_entries" class="form-select form-select-sm" id="entries_per_page">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="-1">Todos</option> {# Option to show all entries #}
+                        </select> entradas
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="dataTables_filter text-md-end" id="search_input_container">
+                    <label>Buscar:
+                        <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="catalog_entries" id="search_input">
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        {# Contenedor de los cuadritos - Le damos un ID para que JavaScript lo maneje #}
+        <div class="row g-4" id="maintenance_cards_container"> {# Start of Bootstrap row for grid layout #}
+            {% for tipoMantenimientoTemporal in tipos_mantenimiento %}
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.2s"> {# Each item takes 3 columns on large, 6 on medium #}
+                <div class="blog-item" data-search-term="{{ tipoMantenimientoTemporal.nombre_tim_mod1|lower }} {{ tipoMantenimientoTemporal.descripcion_corta_tim_mod1|lower }} {{ tipoMantenimientoTemporal.get_activo_tim_mod1_display|lower }}">
+                    <div class="blog-img p-4 pb-0">
+                        <a href="#">
+                            {% if tipoMantenimientoTemporal.imagen_destacada_tim_mod1 %}
+                                <img src="{{ tipoMantenimientoTemporal.imagen_destacada_tim_mod1.url }}" class="img-fluid w-100" alt="{{ tipoMantenimientoTemporal.nombre_tim_mod1 }}">
+                            {% else %}
+                                <img src="/static/img/no-image.jpg" class="img-fluid w-100" alt="No hay imagen">
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="blog-content p-4">
+                        <div class="blog-comment d-flex justify-content-between py-2 px-3 mb-4">
+                            <div class="small"><span class="fa fa-tag text-primary me-2"></span> {{ tipoMantenimientoTemporal.get_activo_tim_mod1_display }}</div>
+                        </div>
+                        <a href="#" class="h4 d-inline-block mb-3">{{ tipoMantenimientoTemporal.nombre_tim_mod1 }}</a>
+                        <p class="mb-3">{{ tipoMantenimientoTemporal.descripcion_corta_tim_mod1 }}</p>
+                        {# Botón modificado #}
+                        <a href="{% url 'catalogo_caracteristicas_servicio' tipoMantenimientoTemporal.pk %}" class="btn btn-dark py-2 px-4 ms-2">
+                            <span class="me-2">Ver lista de mantenimiento</span> <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div> {# End of Bootstrap row #}
+
+        {# Controles de paginación (debajo de los cuadritos) #}
+        <div class="row mt-4 wow fadeInUp" data-wow-delay="0.5s">
+            <div class="col-md-5">
+                <div class="dataTables_info" id="pagination_info" role="status" aria-live="polite">Mostrando 1 a 0 de 0 entradas</div>
+            </div>
+            <div class="col-md-7">
+                <div class="dataTables_paginate paging_simple_numbers" id="pagination_controls">
+                    <ul class="pagination justify-content-end">
+                        <li class="paginate_button page-item previous disabled" id="prev_page_btn">
+                            <a href="#" aria-controls="catalog_entries" data-dt-idx="0" tabindex="0" class="page-link">Anterior</a>
+                        </li>
+                        <div id="page_numbers" class="d-flex">
+                            {# Los números de página se insertarán aquí con JavaScript #}
+                        </div>
+                        <li class="paginate_button page-item next disabled" id="next_page_btn">
+                            <a href="#" aria-controls="catalog_entries" data-dt-idx="7" tabindex="0" class="page-link">Siguiente</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,207 @@
+{% extends "plantilla.html" %} 
+{% load static %} 
+{% block body %}
+<div class="container-fluid courses overflow-hidden py-5">
+    <div class="container py-5">
+        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+            <h4 class="text-primary">Nuestras Características de Servicio</h4>
+            <h1 class="display-4 text-white mb-4">Descubre Nuestras Características Destacadas</h1>
+            <p class="text-white mb-0">Explora las características detalladas de los servicios de mantenimiento que ofrecemos para asegurar el óptimo funcionamiento de tus sistemas y equipos.</p>
+        </div>
+        <div class="row mb-4 wow fadeInUp" data-wow-delay="0.3s">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <div class="dataTables_length" id="length_selector_container">
+                    <label class="text-white">Mostrar
+                        <select name="entries_length" aria-controls="catalog_entries" class="form-select form-select-sm" id="entries_per_page">
+                            <option value="6">6</option> 
+                            <option value="12">12</option>
+                            <option value="24">24</option>
+                            <option value="-1">Todos</option>
+                        </select> entradas
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="dataTables_filter text-md-end" id="search_input_container">
+                    <label class="text-white">Buscar:
+                        <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="catalog_entries" id="search_input">
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row gy-4 gx-0 justify-content-center" id="characteristc_cards_container"> 
+            {% for item in caracteristicas_con_servicio %}
+            {% with caracteristica=item.caracteristica service_id=item.service_id %}
+            <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.2s" 
+                 data-search-term="{{ caracteristica.nombre_cas_mod1|lower }} {{ caracteristica.descripcion_cas_mod1|lower }} {{ caracteristica.tipo_mantenimiento_cas_mod1.nombre_tim_mod1|lower }}">
+                <div class="courses-item">
+                    <div class="courses-item-inner p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-4"> 
+                            <div class="courses-icon-img p-3 bg-danger rounded" style="flex-shrink: 0;">
+                                {% if caracteristica.tipo_mantenimiento_cas_mod1.nombre_tim_mod1 == "Cambio de Aceite" %}
+                                    <i class="fas fa-oil-can fa-3x text-white"></i> 
+                                {% elif caracteristica.tipo_mantenimiento_cas_mod1.nombre_tim_mod1 == "Revisión de Frenos" %}
+                                    <i class="fas fa-car fa-3x text-white"></i> 
+                                {% elif caracteristica.tipo_mantenimiento_cas_mod1.nombre_tim_mod1 == "Alineación y Balanceo" %}
+                                    <i class="fas fa-cogs fa-3x text-white"></i> 
+                                {% else %}
+                                    <i class="fas fa-wrench fa-3x text-white"></i> 
+                                {% endif %}
+                            </div>
+                            
+                            <div class="data-info d-flex flex-column align-items-end text-end ms-3">
+                                <div class="courses-trainer d-flex align-items-center mb-1">
+                                    <p class="mb-0 text-white" style="line-height: 1.2;">{{ caracteristica.tipo_mantenimiento_cas_mod1.nombre_tim_mod1 }}</p> 
+                                </div>
+                                <div class="courses-date text-white">
+                                    <p class="mb-0" style="line-height: 1.2;">ID: {{ caracteristica.id }}</p> 
+                                    <p class="mb-0" style="line-height: 1.2;">Creado: {{ caracteristica.fecha_creacion|date:"d/m/Y" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% if service_id %}
+                            <a href="{% url 'detalle_servicio_cliente' pk=service_id %}" class="d-inline-block h4 mb-3">
+                                {{ caracteristica.nombre_cas_mod1 }}
+                            </a>
+                        {% else %}
+                            <span class="d-inline-block h4 mb-3">{{ caracteristica.nombre_cas_mod1 }}</span>
+                            <p class="text-warning">No hay servicio asociado para ver detalles.</p>
+                        {% endif %}      
+                        <p class="mb-4">{{ caracteristica.descripcion_cas_mod1|truncatechars:100 }}</p> 
+                        <div class="d-flex justify-content-between align-items-center"> 
+                            {% if service_id %}
+                                <a href="{% url 'detalle_servicio_cliente' pk=service_id %}" class="btn btn-warning py-2 px-4 me-2">
+                                    <span>Ver Detalles</span>
+                                </a>
+                            {% else %}
+                                <button class="btn btn-warning py-2 px-4 me-2" disabled><span>Ver Detalles</span></button>
+                            {% endif %}
+                            <a href="{% url 'login_register_slider'%}" onclick="return confirm('¿Está seguro de registrarte para reservar?')" class="btn btn-danger py-2 px-4"> <span>Agendar</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+        <div class="row mt-4 wow fadeInUp" data-wow-delay="0.5s">
+            <div class="col-md-5">
+                <div class="dataTables_info text-white" id="pagination_info" role="status" aria-live="polite">Mostrando 1 a 0 de 0 entradas</div>
+            </div>
+            <div class="col-md-7">
+                <div class="dataTables_paginate paging_simple_numbers" id="pagination_controls">
+                    <ul class="pagination justify-content-end">
+                        <li class="paginate_button page-item previous disabled" id="prev_page_btn">
+                            <a href="#" aria-controls="catalog_entries" data-dt-idx="0" tabindex="0" class="page-link">Anterior</a>
+                        </li>
+                        <div id="page_numbers" class="d-flex">
+                        </div>
+                        <li class="paginate_button page-item next disabled" id="next_page_btn">
+                            <a href="#" aria-controls="catalog_entries" data-dt-idx="7" tabindex="0" class="page-link">Siguiente</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemsPerPageSelect = document.getElementById('entries_per_page');
+        const searchInput = document.getElementById('search_input');
+        const cardsContainer = document.getElementById('characteristc_cards_container');
+        const cards = Array.from(cardsContainer.getElementsByClassName('col-md-6'));
+        const paginationInfo = document.getElementById('pagination_info');
+        const prevButton = document.getElementById('prev_page_btn');
+        const nextButton = document.getElementById('next_page_btn');
+        const pageNumbersContainer = document.getElementById('page_numbers');
+        let currentPage = 1;
+        let itemsPerPage = parseInt(itemsPerPageSelect.value);
+        function filterAndPaginate() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const filteredCards = cards.filter(card => {
+                const cardText = card.getAttribute('data-search-term');
+                return cardText.includes(searchTerm);
+            });
+            const totalItems = filteredCards.length;
+            const totalPages = itemsPerPage === -1 ? 1 : Math.ceil(totalItems / itemsPerPage);
+            if (currentPage > totalPages && totalPages > 0) {
+                currentPage = totalPages;
+            } else if (totalPages === 0) {
+                currentPage = 1;
+            }
+            const startIndex = itemsPerPage === -1 ? 0 : (currentPage - 1) * itemsPerPage;
+            const endIndex = itemsPerPage === -1 ? totalItems : Math.min(startIndex + itemsPerPage, totalItems);
+            cards.forEach(card => card.style.display = 'none'); 
+            for (let i = 0; i < filteredCards.length; i++) {
+                if (itemsPerPage === -1 || (i >= startIndex && i < endIndex)) {
+                    filteredCards[i].style.display = ''; 
+                } else {
+                    filteredCards[i].style.display = 'none';
+                }
+            }
+            if (totalItems === 0) {
+                paginationInfo.textContent = "Mostrando 0 a 0 de 0 entradas";
+            } else {
+                paginationInfo.textContent = `Mostrando ${startIndex + 1} a ${endIndex} de ${totalItems} entradas`;
+            }
+            updatePaginationControls(totalPages);
+        }
+        function updatePaginationControls(totalPages) {
+            pageNumbersContainer.innerHTML = ''; 
+            prevButton.classList.toggle('disabled', currentPage === 1 || totalPages === 0);
+            nextButton.classList.toggle('disabled', currentPage === totalPages || totalPages === 0);
+            if (totalPages > 0) {
+                for (let i = 1; i <= totalPages; i++) {
+                    const li = document.createElement('li');
+                    li.classList.add('paginate_button', 'page-item');
+                    if (i === currentPage) {
+                        li.classList.add('active');
+                    }
+                    const a = document.createElement('a');
+                    a.href = "#";
+                    a.classList.add('page-link');
+                    a.textContent = i;
+                    a.dataset.page = i;
+                    a.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        currentPage = parseInt(this.dataset.page);
+                        filterAndPaginate();
+                    });
+                    li.appendChild(a);
+                    pageNumbersContainer.appendChild(li);
+                }
+            }
+        }
+        itemsPerPageSelect.addEventListener('change', function() {
+            itemsPerPage = parseInt(this.value);
+            currentPage = 1; 
+            filterAndPaginate();
+        });
+        searchInput.addEventListener('keyup', filterAndPaginate);
+        prevButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (currentPage > 1) {
+                currentPage--;
+                filterAndPaginate();
+            }
+        });
+        nextButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            const totalItems = cards.filter(card => {
+                const cardText = card.getAttribute('data-search-term');
+                return cardText.includes(searchInput.value.toLowerCase().trim());
+            }).length;
+            const totalPages = itemsPerPage === -1 ? 1 : Math.ceil(totalItems / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                filterAndPaginate();
+            }
+        });
+
+        filterAndPaginate();
+    });
+</script>
+{% endblock %}

@@ -858,7 +858,7 @@
 .courses {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(rgba(12, 24, 68, 0.7), rgba(12, 24, 68, 0.7)), url(../img/services-img.jpg);
+    background: linear-gradient(rgba(12, 24, 68, 0.7), rgba(12, 24, 68, 0.7)), url(../img/CARTALLER1.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1086,7 +1086,7 @@
 .explore {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(rgba(12, 24, 68, 0.7), rgba(12, 24, 68, 0.7)), url(../img/services-img.jpg);
+    background: linear-gradient(rgba(12, 24, 68, 0.7), rgba(12, 24, 68, 0.7)), url(../img/CARTALLER1.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1195,7 +1195,7 @@
 .testimonial {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(rgba(12, 24, 68, 0.9), rgba(12, 24, 68, 0.9)), url(../img/services-img.jpg);
+    background: linear-gradient(rgba(12, 24, 68, 0.9), rgba(12, 24, 68, 0.9)), url(../img/CARTALLER1.jpg);
     background-position: center top;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1307,7 +1307,7 @@
 /*** Footer Start ***/
 .footer {
     overflow: hidden;
-    background: linear-gradient(rgba(12, 24, 68, 0.9), rgba(12, 24, 68, 0.98)), url(../img/services-img.jpg);
+    background: linear-gradient(rgba(12, 24, 68, 0.9), rgba(12, 24, 68, 0.98)), url(../img/CARTALLER1.jpg);
     background-position: center top;
     background-repeat: no-repeat;
     background-size: cover;

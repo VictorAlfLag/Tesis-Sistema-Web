@@ -1,0 +1,103 @@
+{% extends "plantilla.html" %}
+{% load static %} 
+{% block body %}
+<div class="container-fluid blog py-5">
+    <div class="container py-5">
+        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+            <h4 class="text-primary">Nuestro Catálogo de Repuestos</h4>
+            <h1 class="display-4 mb-4">Encuentra el repuesto que necesitas</h1>
+            <p class="mb-0">Explora nuestra amplia selección de repuestos originales y de calidad.</p>
+        </div>
+        <div class="row mb-4 wow fadeInUp" data-wow-delay="0.3s">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <div class="dataTables_length" id="length_selector_container_productos">
+                    <label>Mostrar
+                        <select name="entries_length_productos" aria-controls="catalog_entries_productos" class="form-select form-select-sm" id="entries_per_page_productos">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="-1">Todos</option>
+                        </select> entradas
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="dataTables_filter text-md-end" id="search_input_container_productos">
+                    <label>Buscar:
+                        <input type="search" class="form-control form-control-sm" placeholder="Buscar por nombre, marca, etc." aria-controls="catalog_entries_productos" id="search_input_productos">
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4" id="catalog_cards_container_productos">
+            {% for producto_temporal in productos_disponibles %}
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="blog-item"
+                     data-search-term="{{ producto_temporal.nombre|lower }} {{ producto_temporal.marca_fabricante|default_if_none:''|lower }} {{ producto_temporal.categoria.nombre|lower }} {{ producto_temporal.tipo_parte.nombre|lower }}">
+                    <div class="blog-img p-4 pb-0">
+                        <a href="{% url 'ver_detalle_producto_cliente' producto_temporal.id %}">
+                            {% if producto_temporal.imagen_principal_del_producto %}
+                                {% if producto_temporal.imagen_principal_del_producto.0.imagen %}
+                                    <img src="{{ producto_temporal.imagen_principal_del_producto.0.imagen.url }}" class="img-fluid w-100 rounded" alt="{{ producto_temporal.nombre }}">
+                                {% else %}
+                                    <img src="{% static 'img/producto_placeholder.png' %}" class="img-fluid w-100 rounded" alt="Imagen no disponible">
+                                {% endif %}
+                            {% else %}
+                                <img src="{% static 'img/producto_placeholder.png' %}" class="img-fluid w-100 rounded" alt="Imagen no disponible">
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="blog-content p-4">
+                        <div class="blog-comment d-flex justify-content-between py-2 px-3 mb-4">
+                            <div class="small"><span class="fa fa-folder text-primary me-2"></span> {{ producto_temporal.categoria.nombre|default_if_none:"N/A" }}</div>
+                            <div class="small"><span class="fa fa-wrench text-primary me-2"></span> {{ producto_temporal.tipo_parte.nombre|default_if_none:"N/A" }}</div>
+                        </div>
+                        <a href="{% url 'ver_detalle_producto_cliente' producto_temporal.id %}" class="h4 d-inline-block mb-3">
+                            {{ producto_temporal.nombre }}
+                            {% if producto_temporal.marca_fabricante %}
+                                ({{ producto_temporal.marca_fabricante }})
+                            {% endif %}
+                        </a>
+                        <p class="mb-3">Precio: <strong class="text-primary">${{ producto_temporal.precio|floatformat:2 }}</strong></p>
+                        <p class="mb-3">Stock: <strong>{{ producto_temporal.stock }} unidades</strong></p>
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'ver_detalle_producto_cliente' producto_temporal.id %}" class="btn btn-dark py-2 px-4 ms-2">
+                                <span class="me-2">Ver Detalles</span> <i class="fa fa-info-circle"></i>
+                            </a>
+                            <a href="" class="btn btn-dark py-2 px-4 ms-2">
+                                <span class="me-2">Añadir al Carrito</span> <i class="fa fa-info-circle"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-secondary">Lo sentimos, no hay productos disponibles en este momento.</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row mt-4 wow fadeInUp" data-wow-delay="0.5s">
+            <div class="col-md-5">
+                <div class="dataTables_info" id="pagination_info_productos" role="status" aria-live="polite">Mostrando 1 a 0 de 0 entradas</div>
+            </div>
+            <div class="col-md-7">
+                <div class="dataTables_paginate paging_simple_numbers" id="pagination_controls_productos">
+                    <ul class="pagination justify-content-end">
+                        <li class="paginate_button page-item previous disabled" id="prev_page_btn_productos">
+                            <a href="#" aria-controls="catalog_entries_productos" data-dt-idx="0" tabindex="0" class="page-link">Anterior</a>
+                        </li>
+                        <div id="page_numbers_productos" class="d-flex">  
+                        </div>
+                        <li class="paginate_button page-item next disabled" id="next_page_btn_productos">
+                            <a href="#" aria-controls="catalog_entries_productos" data-dt-idx="7" tabindex="0" class="page-link">Siguiente</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -690,3 +690,31 @@ def proceso_actualizar_imagen_producto(request):
 
     messages.warning(request, "Acceso inválido al proceso de actualización.")
     return redirect('listado_imagenes_producto')
+from django.db.models import Prefetch
+def catalogo_productos(request):
+    productos_disponibles = Producto.objects.filter(activo=True).prefetch_related(
+        Prefetch(
+            'imagenes',
+            queryset=ImagenProducto.objects.filter(es_principal=True).order_by('orden'),
+            to_attr='imagen_principal_del_producto'
+        )
+    ).order_by('nombre') # O por fecha_creacion, lo que prefieras
+
+    context = {
+        'productos_disponibles': productos_disponibles
+    }
+    return render(request, 'VistasRepuestos/catalogoRepuesto.html', context)
+
+def detalle_producto_cliente(request, pk):
+    producto = get_object_or_404(
+        Producto.objects.select_related('categoria', 'tipo_parte')
+                        .prefetch_related('compatibilidad_marcas', 'compatibilidad_modelos__marca'), 
+        pk=pk
+    )
+    imagenes = ImagenProducto.objects.filter(producto=producto).order_by('orden', '-es_principal')
+
+    context = {
+        'producto': producto,
+        'imagenes': imagenes,
+    }
+    return render(request, 'VistasRepuestos/detalleRepuestoVehiculo.html', context)

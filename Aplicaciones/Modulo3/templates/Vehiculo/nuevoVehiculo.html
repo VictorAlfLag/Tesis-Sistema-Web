@@ -1,0 +1,223 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4 mb-4">
+        <div class="card-title text-center">
+            <h3 class="mb-0 text-white"><b>Nuevo Vehículo</b></h3>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="bg-secondary rounded p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'guardar_vehiculo' %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="marca" class="form-label text-white">Marca:</label>
+                            <select name="marca" id="marca" class="form-select" required>
+                                <option value="">Seleccione una marca</option>
+                                {% for marca in marcas %}
+                                    <option value="{{ marca.id }}" {% if marca_anterior|stringformat:"s" == marca.id|stringformat:"s" %}selected{% endif %}>{{ marca.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="modelo" class="form-label text-white">Modelo:</label>
+                            <select name="modelo" id="modelo" class="form-select" required>
+                                <option value="">Seleccione un modelo</option>
+                                {% for modelo in modelos %}
+                                    <option value="{{ modelo.id }}" {% if modelo_anterior|stringformat:"s" == modelo.id|stringformat:"s" %}selected{% endif %}>{{ modelo.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                            <small class="form-text text-muted">Asegúrate de que el modelo corresponda a la marca seleccionada.</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="anio_fabricacion" class="form-label text-white">Año de Fabricación:</label>
+                            <input type="number" name="anio_fabricacion" class="form-control" id="anio_fabricacion" min="1900" max="2100" placeholder="Ej: 2023" value="{{ anio_fabricacion_anterior|default:'' }}" required>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <label for="version" class="form-label text-white">Versión/Edición:</label>
+                            <input type="text" name="version" class="form-control" id="version" placeholder="Ej: Full Equipo, Sport" value="{{ version_anterior|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="precio" class="form-label text-white">Precio de Venta ($):</label>
+                            <input type="number" name="precio" step="0.01" min="0.01" class="form-control" id="precio" placeholder="Ej: 25000.00" value="{{ precio_anterior|default:'' }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="kilometraje" class="form-label text-white">Kilometraje Actual (km):</label>
+                            <input type="number" name="kilometraje" min="0" class="form-control" id="kilometraje" placeholder="Ej: 50000" value="{{ kilometraje_anterior|default:'' }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="tipo_combustible" class="form-label text-white">Tipo de Combustible:</label>
+                            <select name="tipo_combustible" id="tipo_combustible" class="form-select">
+                                <option value="">Seleccione un tipo</option>
+                                {% for tipo_combustible in tipos_combustible %}
+                                    <option value="{{ tipo_combustible.id }}" {% if tipo_combustible_anterior|stringformat:"s" == tipo_combustible.id|stringformat:"s" %}selected{% endif %}>{{ tipo_combustible.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="tipo_transmision" class="form-label text-white">Tipo de Transmisión:</label>
+                            <select name="tipo_transmision" id="tipo_transmision" class="form-select">
+                                <option value="">Seleccione un tipo</option>
+                                {% for tipo_transmision in tipos_transmision %}
+                                    <option value="{{ tipo_transmision.id }}" {% if tipo_transmision_anterior|stringformat:"s" == tipo_transmision.id|stringformat:"s" %}selected{% endif %}>{{ tipo_transmision.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="tipo_carroceria" class="form-label text-white">Tipo de Carrocería:</label>
+                            <select name="tipo_carroceria" id="tipo_carroceria" class="form-select">
+                                <option value="">Seleccione un tipo</option>
+                                {% for tipo_carroceria in tipos_carroceria %}
+                                    <option value="{{ tipo_carroceria.id }}" {% if tipo_carroceria_anterior|stringformat:"s" == tipo_carroceria.id|stringformat:"s" %}selected{% endif %}>{{ tipo_carroceria.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="color_exterior" class="form-label text-white">Color Exterior:</label>
+                            <input type="text" name="color_exterior" class="form-control" id="color_exterior" placeholder="Ej: Blanco Perla" value="{{ color_exterior_anterior|default:'' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="color_interior" class="form-label text-white">Color Interior:</label>
+                            <input type="text" name="color_interior" class="form-control" id="color_interior" placeholder="Ej: Negro Cuero" value="{{ color_interior_anterior|default:'' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="numero_puertas" class="form-label text-white">Número de Puertas:</label>
+                            <input type="number" name="numero_puertas" min="1" max="6" class="form-control" id="numero_puertas" placeholder="Ej: 4" value="{{ numero_puertas_anterior|default:'' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="cilindraje_cc" class="form-label text-white">Cilindraje (cc):</label>
+                            <input type="number" name="cilindraje_cc" min="0" class="form-control" id="cilindraje_cc" placeholder="Ej: 2000" value="{{ cilindraje_cc_anterior|default:'' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="potencia_hp" class="form-label text-white">Potencia (HP):</label>
+                            <input type="number" name="potencia_hp" min="0" class="form-control" id="potencia_hp" placeholder="Ej: 150" value="{{ potencia_hp_anterior|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion_detallada" class="form-label text-white">Descripción Detallada:</label>
+                        <textarea name="descripcion_detallada" id="descripcion_detallada" class="form-control" rows="5" placeholder="Ingrese una descripción completa del vehículo, estado, extras, etc." required>{{ descripcion_detallada_anterior|default:'' }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-white">Características Adicionales:</label>
+                        <div class="row">
+                            {% for caracteristica in caracteristicas_adicionales %}
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="caracteristicas_adicionales" value="{{ caracteristica.id }}" id="caracteristica_{{ caracteristica.id }}"
+                                            {% if caracteristicas_adicionales_anterior and caracteristica.id|stringformat:"s" in caracteristicas_adicionales_anterior %}checked{% endif %}>
+                                        <label class="form-check-label text-white" for="caracteristica_{{ caracteristica.id }}">
+                                            {% if caracteristica.icono %}<i class="{{ caracteristica.icono }} me-2"></i>{% endif %} {{ caracteristica.nombre }}
+                                        </label>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="numero_chasis" class="form-label text-white">Número de Chasis (VIN):</label>
+                            <input type="text" name="numero_chasis" class="form-control" id="numero_chasis" maxlength="17" placeholder="Ingrese el VIN" value="{{ numero_chasis_anterior|default:'' }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="placa" class="form-label text-white">Número de Placa:</label>
+                            <input type="text" name="placa" class="form-control" id="placa" maxlength="10" placeholder="Ej: ABC-1234" value="{{ placa_anterior|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="situacion_general" class="form-label text-white">Situación General del Vehículo:</label>
+                        <select name="situacion_general" id="situacion_general" class="form-select" required>
+                            <option value="">Seleccione una situación</option>
+                            {# Asume que VEHICULO_SITUACION_CHOICES se pasa desde la vista #}
+                            {% for choice_value, choice_label in VEHICULO_SITUACION_CHOICES %}
+                                <option value="{{ choice_value }}" {% if situacion_general_anterior|stringformat:"s" == choice_value|stringformat:"s" %}selected{% endif %}>{{ choice_label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="tiene_historial_siniestros" id="tiene_historial_siniestros" 
+                               {% if tiene_historial_siniestros_anterior %}checked{% endif %}>
+                        <label class="form-check-label text-white" for="tiene_historial_siniestros">
+                            ¿Tiene historial de siniestros/accidentes?
+                        </label>
+                    </div>
+                    <div class="mb-3" id="detalle_siniestros_div" style="display: {% if tiene_historial_siniestros_anterior %}block{% else %}none{% endif %};">
+                        <label for="detalle_historial_siniestros" class="form-label text-white">Detalle del Historial de Siniestros:</label>
+                        <textarea name="detalle_historial_siniestros" id="detalle_historial_siniestros" class="form-control" rows="3" 
+                                  placeholder="Fechas, tipo de daño, reparaciones, etc.">{{ detalle_historial_siniestros_anterior|default:'' }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="valor_avaluo_referencia" class="form-label text-white">Valor de Avalúo/Referencia (Catastro) ($):</label>
+                        <input type="number" name="valor_avaluo_referencia" step="0.01" min="0" class="form-control" id="valor_avaluo_referencia" 
+                               placeholder="Ej: 22000.00" value="{{ valor_avaluo_referencia_anterior|default:'' }}">
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="disponible_para_venta" id="disponible_para_venta" 
+                               {% if disponible_para_venta_anterior %}checked{% else %}{% if not request.POST %}checked{% endif %}{% endif %}>
+                        <label class="form-check-label text-white" for="disponible_para_venta">
+                            ¿Está disponible para venta?
+                        </label>
+                    </div>
+
+                    <br>
+                    <button type="submit" class="btn btn-danger me-2">Guardar</button>
+                    <a href="{% url 'listado_vehiculos' %}" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tieneSiniestrosCheckbox = document.getElementById('tiene_historial_siniestros');
+        const detalleSiniestrosDiv = document.getElementById('detalle_siniestros_div');
+
+        function toggleDetalleSiniestros() {
+            if (tieneSiniestrosCheckbox.checked) {
+                detalleSiniestrosDiv.style.display = 'block';
+            } else {
+                detalleSiniestrosDiv.style.display = 'none';
+                detalleSiniestrosDiv.querySelector('textarea').value = ''; 
+            }
+        }
+
+        tieneSiniestrosCheckbox.addEventListener('change', toggleDetalleSiniestros);
+        toggleDetalleSiniestros(); // Call on load to set initial state
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4 mb-4">
+        <div class="card-title text-center">
+            <h3 class="mb-0 text-white"><b>EDITAR TIPO DE MANTENIMIENTO</b></h3>
+        </div>
+    </div>
+
+    <div class="bg-secondary rounded p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'proceso_actualizar_tipo_mantenimiento' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{TipoMantenimientoEditar.id}}">
+
+                    <div class="mb-3">
+                        <label for="nombre_tim_mod1" class="form-label text-white">Nombre:</label>
+                        <input type="text" name="nombre_tim_mod1" class="form-control" value="{{TipoMantenimientoEditar.nombre_tim_mod1}}" id="nombre_tim_mod1" placeholder="Ingrese el nombre del tipo de mantenimiento" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion_corta_tim_mod1" class="form-label text-white">Descripción Corta:</label>
+                        <textarea name="descripcion_corta_tim_mod1" id="descripcion_corta_tim_mod1" class="form-control" rows="3" placeholder="Ingrese una descripción corta">{{TipoMantenimientoEditar.descripcion_corta_tim_mod1}}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="imagen_destacada_tim_mod1" class="form-label text-white">Imagen Destacada:</label>
+                        <input type="file" name="imagen_destacada_tim_mod1" class="form-control bg-dark text-white" id="imagen_destacada_tim_mod1">
+                        {% if TipoMantenimientoEditar.imagen_destacada_tim_mod1 %}
+                            <small class="text-white mt-2">Imagen actual: <a href="{{ TipoMantenimientoEditar.imagen_destacada_tim_mod1.url }}" target="_blank">{{ TipoMantenimientoEditar.imagen_destacada_tim_mod1.name }}</a></small>
+                            <img src="{{ TipoMantenimientoEditar.imagen_destacada_tim_mod1.url }}" alt="Imagen actual" style="max-width: 150px; display: block; margin-top: 10px; border-radius: 5px;">
+                        {% else %}
+                            <small class="text-white-50 mt-2">No hay imagen destacada actual.</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="activo_tim_mod1" class="form-label text-white">Estado del Tipo de Mantenimiento:</label>
+                        <select name="activo_tim_mod1" id="activo_tim_mod1" class="form-select bg-dark text-white">
+                            <option value="activo" {% if TipoMantenimientoEditar.activo_tim_mod1 == 'activo' %}selected{% endif %}>Activo</option>
+                            <option value="inactivo" {% if TipoMantenimientoEditar.activo_tim_mod1 == 'inactivo' %}selected{% endif %}>Inactivo</option>
+                        </select>
+                    </div>
+                    
+                    <br>
+                    <button type="submit" class="btn btn-warning me-2">Actualizar</button>
+                    <a href="{% url 'listado_tipo_mantenimiento' %}" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

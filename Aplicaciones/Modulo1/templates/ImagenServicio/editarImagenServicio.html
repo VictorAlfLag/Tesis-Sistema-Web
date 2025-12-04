@@ -1,0 +1,65 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4 mb-4">
+        <div class="card-title text-center">
+            <h3 class="mb-0 text-white"><b>EDITAR IMAGEN DE SERVICIO</b></h3>
+        </div>
+    </div>
+
+    <div class="bg-secondary rounded p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'proceso_actualizar_imagen_servicio' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ImagenServicioEditar.id}}">
+
+                    <div class="mb-3">
+                        <label for="servicio" class="form-label text-white">Servicio:</label>
+                        <select name="servicio" id="servicio" class="form-select" required>
+                            <option value="">Seleccione un servicio</option>
+                            {% for serv in servicios_disponibles %}
+                                <option value="{{ serv.id }}" {% if serv.id == ImagenServicioEditar.servicio_ims_mod1.id %}selected{% endif %}> {# <--- CORRECCIÓN AQUÍ #}
+                                    {{ serv.nombre_sem_mod1 }} {# <--- CORRECCIÓN AQUÍ #}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="imagen" class="form-label text-white">Imagen del Servicio:</label>
+                        <input type="file" name="imagen" class="form-control bg-dark text-white" id="imagen">
+                        {# CORRECCIÓN AQUÍ: Usar imagen_ims_mod1.url y imagen_ims_mod1.name #}
+                        {% if ImagenServicioEditar.imagen_ims_mod1 %}
+                            <small class="text-white mt-2">Imagen actual: <a href="{{ ImagenServicioEditar.imagen_ims_mod1.url }}" target="_blank">{{ ImagenServicioEditar.imagen_ims_mod1.name }}</a></small>
+                            <img src="{{ ImagenServicioEditar.imagen_ims_mod1.url }}" alt="Imagen actual" style="max-width: 200px; display: block; margin-top: 10px;">
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label text-white">Descripción de la Imagen:</label>
+                        {# CORRECCIÓN AQUÍ: Usar descripcion_ims_mod1 #}
+                        <input type="text" name="descripcion" class="form-control" value="{{ImagenServicioEditar.descripcion_ims_mod1}}" id="descripcion" placeholder="Ingrese una descripción para la imagen">
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input type="checkbox" name="es_principal" class="form-check-input" id="es_principal" {% if ImagenServicioEditar.es_principal_ims_mod1 %}checked{% endif %}> {# <--- CORRECCIÓN AQUÍ #}
+                        <label class="form-check-label text-white" for="es_principal">Es Imagen Principal</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="orden" class="form-label text-white">Orden de visualización:</label>
+                        {# CORRECCIÓN AQUÍ: Usar orden_ims_mod1 #}
+                        <input type="number" name="orden" class="form-control" value="{{ImagenServicioEditar.orden_ims_mod1|default_if_none:0}}" id="orden" placeholder="Ej: 0">
+                    </div>
+                    
+                    <br>
+                    <button type="submit" class="btn btn-warning me-2">Actualizar</button>
+                    <a href="{% url 'listado_imagen_servicio' %}" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

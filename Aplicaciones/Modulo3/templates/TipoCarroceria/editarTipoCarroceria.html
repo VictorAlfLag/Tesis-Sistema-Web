@@ -1,0 +1,31 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4 mb-4">
+        <div class="card-title text-center">
+            <h3 class="mb-0 text-white"><b>EDITAR TIPO DE CARROCERÍA</b></h3>
+        </div>
+    </div>
+
+    <div class="bg-secondary rounded p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'proceso_actualizar_tipo_carroceria' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ TipoCarroceriaEditar.id }}">
+
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label text-white">Nombre:</label>
+                        <input type="text" name="nombre" class="form-control" value="{{ TipoCarroceriaEditar.nombre }}" id="nombre" placeholder="Ingrese el nombre del tipo de carrocería" required>
+                    </div>
+
+                    <br>
+                    <button type="submit" class="btn btn-warning me-2">Actualizar</button>
+                    <a href="{% url 'listado_tipos_carroceria' %}" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

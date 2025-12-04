@@ -1,0 +1,66 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4 mb-4">
+        <div class="card-title text-center">
+            <h3 class="mb-0 text-white"><b>Nueva Imagen de Vehículo</b></h3>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="bg-secondary rounded p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'guardar_imagen_vehiculo' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="vehiculo" class="form-label text-white">Vehículo:</label>
+                        <select name="vehiculo" id="vehiculo" class="form-select" required>
+                            <option value="">Seleccione un vehículo</option>
+                            {% for vehiculo in vehiculos %}
+                                <option value="{{ vehiculo.id }}" {% if vehiculo_anterior|stringformat:"s" == vehiculo.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ vehiculo.marca.nombre }} {{ vehiculo.modelo.nombre }} - {{ vehiculo.anio_fabricacion }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="imagen" class="form-label text-white">Archivo de Imagen:</label>
+                        <input type="file" name="imagen" class="form-control bg-dark text-white" id="imagen" accept="image/*" required>
+                        <small class="form-text text-muted">Suba una imagen del vehículo.</small>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="es_principal" id="es_principal" 
+                               {% if es_principal_anterior %}checked{% endif %}>
+                        <label class="form-check-label text-white" for="es_principal">
+                            Es Imagen Principal
+                        </label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="orden" class="form-label text-white">Orden de visualización:</label>
+                        <input type="number" name="orden" class="form-control" id="orden" min="0" 
+                               placeholder="Ej: 0 para la primera" value="{{ orden_anterior|default:0 }}">
+                        <small class="form-text text-muted">Define el orden en que se mostrará la imagen (0 para la primera).</small>
+                    </div>
+
+                    <br>
+                    <button type="submit" class="btn btn-danger me-2">Guardar</button>
+                    <a href="{% url 'listado_imagenes_vehiculo' %}" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

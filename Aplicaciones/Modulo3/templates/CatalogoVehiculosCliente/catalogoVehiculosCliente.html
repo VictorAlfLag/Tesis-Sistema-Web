@@ -1,0 +1,99 @@
+{% extends "plantilla.html" %}
+{% load static %} 
+{% block body %}
+<div class="container-fluid blog py-5">
+    <div class="container py-5">
+        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+            <h4 class="text-primary">Nuestro Catálogo</h4>
+            <h1 class="display-4 mb-4">Descubre tu próximo vehículo</h1>
+            <p class="mb-0">Explora nuestra selección de vehículos disponibles. Encuentra el auto perfecto para ti.</p>
+        </div>
+        <div class="row mb-4 wow fadeInUp" data-wow-delay="0.3s">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <div class="dataTables_length" id="length_selector_container_vehiculos"> 
+                    <label>Mostrar
+                        <select name="entries_length_vehiculos" aria-controls="catalog_entries_vehiculos" class="form-select form-select-sm" id="entries_per_page_vehiculos"> {# Cambiado ID y name #}
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="-1">Todos</option>
+                        </select> entradas
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="dataTables_filter text-md-end" id="search_input_container_vehiculos"> 
+                    <label>Buscar:
+                        <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="catalog_entries_vehiculos" id="search_input_vehiculos"> {# Cambiado ID #}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4" id="catalog_cards_container_vehiculos"> 
+            {% for vehiculoTemporal in vehiculos_disponibles %}
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.2s"> 
+                <div class="blog-item"
+                     data-search-term="{{ vehiculoTemporal.marca.nombre|lower }} {{ vehiculoTemporal.modelo.nombre|lower }} {{ vehiculoTemporal.anio_fabricacion }} {{ vehiculoTemporal.kilometraje }} {{ vehiculoTemporal.precio }}">
+                    <div class="blog-img p-4 pb-0">
+                        <a href="{% url 'ver_detalle_vehiculo_cliente' vehiculoTemporal.id %}">
+                            {% if vehiculoTemporal.imagen_principal_del_vehiculo %}
+                                {% if vehiculoTemporal.imagen_principal_del_vehiculo.0.imagen %}
+                                    <img src="{{ vehiculoTemporal.imagen_principal_del_vehiculo.0.imagen.url }}" class="img-fluid w-100 rounded" alt="{{ vehiculoTemporal.marca.nombre }} {{ vehiculoTemporal.modelo.nombre }}">
+                                {% else %}
+                                    <img src="{% static 'img/vehiculo_placeholder.png' %}" class="img-fluid w-100 rounded" alt="Imagen no disponible">
+                                {% endif %}
+                            {% else %}
+                                <img src="{% static 'img/vehiculo_placeholder.png' %}" class="img-fluid w-100 rounded" alt="Imagen no disponible">
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="blog-content p-4">
+                        <div class="blog-comment d-flex justify-content-between py-2 px-3 mb-4">
+                            <div class="small"><span class="fa fa-tag text-primary me-2"></span> {{ vehiculoTemporal.marca.nombre }}</div>
+                            <div class="small"><span class="fa fa-road text-primary me-2"></span> {{ vehiculoTemporal.kilometraje|floatformat:0 }} km</div>
+                        </div>
+                        <a href="{% url 'ver_detalle_vehiculo_cliente' vehiculoTemporal.id %}" class="h4 d-inline-block mb-3">
+                            {{ vehiculoTemporal.marca.nombre }} {{ vehiculoTemporal.modelo.nombre }} ({{ vehiculoTemporal.anio_fabricacion }})
+                        </a>
+                        <p class="mb-3">Precio: <strong class="text-primary">${{ vehiculoTemporal.precio|floatformat:2 }}</strong></p>
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'ver_detalle_vehiculo_cliente' vehiculoTemporal.id %}" class="btn btn-dark py-2 px-4 ms-2">
+                                <span class="me-2">Ver Detalles</span> <i class="fa fa-calendar-check"></i>
+                            </a>
+                            <a href="{% url 'reservar_vehiculo' vehiculoTemporal.id %}" class="btn btn-dark py-2 px-4 ms-2">
+                                <span class="me-2">Reservar</span> <i class="fa fa-calendar-check"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-secondary">Lo sentimos, no hay vehículos disponibles en este momento.</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row mt-4 wow fadeInUp" data-wow-delay="0.5s">
+            <div class="col-md-5">
+                <div class="dataTables_info" id="pagination_info_vehiculos" role="status" aria-live="polite">Mostrando 1 a 0 de 0 entradas</div> 
+            </div>
+            <div class="col-md-7">
+                <div class="dataTables_paginate paging_simple_numbers" id="pagination_controls_vehiculos"> 
+                    <ul class="pagination justify-content-end">
+                        <li class="paginate_button page-item previous disabled" id="prev_page_btn_vehiculos"> 
+                            <a href="#" aria-controls="catalog_entries_vehiculos" data-dt-idx="0" tabindex="0" class="page-link">Anterior</a>
+                        </li>
+                        <div id="page_numbers_vehiculos" class="d-flex"> 
+                        </div>
+                        <li class="paginate_button page-item next disabled" id="next_page_btn_vehiculos">
+                            <a href="#" aria-controls="catalog_entries_vehiculos" data-dt-idx="7" tabindex="0" class="page-link">Siguiente</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

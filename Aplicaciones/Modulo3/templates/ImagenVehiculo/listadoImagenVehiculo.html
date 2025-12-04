@@ -1,0 +1,60 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4">
+        <h6 class="mb-4 text-white text-center">Listado de Imágenes de Vehículos</h6>
+
+        <div class="d-flex justify-content-center mb-3">
+            <a href="{% url 'nuevo_imagen_vehiculo' %}" class="btn btn-primary">Agregar Imagen de Vehículo</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover text-center" id="tbl-data-imagen-vehiculo">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Vehículo</th>
+                        <th>Imagen</th>
+                        <th>Principal</th>
+                        <th>Orden</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {# CAMBIO AQUI: Asumo que en la vista se pasa como 'imagenes' #}
+                    {% for imagenTemporal in imagenes %}
+                    <tr>
+                        <td>{{ imagenTemporal.id }}</td>
+                        <td>{{ imagenTemporal.vehiculo.marca.nombre }} {{ imagenTemporal.vehiculo.modelo.nombre }}</td>
+                        <td>
+                            {% if imagenTemporal.imagen %}
+                                <a href="{{ imagenTemporal.imagen.url }}" target="_blank">
+                                    <img src="{{ imagenTemporal.imagen.url }}" alt="Imagen de {{ imagenTemporal.vehiculo }}" style="max-width: 100px; height: auto;">
+                                </a>
+                            {% else %}
+                                No hay imagen
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if imagenTemporal.es_principal %}
+                                <span class="badge bg-info">Sí</span>
+                            {% else %}
+                                <span class="badge bg-secondary">No</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ imagenTemporal.orden }}</td>
+                        <td>
+                            <a href="{% url 'editar_imagen_vehiculo' imagenTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_imagen_vehiculo' imagenTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar esta imagen?')" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

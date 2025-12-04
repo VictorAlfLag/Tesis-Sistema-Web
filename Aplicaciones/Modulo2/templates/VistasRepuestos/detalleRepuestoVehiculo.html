@@ -1,0 +1,105 @@
+{% extends "plantilla.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="row g-5">
+            <div class="col-lg-8">
+                <h1 class="display-4 mb-4 text-primary">{{ producto.nombre }}
+                    {% if producto.marca_fabricante %}
+                        ({{ producto.marca_fabricante }}) 
+                    {% endif %}
+                </h1>
+                <div class="mb-4">
+                    <h3>Precio: <strong class="text-secondary">${{ producto.precio|floatformat:2 }}</strong></h3>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><i class="fa fa-cubes text-primary me-2"></i> <strong>Stock:</strong> {{ producto.stock }} unidades</p>
+                        <p><i class="fa fa-folder text-primary me-2"></i> <strong>Categoría:</strong> {{ producto.categoria.nombre|default:"N/A" }}</p>
+                        <p><i class="fa fa-wrench text-primary me-2"></i> <strong>Tipo de Parte:</strong> {{ producto.tipo_parte.nombre|default:"N/A" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><i class="fa fa-hashtag text-primary me-2"></i> <strong>SKU:</strong> {{ producto.sku|default:"N/A" }}</p>
+                        <p><i class="fa fa-car-battery text-primary me-2"></i> <strong>Motor Compatible:</strong> {{ producto.get_tipo_motor_compatible_display|default:"N/A" }}</p>
+                        <p><i class="fa fa-calendar-alt text-primary me-2"></i> <strong>Última Actualización:</strong> {{ producto.fecha_actualizacion|date:"d M Y H:i" }}</p>
+                    </div>
+                </div>
+                <p class="mb-4">
+                    <strong>Descripción Detallada:</strong>
+                    {% if producto.descripcion %}
+                        {{ producto.descripcion|linebreaksbr }}
+                    {% else %}
+                        No hay una descripción detallada disponible para este producto.
+                    {% endif %}
+                </p>
+                {% if producto.compatibilidad_marcas.exists or producto.compatibilidad_modelos.exists %}
+                <h4 class="mb-3 mt-4">Compatibilidad con Vehículos</h4>
+                <p>Este repuesto es compatible con las siguientes marcas y modelos de vehículos:</p>
+                <ul>
+                    {% if producto.compatibilidad_marcas.exists %}
+                        <li><strong>Marcas:</strong>
+                            {% for marca in producto.compatibilidad_marcas.all %}
+                                {{ marca.nombre }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </li>
+                    {% endif %}
+                    {% if producto.compatibilidad_modelos.exists %}
+                        <li><strong>Modelos:</strong>
+                            {% for modelo in producto.compatibilidad_modelos.all %}
+                                {{ modelo.marca.nombre }} {{ modelo.nombre }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </li>
+                    {% endif %}
+                </ul>
+                {% endif %}
+
+                ---
+                <h4 class="mb-3">Galería de Imágenes del Producto</h4>
+                <div class="row g-3">
+                    {% for imagen in imagenes %} 
+                        <div class="col-sm-6 col-md-4 col-lg-3">
+                            <a href="{{ imagen.imagen.url }}" target="_blank">
+                                <img src="{{ imagen.imagen.url }}" class="img-fluid rounded shadow-sm" alt="Imagen de {{ producto.nombre }}">
+                            </a>
+                            {% if imagen.es_principal %}
+                                <p class="text-center mt-1"><span class="badge bg-primary">Imagen Principal</span></p>
+                            {% endif %}
+                        </div>
+                    {% empty %}
+                        <div class="col-12">
+                            <p class="text-secondary">No hay imágenes disponibles para este producto.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <hr class="my-5">
+                <div class="d-flex justify-content-start mt-5">
+                    <a href="{% url 'catalogo_repuestos_cliente' %}" class="btn btn-secondary btn-lg">
+                        <span class="me-2">Volver al Catálogo</span> <i class="fa fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="bg-light rounded p-4 shadow-sm">
+                    <h5 class="mb-4">Información Adicional</h5>
+                    <p><strong>Producto Disponible:</strong>
+                        {% if producto.activo %}
+                            <span class="badge bg-success">Sí</span>
+                        {% else %}
+                            <span class="badge bg-danger">No</span>
+                        {% endif %}
+                    </p>
+                    <p><strong>Fecha de Creación:</strong> {{ producto.fecha_creacion|date:"d M Y H:i" }}</p>
+                    <p><strong>Última Actualización:</strong> {{ producto.fecha_actualizacion|date:"d M Y H:i" }}</p>
+                    <hr>
+                    <p class="mb-0 text-muted">¿Necesitas ayuda para encontrar el repuesto o tienes alguna pregunta?</p>
+                    <p class="mb-0 text-muted">¡Contáctanos!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+{% endblock %}

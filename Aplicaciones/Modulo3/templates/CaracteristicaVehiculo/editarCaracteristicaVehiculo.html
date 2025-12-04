@@ -1,0 +1,37 @@
+{% extends "plantilla_admin.html" %}
+
+{% block body %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4 mb-4">
+        <div class="card-title text-center">
+            <h3 class="mb-0 text-white"><b>EDITAR CARACTERÍSTICA DE VEHÍCULO</b></h3>
+        </div>
+    </div>
+
+    <div class="bg-secondary rounded p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'proceso_actualizar_caracteristica_vehiculo' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ CaracteristicaVehiculoEditar.id }}">
+
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label text-white">Nombre:</label>
+                        <input type="text" name="nombre" class="form-control" value="{{ CaracteristicaVehiculoEditar.nombre }}" id="nombre" placeholder="Ingrese el nombre de la característica" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="icono" class="form-label text-white">Clase de Icono (ej. FontAwesome):</label>
+                        <input type="text" name="icono" class="form-control" value="{{ CaracteristicaVehiculoEditar.icono|default:'' }}" id="icono" placeholder="ej. fas fa-cogs o bi bi-gear-fill">
+                        <small class="form-text text-muted">Puedes encontrar iconos en FontAwesome o Bootstrap Icons.</small>
+                    </div>
+
+                    <br>
+                    <button type="submit" class="btn btn-warning me-2">Actualizar</button>
+                    <a href="{% url 'listado_caracteristicas_vehiculo' %}" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
