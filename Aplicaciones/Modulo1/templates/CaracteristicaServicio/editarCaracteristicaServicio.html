@@ -1,5 +1,4 @@
 {% extends "plantilla_admin.html" %}
-
 {% block body %}
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded p-4 mb-4">
@@ -7,40 +6,32 @@
             <h3 class="mb-0 text-white"><b>EDITAR CARACTERÍSTICA DE SERVICIO</b></h3>
         </div>
     </div>
-
     <div class="bg-secondary rounded p-4">
         <div class="row">
             <div class="col-md-12">
                 <form action="{% url 'proceso_actualizar_caracteristica_servicio' %}" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="id" value="{{CaracteristicaServicioEditar.id}}">
-
-                    {# Campo para Tipo de Mantenimiento #}
+                    <input type="hidden" name="id" value="{{CaracteristicaServicioEditar.id_cas_mod1}}">
                     <div class="mb-3">
                         <label for="tipo_mantenimiento" class="form-label text-white">Tipo de Mantenimiento:</label>
                         <select name="tipo_mantenimiento" id="tipo_mantenimiento" class="form-select" required>
                             <option value="">-- Seleccione un tipo de mantenimiento --</option>
                             {% for tipo in tipos_mantenimiento %}
-                                <option value="{{ tipo.id }}" 
-                                    {% if caracteristica_editar.tipo_mantenimiento_cas_mod1.id == tipo.id %}selected{% endif %}> {# Compara con el tipo_mantenimiento_cas_mod1 del objeto actual #}
+                                <option value="{{ tipo.id_tim_mod1 }}" 
+                                    {% if CaracteristicaServicioEditar.tipo_mantenimiento_cas_mod1.id_tim_mod1 == tipo.id_tim_mod1 %}selected{% endif %}>
                                     {{ tipo.nombre_tim_mod1 }}
                                 </option>
                             {% endfor %}
                         </select>
                     </div>
-
-                    {# Campo para Nombre de la Característica #}
                     <div class="mb-3">
                         <label for="nombre" class="form-label text-white">Nombre de la Característica:</label>
                         <input type="text" name="nombre" class="form-control" value="{{CaracteristicaServicioEditar.nombre_cas_mod1}}" id="nombre" placeholder="Ingrese el nombre de la característica" required>
                     </div>
-
-                    {# Campo para Descripción Detallada #}
                     <div class="mb-3">
                         <label for="descripcion" class="form-label text-white">Descripción Detallada:</label>
                         <textarea name="descripcion" id="descripcion" class="form-control" rows="5" placeholder="Ingrese una descripción detallada de la característica">{{CaracteristicaServicioEditar.descripcion_cas_mod1}}</textarea>
                     </div>
-                    
                     <br>
                     <button type="submit" class="btn btn-warning me-2">Actualizar</button>
                     <a href="{% url 'listado_caracteristica_servicio' %}" class="btn btn-outline-primary">Cancelar</a>

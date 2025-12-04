@@ -13,7 +13,7 @@
             <div class="col-md-12">
                 <form action="{% url 'proceso_actualizar_tipo_mantenimiento' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" name="id" value="{{TipoMantenimientoEditar.id}}">
+                    <input type="hidden" name="id" value="{{TipoMantenimientoEditar.id_tim_mod1}}">
 
                     <div class="mb-3">
                         <label for="nombre_tim_mod1" class="form-label text-white">Nombre:</label>
@@ -33,6 +33,13 @@
                             <img src="{{ TipoMantenimientoEditar.imagen_destacada_tim_mod1.url }}" alt="Imagen actual" style="max-width: 150px; display: block; margin-top: 10px; border-radius: 5px;">
                         {% else %}
                             <small class="text-white-50 mt-2">No hay imagen destacada actual.</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        {% if TipoMantenimientoEditar.imagen_destacada_tim_mod1 %}
+                            <input type="checkbox" name="imagen_destacada_tim_mod1-clear" id="imagen_destacada_tim_mod1-clear" class="form-check-input">
+                            <label for="imagen_destacada_tim_mod1-clear" class="form-check-label text-white">Marcar para eliminar imagen actual</label>
                         {% endif %}
                     </div>
 

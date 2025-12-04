@@ -13,11 +13,15 @@
             <div class="col-md-12">
                 <form action="{% url 'proceso_actualizar_tipo_combustible' %}" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="id" value="{{ TipoCombustibleEditar.id }}">
+                    <!-- CORRECCIÓN 1: Usar el nombre de campo ID correcto: id_tco_mod3 -->
+                    <input type="hidden" name="id" value="{{ TipoCombustibleEditar.id_tco_mod3 }}">
 
                     <div class="mb-3">
                         <label for="nombre" class="form-label text-white">Nombre:</label>
-                        <input type="text" name="nombre" class="form-control" value="{{ TipoCombustibleEditar.nombre }}" id="nombre" placeholder="Ingrese el nombre del tipo de combustible" required>
+                        <!-- CORRECCIÓN 2: Usar el nombre de campo NOMBRE correcto: nombre_tco_mod3 -->
+                        <input type="text" name="nombre" class="form-control" 
+                               value="{{ TipoCombustibleEditar.nombre_tco_mod3 }}" 
+                               id="nombre" placeholder="Ingrese el nombre del tipo de combustible" required>
                     </div>
 
                     <br>

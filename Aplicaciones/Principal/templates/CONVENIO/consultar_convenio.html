@@ -1,0 +1,59 @@
+{% extends 'plantilla.html' %} 
+{% load static %}
+{% block title %}Consultar Convenio{% endblock %}
+{% block body_class %}bg-light{% endblock %} 
+{% block body %}
+    <div class="container-fluid feature py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="courses-item position-relative p-4" style="background: white; border-radius: 10px; border: 2px solid red; overflow: hidden; box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);">
+                    <div class="text-center mb-4">
+                        <h1 class="text-primary mb-0">
+                            <span class="colored-boxes me-2">
+                                <span class="box black"></span>
+                                <span class="box gray"></span>
+                                <span class="box red"></span>
+                            </span>
+                            Grupo Santa Maria
+                        </h1>
+                    </div>
+                    <h5 class="text-primary mb-4 text-center">Consulta de Convenios y Descuentos</h5>
+                    <p class="text-secondary text-center mb-4">
+                        Ingresa tu número de cédula o RUC para verificar si tienes un descuento activo.
+                    </p>
+                    <form method="post" action="{% url 'consultar_convenio' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="cedula" class="form-label">Cédula / RUC del Cliente:</label>
+                            <input type="text" 
+                                   name="cedula" 
+                                   id="cedula" 
+                                   required
+                                   placeholder="Ej: 1712345678"
+                                   class="form-control" 
+                                   style="border-color: #ced4da;"
+                                   pattern="[0-9]*" 
+                                   title="Solo se permiten números (sin puntos, letras o signos)"
+                            >
+                        </div>
+                        <button type="submit" 
+                                class="btn btn-danger w-100 py-2 fw-bold" 
+                                style="background-color: #dc3545; border-color: #dc3545;"> 
+                            Consultar Descuento
+                        </button>
+                    </form>
+                    {% if messages %}
+                        <ul class="list-unstyled mt-4">
+                            {% for message in messages %}
+                                <li class="alert alert-{{ message.tags }} text-center" role="alert">
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

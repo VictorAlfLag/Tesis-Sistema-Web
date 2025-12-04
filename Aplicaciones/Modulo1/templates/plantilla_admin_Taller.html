@@ -1,0 +1,411 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es"> 
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Kaiadmin - Panel de Taller</title> 
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <link
+      rel="icon"
+      href="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/img/kaiadmin/favicon.ico' %}"
+      type="image/x-icon"
+    />
+
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/css/fonts.min.css' %}"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <link rel="stylesheet" href="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/css/plugins.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/css/kaiadmin.min.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/css/demo.css' %}" />
+
+    <style>
+      /* Contenedor principal del pop-up de SweetAlert2 */
+      .swal2-popup {
+        background-color: #FFFFFF; /* Fondo blanco para que parezca una tarjeta */
+        border-radius: 10px; /* Bordes redondeados */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        font-family: 'Roboto', sans-serif; /* Fuente Roboto */
+        border: 1px solid #e0e0e0; /* Borde sutil */
+      }
+
+      /* Título del mensaje de SweetAlert2 */
+      .swal2-title {
+        color: #1A237E; /* Azul oscuro */
+        font-weight: 700; /* Negrita */
+        font-size: 1.6em; /* Tamaño de fuente más grande */
+        padding-bottom: 0.5em;
+      }
+
+      /* Contenido del mensaje de SweetAlert2 */
+      .swal2-html-container {
+        color: #444444; /* Color de texto más suave */
+        font-size: 1.1em;
+        line-height: 1.5;
+      }
+
+      /* Botones de confirmación de SweetAlert2 (por ejemplo, el botón "OK") */
+      .swal2-confirm.swal2-styled {
+        background-color: #007bff !important; /* Azul de Bootstrap */
+        color: #ffffff !important;
+        border: none !important;
+        border-radius: 5px !important;
+        font-weight: 500;
+        padding: 10px 25px;
+        transition: background-color 0.3s ease;
+      }
+      .swal2-confirm.swal2-styled:hover {
+        background-color: #0056b3 !important; /* Azul más oscuro al pasar el ratón */
+      }
+
+      /* Botones de cancelación de SweetAlert2 */
+      .swal2-styled.swal2-cancel {
+        background-color: #6c757d !important; /* Gris de Bootstrap */
+        color: #ffffff !important;
+        border: none !important;
+        border-radius: 5px !important;
+        font-weight: 500;
+        padding: 10px 25px;
+        transition: background-color 0.3s ease;
+      }
+      .swal2-styled.swal2-cancel:hover {
+        background-color: #5a6268 !important;
+      }
+
+      /* Colores para los iconos de SweetAlert2 (éxito, error, advertencia) */
+      .swal2-success .swal2-success-line-tip,
+      .swal2-success .swal2-success-line-long {
+        background-color: #28a745 !important; /* Verde de Bootstrap para éxito */
+      }
+      .swal2-success .swal2-success-ring {
+        border-color: #28a745 !important;
+      }
+      .swal2-error .swal2-x-mark {
+        background-color: #dc3545 !important; /* Rojo de Bootstrap para error */
+      }
+      .swal2-error .swal2-x-mark-line-left,
+      .swal2-error .swal2-x-mark-line-right {
+        background-color: #dc3545 !important; /* Rojo de Bootstrap para error */
+      }
+      .swal2-error .swal2-error-ring {
+        border-color: #dc3545 !important;
+      }
+      .swal2-warning .swal2-icon-content {
+        color: #ffc107 !important; /* Amarillo de Bootstrap para advertencia */
+      }
+
+      /* Estilos para mensajes de validación (de jQuery Validate, si lo usas) */
+      label.error {
+        color: red;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .form-control.error {
+        border: 1px solid red;
+      }
+
+      /* Estilos para los controles de paginación y búsqueda personalizados */
+      .dataTables_length, .dataTables_filter {
+        margin-bottom: 1rem; /* Espacio entre los controles y las tarjetas */
+      }
+      .dataTables_length label, .dataTables_filter label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .dataTables_paginate {
+        display: flex;
+        justify-content: flex-end; /* Alinea los controles a la derecha */
+      }
+      #page_numbers {
+        margin: 0 10px; /* Espacio entre Anterior/Siguiente y los números */
+      }
+      /* Estilos para el logo con las cajas de color (anteriormente .colored-boxes) */
+      /* Estos estilos son ahora parte del CSS en línea para mayor control y para reemplazar el logo */
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+          <div class="logo-header" data-background-color="dark">
+              <div class="logo">
+                  <div style="display: inline-flex; align-items: center; margin-right: 10px;">
+                      <div style="background-color: #000000; width: 8px; height: 20px; margin-right: 2px;"></div>
+                      <div style="background-color: #CCCCCC; width: 8px; height: 20px; margin-right: 2px;"></div>
+                      <div style="background-color: #E70020; width: 8px; height: 20px;"></div>
+                  </div>
+                  <span style="color: white; font-weight: bold; font-size: 1.2em;">Admin Taller</span>
+              </div>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+          </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-item active">
+                <a
+                  data-bs-toggle="collapse"
+                  href="#dashboard"
+                  class="collapsed"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-home"></i>
+                  <p>Dashboard</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="dashboard">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="{% static 'Plantilla/kaiadmin-lite-1.2.0/index.html' %}">
+                        <span class="sub-item">Dashboard 1</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">ADMINISTRACIÓN</h4>
+              </li>
+
+              <li class="nav-item">
+                <a href="#">
+                  <i class="fas fa-history"></i>
+                  <p>Historial</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#">
+                  <i class="fas fa-car"></i>
+                  <p>Vehículos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#">
+                  <i class="fas fa-cogs"></i>
+                  <p>Repuestos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#">
+                  <i class="fas fa-wrench"></i>
+                  <p>Taller</p>
+                </a>
+              </li>
+                                          <a class="sidebar-link" href="{% url 'logout' %}" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-login"></i>
+                                </span>
+                                <span class="hide-menu">Cerrar Sección</span>
+                            </a>
+            </ul>
+          </div>
+        </div>
+      </div>
+          <footer class="footer">
+            <div class="container-fluid">
+              <nav class="pull-left">
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="http://www.themekita.com"> ThemeKita </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#"> Help </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#"> Licenses </a>
+                  </li>
+                </ul>
+              </nav>
+              <div class="copyright ml-auto">
+                2024, made with <i class="fa fa-heart heart text-danger"></i> by
+                <a href="http://www.themekita.com">ThemeKita</a>
+              </div>
+            </div>
+          </footer>
+      </div>
+    </div>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/core/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/core/popper.min.js' %}"></script>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/core/bootstrap.min.js' %}"></script>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/plugin/chart.js/chart.min.js' %}"></script>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js' %}"></script>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/plugin/chart-circle/circles.min.js' %}"></script>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/plugin/datatables/datatables.min.js' %}"></script>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/plugin/jsvectormap/jsvectormap.min.js' %}"></script>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/plugin/jsvectormap/world.js' %}"></script>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/plugin/sweetalert/sweetalert.min.js' %}"></script>
+
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/kaiadmin.min.js' %}"></script>
+
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/setting-demo.js' %}"></script>
+    <script src="{% static 'Plantilla/kaiadmin-lite-1.2.0/assets/js/demo.js' %}"></script>
+    <script>
+      // Scripts de gráficos de demostración de Kaiadmin
+      $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
+        type: "line",
+        height: "70",
+        width: "100%",
+        lineWidth: "2",
+        lineColor: "#177dff",
+        fillColor: "rgba(23, 125, 255, 0.14)",
+      });
+
+      $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
+        type: "line",
+        height: "70",
+        width: "100%",
+        lineWidth: "2",
+        lineColor: "#f3545d",
+        fillColor: "rgba(243, 84, 93, .14)",
+      });
+
+      $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
+        type: "line",
+        height: "70",
+        width: "100%",
+        lineWidth: "2",
+        lineColor: "#ffa534",
+        fillColor: "rgba(255, 165, 52, .14)",
+      });
+    </script>
+    <script>
+      $(document).ready(function() {
+        {% if messages %}
+          {% for message in messages %}
+            Swal.fire({
+                title: "{% if message.tags == 'success' %}CONFIRMACIÓN{% elif message.tags == 'error' %}ERROR{% elif message.tags == 'warning' %}ADVERTENCIA{% else %}INFORMACIÓN{% endif %}",
+                text: "{{ message }}",
+                icon: "{{ message.tags }}",
+                buttonsStyling: false 
+            });
+          {% endfor %}
+        {% endif %}
+        if ($('#maintenance_cards_container').length) {
+            const cardsContainer = $('#maintenance_cards_container');
+            const allCards = cardsContainer.find('.blog-item').closest('.col-lg-3'); 
+            let filteredCards = [...allCards]; 
+            let currentPage = 1;
+            let entriesPerPage = parseInt($('#entries_per_page').val()); 
+            const searchInput = $('#search_input'); 
+            const entriesPerPageSelect = $('#entries_per_page'); 
+            const prevPageBtn = $('#prev_page_btn'); 
+            const nextPageBtn = $('#next_page_btn'); 
+            const pageNumbersContainer = $('#page_numbers'); 
+            const paginationInfo = $('#pagination_info'); 
+            function displayCards() {
+                const startIndex = (currentPage - 1) * entriesPerPage;
+                const endIndex = (entriesPerPage === -1) ? filteredCards.length : startIndex + entriesPerPage; 
+                allCards.hide(); 
+                filteredCards.slice(startIndex, endIndex).forEach(card => {
+                    $(card).show(); 
+                });
+                updatePaginationControls(); 
+                updatePaginationInfo(); 
+            }
+            function updatePaginationControls() {
+                const totalPages = (entriesPerPage === -1) ? 1 : Math.ceil(filteredCards.length / entriesPerPage); 
+                prevPageBtn.toggleClass('disabled', currentPage === 1 || filteredCards.length === 0); 
+                nextPageBtn.toggleClass('disabled', currentPage === totalPages || filteredCards.length === 0 || entriesPerPage === -1); 
+                pageNumbersContainer.empty();
+
+                if (filteredCards.length > 0 && entriesPerPage !== -1) {
+                    for (let i = 1; i <= totalPages; i++) {
+                        const pageItem = $(`<li class="paginate_button page-item ${i === currentPage ? 'active' : ''}"><a href="#" aria-controls="catalog_entries" data-dt-idx="${i}" tabindex="0" class="page-link">${i}</a></li>`);
+                        pageItem.find('a').on('click', function(e) {
+                            e.preventDefault();
+                            currentPage = i;
+                            displayCards(); 
+                        });
+                        pageNumbersContainer.append(pageItem); 
+                    }
+                }
+            }
+            function updatePaginationInfo() {
+                const totalFiltered = filteredCards.length;
+                let startIndex = 0;
+                let endIndex = 0;
+                if (totalFiltered > 0) {
+                    startIndex = (currentPage - 1) * entriesPerPage + 1;
+                    endIndex = startIndex + entriesPerPage - 1;
+                    if (endIndex > totalFiltered || entriesPerPage === -1) { 
+                        endIndex = totalFiltered; 
+                    }
+                }
+                if (entriesPerPage === -1) { 
+                    paginationInfo.text(`Mostrando 1 a ${totalFiltered} de ${totalFiltered} entradas`);
+                } else {
+                    paginationInfo.text(`Mostrando ${startIndex} a ${endIndex} de ${totalFiltered} entradas`);
+                }
+            }
+            function applyFilters() {
+                const searchTerm = searchInput.val().toLowerCase().trim(); 
+                filteredCards = allCards.filter(function() {
+                    const cardElement = $(this).find('.blog-item'); 
+                    const cardSearchTerm = cardElement.data('searchTerm'); 
+                    return (cardSearchTerm || '').includes(searchTerm);
+                }).get(); 
+                currentPage = 1; 
+                displayCards(); 
+            }
+            searchInput.on('keyup', applyFilters); 
+            entriesPerPageSelect.on('change', function() {
+                entriesPerPage = parseInt($(this).val());
+                currentPage = 1; 
+                applyFilters(); 
+            });
+            prevPageBtn.on('click', function(e) {
+                e.preventDefault(); 
+                if (!$(this).hasClass('disabled')) { 
+                    currentPage--;
+                    displayCards();
+                }
+            });
+            nextPageBtn.on('click', function(e) {
+                e.preventDefault(); 
+                if (!$(this).hasClass('disabled')) { 
+                    currentPage++;
+                    displayCards();
+                }
+            });
+            applyFilters(); 
+        }
+      });
+    </script>
+  </body>
+</html>

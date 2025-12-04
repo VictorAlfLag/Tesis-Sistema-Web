@@ -28,7 +28,7 @@
                             <option value="">Seleccione un servicio</option>
                             {% for serv in servicios_disponibles %}
                                 <option value="{{ serv.id }}" {% if serv.id|stringformat:"s" == servicio_anterior|default:'' %}selected{% endif %}>
-                                    {{ serv.nombre_sem_mod1 }} {# <--- CORRECCIÓN AQUI: usar nombre_sem_mod1 #}
+                                    {{ serv.nombre_sem_mod1 }}
                                 </option>
                             {% endfor %}
                         </select>
@@ -36,7 +36,6 @@
 
                     <div class="mb-3">
                         <label for="imagen" class="form-label text-white">Imagen del Servicio:</label>
-                        {# Los nombres de los campos de input DEBEN coincidir con los de tu modelo ImagenServicio #}
                         <input type="file" name="imagen" class="form-control bg-dark text-white" id="imagen" required>
                         {% if imagen_anterior %}
                             <small class="text-white-50 mt-2">Archivo seleccionado anteriormente: {{ imagen_anterior.name }}</small>

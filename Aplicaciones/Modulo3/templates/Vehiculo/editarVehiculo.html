@@ -13,7 +13,7 @@
             <div class="col-md-12">
                 <form action="{% url 'proceso_actualizar_vehiculo' %}" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="id" value="{{ VehiculoEditar.id }}">
+                    <input type="hidden" name="id" value="{{ VehiculoEditar.id_vch_mod3 }}">
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -21,7 +21,7 @@
                             <select name="marca" id="marca" class="form-select" required>
                                 <option value="">Seleccione una marca</option>
                                 {% for marca in marcas %}
-                                    <option value="{{ marca.id }}" {% if VehiculoEditar.marca.id == marca.id %}selected{% endif %}>{{ marca.nombre }}</option>
+                                    <option value="{{ marca.id_mrc_mod3 }}" {% if VehiculoEditar.marca_vch_mod3.id_mrc_mod3 == marca.id_mrc_mod3 %}selected{% endif %}>{{ marca.nombre_mrc_mod3 }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -30,7 +30,7 @@
                             <select name="modelo" id="modelo" class="form-select" required>
                                 <option value="">Seleccione un modelo</option>
                                 {% for modelo in modelos %}
-                                    <option value="{{ modelo.id }}" {% if VehiculoEditar.modelo.id == modelo.id %}selected{% endif %}>{{ modelo.nombre }}</option>
+                                    <option value="{{ modelo.id_mdl_mod3 }}" {% if VehiculoEditar.modelo_vch_mod3.id_mdl_mod3 == modelo.id_mdl_mod3 %}selected{% endif %}>{{ modelo.nombre_mdl_mod3 }}</option>
                                 {% endfor %}
                             </select>
                             <small class="form-text text-muted">Asegúrate de que el modelo corresponda a la marca seleccionada.</small>
@@ -40,22 +40,22 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="anio_fabricacion" class="form-label text-white">Año de Fabricación:</label>
-                            <input type="number" name="anio_fabricacion" class="form-control" value="{{ VehiculoEditar.anio_fabricacion }}" id="anio_fabricacion" min="1900" max="2100" placeholder="Ej: 2023" required>
+                            <input type="number" name="anio_fabricacion" class="form-control" value="{{ VehiculoEditar.anio_fabricacion_vch_mod3 }}" id="anio_fabricacion" min="1900" max="2100" placeholder="Ej: 2023" required>
                         </div>
                         <div class="col-md-8 mb-3">
                             <label for="version" class="form-label text-white">Versión/Edición:</label>
-                            <input type="text" name="version" class="form-control" value="{{ VehiculoEditar.version|default:'' }}" id="version" placeholder="Ej: Full Equipo, Sport">
+                            <input type="text" name="version" class="form-control" value="{{ VehiculoEditar.version_vch_mod3|default:'' }}" id="version" placeholder="Ej: Full Equipo, Sport">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="precio" class="form-label text-white">Precio de Venta ($):</label>
-                            <input type="number" name="precio" step="0.01" min="0.01" class="form-control" value="{{ VehiculoEditar.precio }}" id="precio" placeholder="Ej: 25000.00" required>
+                            <input type="number" name="precio" step="0.01" min="0.01" class="form-control" value="{{ VehiculoEditar.precio_vch_mod3 }}" id="precio" placeholder="Ej: 25000.00" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="kilometraje" class="form-label text-white">Kilometraje Actual (km):</label>
-                            <input type="number" name="kilometraje" min="0" class="form-control" value="{{ VehiculoEditar.kilometraje }}" id="kilometraje" placeholder="Ej: 50000" required>
+                            <input type="number" name="kilometraje" min="0" class="form-control" value="{{ VehiculoEditar.kilometraje_vch_mod3 }}" id="kilometraje" placeholder="Ej: 50000" required>
                         </div>
                     </div>
 
@@ -65,7 +65,7 @@
                             <select name="tipo_combustible" id="tipo_combustible" class="form-select">
                                 <option value="">Seleccione un tipo</option>
                                 {% for tipo_combustible in tipos_combustible %}
-                                    <option value="{{ tipo_combustible.id }}" {% if VehiculoEditar.tipo_combustible.id == tipo_combustible.id %}selected{% endif %}>{{ tipo_combustible.nombre }}</option>
+                                    <option value="{{ tipo_combustible.id_tco_mod3 }}" {% if VehiculoEditar.tipo_combustible_vch_mod3.id_tco_mod3 == tipo_combustible.id_tco_mod3 %}selected{% endif %}>{{ tipo_combustible.nombre_tco_mod3 }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -74,7 +74,7 @@
                             <select name="tipo_transmision" id="tipo_transmision" class="form-select">
                                 <option value="">Seleccione un tipo</option>
                                 {% for tipo_transmision in tipos_transmision %}
-                                    <option value="{{ tipo_transmision.id }}" {% if VehiculoEditar.tipo_transmision.id == tipo_transmision.id %}selected{% endif %}>{{ tipo_transmision.nombre }}</option>
+                                    <option value="{{ tipo_transmision.id_ttr_mod3 }}" {% if VehiculoEditar.tipo_transmision_vch_mod3.id_ttr_mod3 == tipo_transmision.id_ttr_mod3 %}selected{% endif %}>{{ tipo_transmision.nombre_ttr_mod3 }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -83,7 +83,7 @@
                             <select name="tipo_carroceria" id="tipo_carroceria" class="form-select">
                                 <option value="">Seleccione un tipo</option>
                                 {% for tipo_carroceria in tipos_carroceria %}
-                                    <option value="{{ tipo_carroceria.id }}" {% if VehiculoEditar.tipo_carroceria.id == tipo_carroceria.id %}selected{% endif %}>{{ tipo_carroceria.nombre }}</option>
+                                    <option value="{{ tipo_carroceria.id_tca_mod3 }}" {% if VehiculoEditar.tipo_carroceria_vch_mod3.id_tca_mod3 == tipo_carroceria.id_tca_mod3 %}selected{% endif %}>{{ tipo_carroceria.nombre_tca_mod3 }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -92,32 +92,32 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="color_exterior" class="form-label text-white">Color Exterior:</label>
-                            <input type="text" name="color_exterior" class="form-control" value="{{ VehiculoEditar.color_exterior|default:'' }}" id="color_exterior" placeholder="Ej: Blanco Perla">
+                            <input type="text" name="color_exterior" class="form-control" value="{{ VehiculoEditar.color_exterior_vch_mod3|default:'' }}" id="color_exterior" placeholder="Ej: Blanco Perla">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="color_interior" class="form-label text-white">Color Interior:</label>
-                            <input type="text" name="color_interior" class="form-control" value="{{ VehiculoEditar.color_interior|default:'' }}" id="color_interior" placeholder="Ej: Negro Cuero">
+                            <input type="text" name="color_interior" class="form-control" value="{{ VehiculoEditar.color_interior_vch_mod3|default:'' }}" id="color_interior" placeholder="Ej: Negro Cuero">
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="numero_puertas" class="form-label text-white">Número de Puertas:</label>
-                            <input type="number" name="numero_puertas" min="1" max="6" class="form-control" value="{{ VehiculoEditar.numero_puertas|default:'' }}" id="numero_puertas" placeholder="Ej: 4">
+                            <input type="number" name="numero_puertas" min="1" max="6" class="form-control" value="{{ VehiculoEditar.numero_puertas_vch_mod3|default:'' }}" id="numero_puertas" placeholder="Ej: 4">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="cilindraje_cc" class="form-label text-white">Cilindraje (cc):</label>
-                            <input type="number" name="cilindraje_cc" min="0" class="form-control" value="{{ VehiculoEditar.cilindraje_cc|default:'' }}" id="cilindraje_cc" placeholder="Ej: 2000">
+                            <input type="number" name="cilindraje_cc" min="0" class="form-control" value="{{ VehiculoEditar.cilindraje_cc_vch_mod3|default:'' }}" id="cilindraje_cc" placeholder="Ej: 2000">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="potencia_hp" class="form-label text-white">Potencia (HP):</label>
-                            <input type="number" name="potencia_hp" min="0" class="form-control" value="{{ VehiculoEditar.potencia_hp|default:'' }}" id="potencia_hp" placeholder="Ej: 150">
+                            <input type="number" name="potencia_hp" min="0" class="form-control" value="{{ VehiculoEditar.potencia_hp_vch_mod3|default:'' }}" id="potencia_hp" placeholder="Ej: 150">
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="descripcion_detallada" class="form-label text-white">Descripción Detallada:</label>
-                        <textarea name="descripcion_detallada" id="descripcion_detallada" class="form-control" rows="5" placeholder="Ingrese una descripción completa del vehículo, estado, extras, etc." required>{{ VehiculoEditar.descripcion_detallada }}</textarea>
+                        <textarea name="descripcion_detallada" id="descripcion_detallada" class="form-control" rows="5" placeholder="Ingrese una descripción completa del vehículo, estado, extras, etc." required>{{ VehiculoEditar.descripcion_detallada_vch_mod3 }}</textarea>
                     </div>
 
                     <div class="mb-3">
@@ -126,10 +126,10 @@
                             {% for caracteristica in caracteristicas_adicionales %}
                                 <div class="col-md-4 col-sm-6">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="caracteristicas_adicionales" value="{{ caracteristica.id }}" id="caracteristica_{{ caracteristica.id }}"
-                                            {% if caracteristica in VehiculoEditar.caracteristicas_adicionales.all %}checked{% endif %}>
-                                        <label class="form-check-label text-white" for="caracteristica_{{ caracteristica.id }}">
-                                            {% if caracteristica.icono %}<i class="{{ caracteristica.icono }} me-2"></i>{% endif %} {{ caracteristica.nombre }}
+                                        <input class="form-check-input" type="checkbox" name="caracteristicas_adicionales" value="{{ caracteristica.id_cad_mod3 }}" id="caracteristica_{{ caracteristica.id_cad_mod3 }}"
+                                            {% if caracteristica in VehiculoEditar.caracteristicas_adicionales_vch_mod3.all %}checked{% endif %}>
+                                        <label class="form-check-label text-white" for="caracteristica_{{ caracteristica.id_cad_mod3 }}">
+                                            {% if caracteristica.icono %}<i class="{{ caracteristica.icono }} me-2"></i>{% endif %} {{ caracteristica.nombre_cad_mod3 }}
                                         </label>
                                     </div>
                                 </div>
@@ -140,11 +140,11 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="numero_chasis" class="form-label text-white">Número de Chasis (VIN):</label>
-                            <input type="text" name="numero_chasis" class="form-control" value="{{ VehiculoEditar.numero_chasis }}" id="numero_chasis" maxlength="17" placeholder="Ingrese el VIN" required>
+                            <input type="text" name="numero_chasis" class="form-control" value="{{ VehiculoEditar.numero_chasis_vch_mod3 }}" id="numero_chasis" maxlength="17" placeholder="Ingrese el VIN" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="placa" class="form-label text-white">Número de Placa:</label>
-                            <input type="text" name="placa" class="form-control" value="{{ VehiculoEditar.placa|default:'' }}" id="placa" maxlength="10" placeholder="Ej: ABC-1234">
+                            <input type="text" name="placa" class="form-control" value="{{ VehiculoEditar.placa_vch_mod3|default:'' }}" id="placa" maxlength="10" placeholder="Ej: ABC-1234">
                         </div>
                     </div>
 
@@ -152,29 +152,29 @@
                         <label for="situacion_general" class="form-label text-white">Situación General del Vehículo:</label>
                         <select name="situacion_general" id="situacion_general" class="form-select" required>
                             {% for choice_value, choice_label in VehiculoEditar.SITUACION_VEHICULO_CHOICES %}
-                                <option value="{{ choice_value }}" {% if VehiculoEditar.situacion_general == choice_value %}selected{% endif %}>{{ choice_label }}</option>
+                                <option value="{{ choice_value }}" {% if VehiculoEditar.situacion_general_vch_mod3 == choice_value %}selected{% endif %}>{{ choice_label }}</option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" name="tiene_historial_siniestros" id="tiene_historial_siniestros" {% if VehiculoEditar.tiene_historial_siniestros %}checked{% endif %}>
+                        <input class="form-check-input" type="checkbox" name="tiene_historial_siniestros" id="tiene_historial_siniestros" {% if VehiculoEditar.tiene_historial_siniestros_vch_mod3 %}checked{% endif %}>
                         <label class="form-check-label text-white" for="tiene_historial_siniestros">
                             ¿Tiene historial de siniestros/accidentes?
                         </label>
                     </div>
-                    <div class="mb-3" id="detalle_siniestros_div" style="display: {% if VehiculoEditar.tiene_historial_siniestros %}block{% else %}none{% endif %};">
+                    <div class="mb-3" id="detalle_siniestros_div" style="display: {% if VehiculoEditar.tiene_historial_siniestros_vch_mod3 %}block{% else %}none{% endif %};">
                         <label for="detalle_historial_siniestros" class="form-label text-white">Detalle del Historial de Siniestros:</label>
-                        <textarea name="detalle_historial_siniestros" id="detalle_historial_siniestros" class="form-control" rows="3" placeholder="Fechas, tipo de daño, reparaciones, etc.">{{ VehiculoEditar.detalle_historial_siniestros|default:'' }}</textarea>
+                        <textarea name="detalle_historial_siniestros" id="detalle_historial_siniestros" class="form-control" rows="3" placeholder="Fechas, tipo de daño, reparaciones, etc.">{{ VehiculoEditar.detalle_historial_siniestros_vch_mod3|default:'' }}</textarea>
                     </div>
 
                     <div class="mb-3">
                         <label for="valor_avaluo_referencia" class="form-label text-white">Valor de Avalúo/Referencia (Catastro) ($):</label>
-                        <input type="number" name="valor_avaluo_referencia" step="0.01" min="0" class="form-control" value="{{ VehiculoEditar.valor_avaluo_referencia|default:'' }}" id="valor_avaluo_referencia" placeholder="Ej: 22000.00">
+                        <input type="number" name="valor_avaluo_referencia" step="0.01" min="0" class="form-control" value="{{ VehiculoEditar.valor_avaluo_referencia_vch_mod3|default:'' }}" id="valor_avaluo_referencia" placeholder="Ej: 22000.00">
                     </div>
 
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" name="disponible_para_venta" id="disponible_para_venta" {% if VehiculoEditar.disponible_para_venta %}checked{% endif %}>
+                        <input class="form-check-input" type="checkbox" name="disponible_para_venta" id="disponible_para_venta" {% if VehiculoEditar.disponible_para_venta_vch_mod3 %}checked{% endif %}>
                         <label class="form-check-label text-white" for="disponible_para_venta">
                             ¿Está disponible para venta?
                         </label>
@@ -199,11 +199,10 @@
                 detalleSiniestrosDiv.style.display = 'block';
             } else {
                 detalleSiniestrosDiv.style.display = 'none';
-                detalleSiniestrosDiv.querySelector('textarea').value = ''; // Limpiar el campo al ocultar
+                detalleSiniestrosDiv.querySelector('textarea').value = ''; 
             }
         });
-
-        // Asegurarse de que el div de detalle de siniestros se muestre u oculte al cargar la página si el checkbox está marcado
+        // Inicializa el estado al cargar la página (ya estaba bien, pero se mantiene la estructura)
         if (tieneSiniestrosCheckbox.checked) {
             detalleSiniestrosDiv.style.display = 'block';
         } else {

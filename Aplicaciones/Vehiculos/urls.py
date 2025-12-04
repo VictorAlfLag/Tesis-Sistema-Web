@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views # Asegúrate de que este import apunte a tus vistas
+from . import views 
 
 urlpatterns = [
     # --- URLs para VehiculoMarca ---

@@ -13,11 +13,13 @@
             <div class="col-md-12">
                 <form action="{% url 'proceso_actualizar_tipo_carroceria' %}" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="id" value="{{ TipoCarroceriaEditar.id }}">
+                    <input type="hidden" name="id" value="{{ TipoCarroceriaEditar.id_tca_mod3 }}">
 
                     <div class="mb-3">
                         <label for="nombre" class="form-label text-white">Nombre:</label>
-                        <input type="text" name="nombre" class="form-control" value="{{ TipoCarroceriaEditar.nombre }}" id="nombre" placeholder="Ingrese el nombre del tipo de carrocería" required>
+                        <input type="text" name="nombre" class="form-control" 
+                               value="{{ TipoCarroceriaEditar.nombre_tca_mod3 }}" 
+                               id="nombre" placeholder="Ingrese el nombre del tipo de carrocería" required>
                     </div>
 
                     <br>

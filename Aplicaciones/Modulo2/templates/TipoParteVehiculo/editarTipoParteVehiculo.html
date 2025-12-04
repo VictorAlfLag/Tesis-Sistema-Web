@@ -13,16 +13,19 @@
             <div class="col-md-12">
                 <form action="{% url 'proceso_actualizar_tipo_parte_vehiculo' %}" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="id" value="{{TipoParteVehiculoEditar.id}}">
+                    <!-- Aplicando sufijo a ID -->
+                    <input type="hidden" name="id" value="{{TipoParteVehiculoEditar.id_tpv_mod2}}">
 
                     <div class="mb-3">
                         <label for="nombre" class="form-label text-white">Nombre:</label>
-                        <input type="text" name="nombre" class="form-control" value="{{TipoParteVehiculoEditar.nombre}}" id="nombre" placeholder="Ingrese el nombre del tipo de parte de vehículo">
+                        <!-- Aplicando sufijo a nombre -->
+                        <input type="text" name="nombre" class="form-control" value="{{TipoParteVehiculoEditar.nombre_tpv_mod2}}" id="nombre" placeholder="Ingrese el nombre del tipo de parte de vehículo">
                     </div>
 
                     <div class="mb-3">
                         <label for="descripcion" class="form-label text-white">Descripción:</label>
-                        <textarea name="descripcion" id="descripcion" class="form-control" rows="3" placeholder="Ingrese la descripción">{{TipoParteVehiculoEditar.descripcion}}</textarea>
+                        <!-- Aplicando sufijo a descripción -->
+                        <textarea name="descripcion" id="descripcion" class="form-control" rows="3" placeholder="Ingrese la descripción">{{TipoParteVehiculoEditar.descripcion_tpv_mod2}}</textarea>
                     </div>
 
                     <br>

@@ -18,7 +18,8 @@
                     <div class="col-md-6">
                         <p><i class="fa fa-cubes text-primary me-2"></i> <strong>Stock:</strong> {{ producto.stock }} unidades</p>
                         <p><i class="fa fa-folder text-primary me-2"></i> <strong>Categoría:</strong> {{ producto.categoria.nombre|default:"N/A" }}</p>
-                        <p><i class="fa fa-wrench text-primary me-2"></i> <strong>Tipo de Parte:</strong> {{ producto.tipo_parte.nombre|default:"N/A" }}</p>
+                        <!-- Aplicando sufijo a tipo_parte.nombre -->
+                        <p><i class="fa fa-wrench text-primary me-2"></i> <strong>Tipo de Parte:</strong> {{ producto.tipo_parte.nombre_tpv_mod2|default:"N/A" }}</p>
                     </div>
                     <div class="col-md-6">
                         <p><i class="fa fa-hashtag text-primary me-2"></i> <strong>SKU:</strong> {{ producto.sku|default:"N/A" }}</p>
@@ -48,14 +49,14 @@
                     {% if producto.compatibilidad_modelos.exists %}
                         <li><strong>Modelos:</strong>
                             {% for modelo in producto.compatibilidad_modelos.all %}
-                                {{ modelo.marca.nombre }} {{ modelo.nombre }}{% if not forloop.last %}, {% endif %}
+                                {{ modelo.marca.nombre }}{{ modelo.nombre }}{% if not forloop.last %}, {% endif %}
                             {% endfor %}
                         </li>
                     {% endif %}
                 </ul>
                 {% endif %}
 
-                ---
+                <hr class="mt-4 mb-4">
                 <h4 class="mb-3">Galería de Imágenes del Producto</h4>
                 <div class="row g-3">
                     {% for imagen in imagenes %} 
@@ -77,6 +78,9 @@
                 <div class="d-flex justify-content-start mt-5">
                     <a href="{% url 'catalogo_repuestos_cliente' %}" class="btn btn-secondary btn-lg">
                         <span class="me-2">Volver al Catálogo</span> <i class="fa fa-arrow-left"></i>
+                    </a>
+                    <a href="#" class="btn btn-primary btn-lg ms-3">
+                        <span class="me-2">Añadir al Carrito</span> <i class="fa fa-shopping-cart"></i>
                     </a>
                 </div>
             </div>
@@ -102,4 +106,5 @@
 </div>
 {% endblock %}
 {% block extra_js %}
+<!-- Script placeholder for any client-side logic, pagination, or filtering -->
 {% endblock %}

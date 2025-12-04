@@ -22,11 +22,11 @@
                 <tbody>
                     {% for tipoTransmisionTemporal in tipos_transmision %}
                     <tr>
-                        <td>{{ tipoTransmisionTemporal.id }}</td>
-                        <td>{{ tipoTransmisionTemporal.nombre }}</td>
+                        <td>{{ tipoTransmisionTemporal.id_ttr_mod3 }}</td>
+                        <td>{{ tipoTransmisionTemporal.nombre_ttr_mod3 }}</td>
                         <td>
-                            <a href="{% url 'editar_tipo_transmision' tipoTransmisionTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="{% url 'eliminar_tipo_transmision' tipoTransmisionTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar este tipo de transmisión?')" class="btn btn-danger btn-sm">Eliminar</a>
+                            <a href="{% url 'editar_tipo_transmision' tipoTransmisionTemporal.id_ttr_mod3 %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_tipo_transmision' tipoTransmisionTemporal.id_ttr_mod3 %}" onclick="return confirm('¿Está seguro de eliminar este tipo de transmisión?')" class="btn btn-danger btn-sm">Eliminar</a>
                         </td>
                     </tr>
                     {% endfor %}

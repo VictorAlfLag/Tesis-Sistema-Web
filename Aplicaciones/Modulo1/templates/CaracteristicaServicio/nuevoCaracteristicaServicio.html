@@ -21,29 +21,23 @@
             <div class="col-md-12">
                 <form action="{% url 'guardar_caracteristica_servicio' %}" method="post">
                     {% csrf_token %}
-
-                    {# Campo para Tipo de Mantenimiento #}
                     <div class="mb-3">
                         <label for="tipo_mantenimiento" class="form-label text-white">Tipo de Mantenimiento:</label>
                         <select name="tipo_mantenimiento" id="tipo_mantenimiento" class="form-select" required>
                             <option value="">-- Seleccione un tipo de mantenimiento --</option>
                             {% for tipo in tipos_mantenimiento %}
-                                <option value="{{ tipo.id }}" {% if tipo.mantenimiento_anterior and tipo.id == tipo_mantenimiento_anterior %}selected{% endif %}>
+                                <option value="{{ tipo.id_tim_mod1 }}" {% if tipo.id_tim_mod1 == tipo_mantenimiento_anterior %}selected{% endif %}>
                                     {{ tipo.nombre_tim_mod1 }}
                                 </option>
                             {% endfor %}
                         </select>
                     </div>
-
-                    {# Campo para Nombre de la Característica #}
                     <div class="mb-3">
                         <label for="nombre" class="form-label text-white">Nombre de la Característica:</label>
                         <input type="text" name="nombre" class="form-control" id="nombre"
                                placeholder="Ingrese el nombre de la característica del servicio"
                                value="{{ nombre_anterior|default:'' }}" required>
                     </div>
-
-                    {# Campo para Descripción Detallada #}
                     <div class="mb-3">
                         <label for="descripcion" class="form-label text-white">Descripción Detallada:</label>
                         <textarea name="descripcion" id="descripcion" class="form-control" rows="5"

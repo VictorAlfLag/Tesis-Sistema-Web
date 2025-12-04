@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.home_modulo1, name='home_modulo1'),  
-
+    path('panel-Taller/', views.plantilla_admin_Taller_view, name='plantillaTaller'),
     # URLs para TipoMantenimiento
     path('tipos-mantenimiento/', views.listado_tipo_mantenimiento, name='listado_tipo_mantenimiento'),
     path('tipos-mantenimiento/eliminar/<int:id>/', views.eliminar_tipo_mantenimiento, name='eliminar_tipo_mantenimiento'),

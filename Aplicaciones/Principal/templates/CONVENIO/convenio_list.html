@@ -1,0 +1,116 @@
+{% extends 'plantilla_admin.html' %} 
+{% load static %}
+
+{% block title %}Gestión de Convenios{% endblock %}
+
+{% block body %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4">
+        <h4 class="mb-4 text-center text-primary">Gestión de Convenios por Cliente</h4>
+        <p class="text-white-50 text-center">Revisa el estado de los convenios y asigna descuentos a los clientes.</p>
+        
+        {# Mostrar Mensajes de Django #}
+        {% if messages %}
+            <ul class="messages list-unstyled">
+                {% for message in messages %}
+                    <li class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {# Formulario de Búsqueda #}
+        <div class="mb-4">
+            <form method="get" class="d-flex">
+                <input class="form-control bg-dark border-0 me-2" type="search" placeholder="Buscar por cédula, nombre o apellido..." aria-label="Search" name="q" value="{{ search_query }}">
+                <button class="btn btn-primary" type="submit">Buscar</button>
+            </form>
+        </div>
+        
+        <h5 class="text-white mb-3">Clientes con Convenio Asignado</h5>
+
+        {# Tabla para Clientes CON Convenio #}
+        {% if convenios_existentes %}
+            <div class="table-responsive mb-5">
+                <table class="table table-bordered text-start align-middle">
+                    <thead>
+                        <tr class="text-white">
+                            <th scope="col">Cédula</th>
+                            <th scope="col">Nombre Completo</th>
+                            <th scope="col">Descuento (%)</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for convenio in convenios_existentes %}
+                        <tr class="text-white-50">
+                            {# 💡 Usamos .usuario.cedula y .usuario.first_name para acceder a los datos del usuario #}
+                            <td>{{ convenio.cliente_profile.usuario.cedula }}</td>
+                            <td>{{ convenio.cliente_profile.usuario.first_name }} {{ convenio.cliente_profile.usuario.last_name }}</td>
+                            <td>{{ convenio.descuento_porcentaje|floatformat:2 }}</td>
+                            <td>
+                                {% if convenio.activo %}
+                                    <span class="badge bg-success">Activo</span>
+                                {% else %}
+                                    <span class="badge bg-warning">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'editar_convenio_cliente' pk=convenio.cliente_profile.pk %}" class="btn btn-sm btn-primary me-2">
+                                    Editar
+                                </a>
+                                <form action="{% url 'eliminar_convenio_cliente' pk=convenio.cliente_profile.pk %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar el convenio de {{ convenio.cliente_profile.usuario.first_name }}?');">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-white-50 mb-5">No hay convenios activos que coincidan con la búsqueda.</p>
+        {% endif %}
+        
+        
+        <h5 class="text-white mb-3">Clientes sin Convenio</h5>
+        
+        {# Tabla para Clientes SIN Convenio #}
+        {% if clientes_sin_convenio %}
+            <div class="table-responsive">
+                <table class="table table-bordered text-start align-middle">
+                    <thead>
+                        <tr class="text-white bg-dark">
+                            <th scope="col">Cédula</th>
+                            <th scope="col">Nombre Completo</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cliente in clientes_sin_convenio %}
+                        <tr class="text-white-50">
+                            {# 💡 Usamos .usuario.cedula y .usuario.first_name para acceder a los datos del usuario #}
+                            <td>{{ cliente.usuario.cedula }}</td>
+                            <td>{{ cliente.usuario.first_name }} {{ cliente.usuario.last_name }}</td>
+                            <td><span class="badge bg-info">Sin Convenio</span></td>
+                            <td>
+                                <a href="{% url 'editar_convenio_cliente' pk=cliente.pk %}" class="btn btn-sm btn-success">
+                                    Asignar Convenio
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% elif not convenios_existentes and not clientes_sin_convenio %}
+             <p class="text-white-50">No se encontraron clientes que coincidan con los criterios de búsqueda.</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

@@ -7,9 +7,11 @@
         <div class="row g-5">
             <div class="col-lg-8">
                 <h1 class="display-4 mb-4 text-primary">{{ vehiculo.marca.nombre }} {{ vehiculo.modelo.nombre }} ({{ vehiculo.anio_fabricacion }})</h1>
+                
                 <div class="mb-4">
                     <h3>Precio: <strong class="text-secondary">${{ vehiculo.precio|floatformat:2 }}</strong></h3>
                 </div>
+
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <p><i class="fa fa-tachometer-alt text-primary me-2"></i> <strong>Kilometraje:</strong> {{ vehiculo.kilometraje|floatformat:0 }} km</p>
@@ -22,6 +24,7 @@
                         <p><i class="fa fa-tags text-primary me-2"></i> <strong>Placa:</strong> {{ vehiculo.placa|default:"N/A" }}</p>
                     </div>
                 </div>
+
                 <p class="mb-4">
                     <strong>Descripción:</strong>
                     {% if vehiculo.descripcion %}
@@ -32,12 +35,13 @@
                 </p>
 
                 ---
+                
                 <h4 class="mb-3">Galería de Imágenes</h4>
                 <div class="row g-3">
                     {% for imagen in vehiculo.imagenes.all %}
                         <div class="col-sm-6 col-md-4 col-lg-3">
-                            <a href="{{ imagen.imagen.url }}" target="_blank">
-                                <img src="{{ imagen.imagen.url }}" class="img-fluid rounded shadow-sm" alt="Imagen de {{ vehiculo.marca.nombre }} {{ vehiculo.modelo.nombre }}">
+                            <a href="{{ imagen.imagen.url }}" target="_blank" title="Ver imagen en tamaño completo">
+                                <img src="{{ imagen.imagen.url }}" class="img-fluid rounded shadow-sm" alt="Imagen de {{ vehiculo.marca.nombre }} {{ vehiculo.modelo.nombre }}" style="object-fit: cover; height: 150px; width: 100%;">
                             </a>
                             {% if imagen.es_principal %}
                                 <p class="text-center mt-1"><span class="badge bg-primary">Imagen Principal</span></p>
@@ -49,7 +53,9 @@
                         </div>
                     {% endfor %}
                 </div>
+                
                 <hr class="my-5">
+
                 <div class="d-flex justify-content-start mt-5">
                     <a href="{% url 'reservar_vehiculo' vehiculo.id %}" class="btn btn-primary btn-lg me-3">
                         <span class="me-2">Reservar este Vehículo</span> <i class="fa fa-calendar-check"></i>
@@ -59,6 +65,7 @@
                     </a>
                 </div>
             </div>
+
             <div class="col-lg-4">
                 <div class="bg-light rounded p-4 shadow-sm">
                     <h5 class="mb-4">Información Adicional</h5>
@@ -84,7 +91,6 @@
 {% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // --- JavaScript for Service Characteristics Section ---
         const itemsPerPageSelectServices = document.getElementById('entries_per_page_services');
         const searchInputServices = document.getElementById('search_input_services');
         const cardsContainerServices = document.getElementById('characteristc_cards_container_services');
@@ -188,7 +194,7 @@
             }
         });
 
-        filterAndPaginateServices(); // Call function on load to initialize pagination
+        filterAndPaginateServices(); 
     });
 </script>
 {% endblock %}

@@ -1,0 +1,93 @@
+{% extends "plantilla_admin.html" %}
+{% block body %}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4 mb-4">
+        <div class="card-title text-center">
+            <h3 class="mb-0 text-white"><b>EDITAR SLIDE: {{ slide_editar.title }}</b></h3>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="bg-secondary rounded p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'proceso_actualizar_carrucel' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ slide_editar.id }}">
+                    
+                    <div class="mb-3 text-center">
+                        <label class="form-label text-white d-block">Imagen Actual:</label>
+                        {% if slide_editar.image %}
+                            <img src="{{ slide_editar.image.url }}" alt="Imagen actual" style="width: 200px; height: auto; border: 1px solid #333;">
+                            <div class="form-check text-center mt-2">
+                                <input type="checkbox" name="image-clear" id="image-clear" class="form-check-input">
+                                <label for="image-clear" class="form-check-label text-white">Eliminar imagen actual</label>
+                            </div>
+                        {% else %}
+                            <p class="text-warning">No hay imagen actual.</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="image" class="form-label text-white">Subir Nueva Imagen (Opcional):</label>
+                        <input type="file" name="image" class="form-control bg-dark text-white" id="image">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="order" class="form-label text-white">Orden de Aparición:</label>
+                        <input type="number" name="order" class="form-control" id="order" 
+                               value="{{ slide_editar.order }}" required>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="is_active" class="form-check-input" id="is_active" 
+                               {% if slide_editar.is_active %}checked{% endif %}>
+                        <label class="form-check-label text-white" for="is_active">Mostrar Slide (Activo)</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="subtitle" class="form-label text-white">Subtítulo (Línea pequeña):</label>
+                        <input type="text" name="subtitle" class="form-control" id="subtitle" 
+                               value="{{ slide_editar.subtitle }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="title" class="form-label text-white">Título Principal:</label>
+                        <input type="text" name="title" class="form-control" id="title" 
+                               value="{{ slide_editar.title }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label text-white">Descripción Detallada:</label>
+                        <textarea name="description" id="description" class="form-control" rows="3">{{ slide_editar.description }}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="button_text" class="form-label text-white">Texto del Botón:</label>
+                        <input type="text" name="button_text" class="form-control" id="button_text" 
+                               value="{{ slide_editar.button_text }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="button_link" class="form-label text-white">Enlace del Botón (URL):</label>
+                        <input type="url" name="button_link" class="form-control" id="button_link" 
+                               value="{{ slide_editar.button_link|default:'' }}">
+                    </div>
+                    
+                    <br>
+                    <button type="submit" class="btn btn-warning me-2">Actualizar Slide</button>
+                    <a href="{% url 'listado_carrucel' %}" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

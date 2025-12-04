@@ -1,266 +1,449 @@
-<!DOCTYPE html>
+{% load static %}
+<!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MaterialPro Free NextJs Admin Template by Wrappixel</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Grupo SantaMaria</title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <link rel="shortcut icon" type="image/png" href="{% static 'Plantilla/Modernize-1.0.0/src/assets/images/logos/favicon.png' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Teko:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
+    <link rel="stylesheet" href="{% static 'Plantilla/Modernize-1.0.0/src/assets/css/styles.min.css' %}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* Contenedor principal del pop-up */
+        .swal2-popup {
+            background-color: #FFFFFF; /* Fondo blanco para que parezca una tarjeta */
+            border-radius: 10px; /* Bordes redondeados, como tu tarjeta */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            font-family: 'Roboto', sans-serif; /* Usa una de tus fuentes si está disponible */
+            border: 1px solid #e0e0e0; /* Un borde sutil para definir la tarjeta */
+        }
 
-  <!-- Favicon -->
-  <!-- --------------------------------------------------- -->
-  <link rel="shortcut icon" type="image/png"
-    href="https://demos.wrappixel.com/premium-admin-templates/nextjs/materialpro-nextjs/landingpage/dist/images/favicon.png" />
+        /* Título del mensaje */
+        .swal2-title {
+            color: #1A237E; /* Azul oscuro, similar al texto de tu encabezado o títulos */
+            font-weight: 700; /* Negrita */
+            font-size: 1.6em; /* Un poco más grande para el título */
+            padding-bottom: 0.5em;
+        }
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
-  <link href="./style.css" rel="stylesheet" />
+        /* Contenido del mensaje */
+        .swal2-html-container {
+            color: #444444; /* Color de texto más suave */
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+
+        /* Botones de confirmación (el botón "OK") */
+        .swal2-confirm.swal2-styled {
+            background-color: #007bff !important; /* Azul de Bootstrap, o el azul vibrante de tu header */
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 5px !important;
+            font-weight: 500;
+            padding: 10px 25px;
+            transition: background-color 0.3s ease;
+        }
+        .swal2-confirm.swal2-styled:hover {
+            background-color: #0056b3 !important; /* Un azul más oscuro al pasar el ratón */
+        }
+
+        /* Botones de cancelación (si los usas, por ejemplo, en confirmaciones de eliminar) */
+        .swal2-styled.swal2-cancel {
+            background-color: #6c757d !important; /* Gris de Bootstrap para cancelar */
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 5px !important;
+            font-weight: 500;
+            padding: 10px 25px;
+            transition: background-color 0.3s ease;
+        }
+        .swal2-styled.swal2-cancel:hover {
+            background-color: #5a6268 !important;
+        }
+
+        /* Colores para los iconos (éxito, error, advertencia) */
+        .swal2-success .swal2-success-line-tip,
+        .swal2-success .swal2-success-line-long {
+            background-color: #28a745 !important; /* Verde de Bootstrap para éxito */
+        }
+        .swal2-success .swal2-success-ring {
+            border-color: #28a745 !important;
+        }
+        .swal2-error .swal2-x-mark {
+            background-color: #dc3545 !important; /* Rojo de Bootstrap para error */
+        }
+        .swal2-error .swal2-x-mark-line-left,
+        .swal2-error .swal2-x-mark-line-right {
+             background-color: #dc3545 !important; /* Rojo de Bootstrap para error */
+        }
+        .swal2-error .swal2-error-ring {
+            border-color: #dc3545 !important;
+        }
+        .swal2-warning .swal2-icon-content {
+            color: #ffc107 !important; /* Amarillo de Bootstrap para advertencia */
+        }
+
+        /* Estilos para mensajes de validación (de jQuery Validate) */
+        label.error {
+            color: red;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .form-control.error {
+            border: 1px solid red;
+        }
+
+        /* Estilos para los controles de paginación y búsqueda personalizados */
+        .dataTables_length, .dataTables_filter {
+            margin-bottom: 1rem; /* Espacio entre los controles y las tarjetas */
+        }
+        .dataTables_length label, .dataTables_filter label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .dataTables_paginate {
+            display: flex;
+            justify-content: flex-end; /* Alinea los controles a la derecha */
+        }
+        #page_numbers {
+            margin: 0 10px; /* Espacio entre Anterior/Siguiente y los números */
+        }
+        /* Estilos para el logo con las cajas de color */
+        .colored-boxes {
+            display: inline-flex; /* Para que las cajas se muestren en línea */
+            height: 100%; /* O un valor fijo si lo necesitas */
+            align-items: center; /* Centrar verticalmente las cajas */
+            vertical-align: middle; /* Alineación vertical */
+            margin-right: 5px; /* Espacio entre las cajas y el texto */
+        }
+
+        .colored-boxes .box {
+            display: block; /* Cada caja es un bloque */
+            width: 8px; /* Ancho de cada línea */
+            height: 30px; /* Alto de cada línea, ajusta si es necesario */
+            margin: 0 1px; /* Espacio entre las líneas */
+            border-radius: 2px; /* Bordes ligeramente redondeados, opcional */
+        }
+
+        .colored-boxes .black {
+            background-color: #000000; /* Color negro */
+        }
+
+        .colored-boxes .gray {
+            background-color: #CCCCCC; /* Color gris */
+        }
+
+        .colored-boxes .red {
+            background-color: #E70020; /* Color rojo, ajusta para que coincida con tu logo */
+        }
+    </style>
 </head>
-
 <body>
-  <div id="main-wrapper">
-    <header class="bg-white">
-      <div class="container">
-        <!-- Start Header -->
-        <div class="header">
-          <nav class="navbar navbar-expand-md navbar-light px-0">
-            <a class="navbar-brand" href="index.html">
-              <img
-                src="https://demos.wrappixel.com/premium-admin-templates/nextjs/materialpro-nextjs/landingpage/dist/images/material-admin-logo.png"
-                alt="logo" />
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-              aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav ms-auto py-3 py-md-0">
-                <li class="nav-item pe-0 pe-md-3">
-                  <a href="https://www.wrappixel.com/templates/materialpro-free-nextjs-admin-template"
-                    class="btn btn-custom btn-outline-primary d-block d-md-inline-block" target="_blank">Free
-                    Download</a>
-                </li>
-                <li class="nav-item mt-3 mt-md-0">
-                  <a href="https://www.wrappixel.com/templates/materialpro-nextjs-admin-dashboard-app-directory/?ref=33"
-                    class="btn btn-custom btn-primary d-block d-md-inline-block" target="_blank">Check Pro Version</a>
-                </li>
-              </ul>
-            </div>
-          </nav>
-        </div>
-        <!-- End Header -->
-      </div>
-    </header>
-
-    <div class="content-wrapper">
-      <section class="spacer bg-light">
-        <div class="container">
-          <div class="row justify-content-md-center">
-            <!-- ============================================================== -->
-            <!-- Lite Demo -->
-            <!-- ============================================================== -->
-            <div class="col-lg-6 col-md-9 d-flex aligh-items-stretch">
-              <div class="card p-2 me-1">
-                <div class="card-body p-4">
-                  <div class="text-center">
-                    <h3 class="text-dark font-weight-medium">Free Version</h3>
-                  </div>
-                  <div class="live-box text-center mt-4">
-                    <img class="img-fluid rounded"
-                      src="https://www.wrappixel.com/wp-content/uploads/2023/08/materialpro-nextjs-free-2.jpg"
-                      alt="Free version" />
-                  </div>
-                  <div class="text-center mt-4">
-                    <a class="btn btn-outline-secondary btn-custom mb-2 mb-md-0"
-                      href="https://materialpro-nextjs-free.vercel.app/" target="_blank">Live Preview</a>
-                    <a href="https://www.wrappixel.com/templates/materialpro-free-nextjs-admin-template"
-                      class="btn btn-secondary btn-custom ms-2" target="_blank">Free
-                      Download</a>
-                  </div>
-
-                  <div class="row text-muted mt-4">
-                    <div class="col-md-6">
-                      <ul class="list-unstyled listing">
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-muted me-2"></span>1 Basic Dashboard
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-muted me-2"></span>7+ UI component
-                          pages
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-muted me-2"></span>7+ Pages Template
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-muted me-2"></span>Latest Material UI
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-muted me-2"></span>Tabler Icons
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-muted me-2"></span>Fully Responsive
-                          Pages
-                        </li>
-
-                      </ul>
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+        data-sidebar-position="fixed" data-header-position="fixed">
+        <aside class="left-sidebar">
+            <div>
+                <div class="brand-logo d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center h-100">
+                        <a href="{% url 'home_page' %}" class="navbar-brand" style="height: 125px;">
+                            <h1 class="text-primary mb-0" style="color: #000000ff !important;"> 
+                                <span class="colored-boxes me-2">
+                                    <span class="box black"></span>
+                                    <span class="box gray"></span>
+                                    <span class="box red"></span>
+                                </span>
+                                Bienvenido
+                            </h1>
+                        </a>
                     </div>
-                    <div class="col-md-6">
-                      <ul class="list-unstyled listing">
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-muted me-2"></span>Easy To Customize
-                        </li>
-                        <li class="text-dark py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-muted me-2"></span>No Documentation
-                        </li>
-                        <li class="text-dark py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-muted me-2"></span>Backlink Required
-                        </li>
-                        <li class="text-dark py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-muted me-2"></span>No Support Provided
-                        </li>
-                      </ul>
+                    <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                        <i class="ti ti-x fs-8"></i>
                     </div>
-                  </div>
                 </div>
-              </div>
-            </div>
-            <!-- ============================================================== -->
-            <!-- Pro Demo -->
-            <!-- ============================================================== -->
-            <div class="col-lg-6 col-md-9 mt-0 mt-md-4 mt-lg-0">
-              <div class="card pro-demo p-2 ms-1">
-                <div class="card-body p-4">
-                  <div class="text-center">
-                    <h3 class="text-primary font-weight-medium">
-                      Pro Version
-                    </h3>
-                  </div>
-                  <div class="live-box text-center mt-4">
-                    <img class="img-fluid rounded"
-                      src="https://www.wrappixel.com/wp-content/uploads/edd/2024/05/materialpro-next-js-admin-wpn1.jpg"
-                      alt="Pro version" />
-                  </div>
-                  <div class="text-center mt-4">
-                    <a class="btn btn-outline-primary btn-custom mb-2 mb-md-0"
-                      href="https://materialpro-nextjs-pro.vercel.app/"
-                      target="_blank">Live Preview</a>
-                    <a href="https://www.wrappixel.com/templates/materialpro-nextjs-admin-dashboard-app-directory/?ref=33"
-                      class="btn btn-custom btn-primary ms-2" target="_blank">Check Pro Version</a>
-                  </div>
-                  <div class="row text-dark mt-4">
-                    <div class="col-md-6">
-                      <ul class="list-unstyled listing">
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>6+ Stunning
-                          Dashboards
+                <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+                    <ul id="sidebarnav">
+                        <li class="nav-small-cap">
+                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                            <span class="hide-menu">Home</span>
                         </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>65+ Page
-                          Templates
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{% url 'home_page' %}" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-layout-dashboard"></i>
+                                </span>
+                                <span class="hide-menu">Dashboard</span>
+                            </a>
                         </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>45+ UI
-                          Components
+                        <li class="nav-small-cap">
+                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                            <span class="hide-menu">MIS PEDIDOS</span>
                         </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Axios Included
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{% url 'catalogo_tipos_mantenimiento' %}" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-settings"></i> 
+                                </span>
+                                <span class="hide-menu">Taller</span>
+                            </a>
                         </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Front-end
-                          Landing Page
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{% url 'catalogo_repuestos_cliente' %}" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-tools"></i> 
+                                </span>
+                                <span class="hide-menu">Repuestos</span>
+                            </a>
                         </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>1 Year
-                          Premium Support
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{% url 'catalogo_vehiculos_cliente' %}" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-car"></i> 
+                                </span>
+                                <span class="hide-menu">Venta Vehículos</span>
+                            </a>
                         </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Right-to-Left(RTL) Verion
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{% url 'plantilla_Cliente' %}" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-user-plus"></i>
+                                </span>
+                                <span class="hide-menu">Convenios</span>
+                            </a>
                         </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Unlimited
-                          Colors
+                        <li class="nav-small-cap">
+                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                            <span class="hide-menu">EXTRA</span>
                         </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>3000+ Font
-                          Icons
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="./icon-tabler.html" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-mood-happy"></i>
+                                </span>
+                                <span class="hide-menu">Editar Perfil</span>
+                            </a>
                         </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Lots of Chart
-                          Options
+                                                <li class="sidebar-item">
+                            <a class="sidebar-link" href="{% url 'logout' %}" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-login"></i>
+                                </span>
+                                <span class="hide-menu">Cerrar Sección</span>
+                            </a>
                         </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Latest
-                          Material UI
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="./sample-page.html" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-aperture"></i>
+                                </span>
+                                <span class="hide-menu">Sample Page</span>
+                            </a>
                         </li>
-
-                      </ul>
+                    </ul>
+                    <div class="unlimited-access hide-menu bg-light-primary position-relative mb-7 mt-5 rounded">
+                        <div class="d-flex">
+                            <div class="unlimited-access-title me-3">
+                                <h6 class="fw-semibold fs-4 mb-6 text-dark w-85">Upgrade to pro</h6>
+                                <a href="https://adminmart.com/product/modernize-bootstrap-5-admin-template/" target="_blank" class="btn btn-primary fs-2 fw-semibold lh-sm">Buy Pro</a>
+                            </div>
+                            <div class="unlimited-access-img">
+                                <img src="{% static 'Plantilla/Modernize-1.0.0/src/assets/images/backgrounds/rocket.png' %}" alt="" class="img-fluid">
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                      <ul class="list-unstyled listing">
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>5+ Unique
-                          Demos
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>8+ Ready to
-                          Use App
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Light and Dark
-                          Sidebar
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>i18n Added
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Slick Carousel Added
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Documentation
-                          Provided
-                        </li>
-
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Tons of Table
-                          Example
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Dashboard Figma
-                          Files
-                        </li>
-
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Easy to
-                          Customize
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>Fully
-                          Responsive Pages
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                          <span class="icon-circle circle-primary me-2"></span>& lots more..
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+                </nav>
                 </div>
-              </div>
+            </aside>
+        <div class="body-wrapper">
+            <header class="app-header">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <ul class="navbar-nav">
+                        <li class="nav-item d-block d-xl-none">
+                            <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+                                <i class="ti ti-menu-2"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-icon-hover" href="javascript:void(0)">
+                                <i class="ti ti-bell-ringing"></i>
+                                <div class="notification bg-primary rounded-circle"></div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+                        <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <img src="{% static 'Plantilla/Modernize-1.0.0/src/assets/images/profile/user-1.jpg' %}" alt="" width="35" height="35" class="rounded-circle">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                                    <div class="message-body">
+                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                            <i class="ti ti-user fs-6"></i>
+                                            <p class="mb-0 fs-3">My Profile</p>
+                                        </a>
+                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                            <i class="ti ti-mail fs-6"></i>
+                                            <p class="mb-0 fs-3">My Account</p>
+                                        </a>
+                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                            <i class="ti ti-list-check fs-6"></i>
+                                            <p class="mb-0 fs-3">My Task</p>
+                                        </a>
+                                        <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+            <div class="container-fluid">
+                {% block body %}
+                {% endblock %}
             </div>
-          </div>
+            <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
+                <div class="container py-5">
+                </div>
+            </div>
+            <div class="container-fluid copyright py-4">
+                <div class="container">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-md-6 text-center text-md-start mb-md-0">
+                            <span class="text-body"><a href="#" class="border-bottom text-white"><i class="fas fa-copyright me-2"></i>Grupo Santa Maria</a>, All right reserved.</span>
+                        </div>
+                        <div class="col-md-6 text-center text-md-end text-body">
+                            Derechos reservados al <a class="border-bottom text-white" href="https://htmlcodex.com">@Autor</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="py-6 px-6 text-center">
+                <p class="mb-0 fs-4">Design and Developed by <a href="https://adminmart.com/" target="_blank" class="pe-1 text-primary text-decoration-underline">AdminMart.com</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a></p>
+            </div>
         </div>
-      </section>
-
-      <footer class="text-center p-4">
-        All Rights Reserved by MaterialPro NextJs Admin. Designed and Developed
-        by
-        <a href="https://www.wrappixel.com">wrappixel.com</a>
-      </footer>
     </div>
-  </div>
+    <script src="{% static 'Plantilla/Modernize-1.0.0/src/assets/libs/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'Plantilla/Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'Plantilla/Modernize-1.0.0/src/assets/js/sidebarmenu.js' %}"></script>
+    <script src="{% static 'Plantilla/Modernize-1.0.0/src/assets/js/app.min.js' %}"></script>
+    <script src="{% static 'Plantilla/Modernize-1.0.0/src/assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
+    <script src="{% static 'Plantilla/Modernize-1.0.0/src/assets/libs/simplebar/dist/simplebar.js' %}"></script>
+    <script src="{% static 'Plantilla/Modernize-1.0.0/src/assets/js/dashboard.js' %}"></script>
+    <script src="{% static 'librerias/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            {% if messages %}
+                {% for message in messages %}
+                    Swal.fire({
+                        title: "{% if message.tags == 'success' %}CONFIRMACIÓN{% elif message.tags == 'error' %}ERROR{% elif message.tags == 'warning' %}ADVERTENCIA{% else %}INFORMACIÓN{% endif %}",
+                        text: "{{ message }}",
+                        icon: "{{ message.tags }}",
+                        buttonsStyling: false
+                    });
+                {% endfor %}
+            {% endif %}
+            if ($('#maintenance_cards_container').length) {
+                const cardsContainer = $('#maintenance_cards_container');
+                const allCards = cardsContainer.find('.blog-item').closest('.col-lg-3');
+                let filteredCards = [...allCards]; 
+                let currentPage = 1;
+                let entriesPerPage = parseInt($('#entries_per_page').val());
+                const searchInput = $('#search_input');
+                const entriesPerPageSelect = $('#entries_per_page');
+                const prevPageBtn = $('#prev_page_btn');
+                const nextPageBtn = $('#next_page_btn');
+                const pageNumbersContainer = $('#page_numbers');
+                const paginationInfo = $('#pagination_info');
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-    crossorigin="anonymous"></script>
+                function displayCards() {
+                    const startIndex = (currentPage - 1) * entriesPerPage;
+                    const endIndex = (entriesPerPage === -1) ? filteredCards.length : startIndex + entriesPerPage;
+                    allCards.hide();
+                    filteredCards.slice(startIndex, endIndex).forEach(card => {
+                        $(card).show();
+                    });
+                    updatePaginationControls();
+                    updatePaginationInfo();
+                }
+
+                function updatePaginationControls() {
+                    const totalPages = (entriesPerPage === -1) ? 1 : Math.ceil(filteredCards.length / entriesPerPage);
+                    prevPageBtn.toggleClass('disabled', currentPage === 1 || filteredCards.length === 0);
+                    nextPageBtn.toggleClass('disabled', currentPage === totalPages || filteredCards.length === 0 || entriesPerPage === -1);
+                    pageNumbersContainer.empty(); 
+                    if (filteredCards.length > 0 && entriesPerPage !== -1) {
+                        for (let i = 1; i <= totalPages; i++) {
+                            const pageItem = $(`<li class="paginate_button page-item ${i === currentPage ? 'active' : ''}"><a href="#" aria-controls="catalog_entries" data-dt-idx="${i}" tabindex="0" class="page-link">${i}</a></li>`);
+                            pageItem.find('a').on('click', function(e) {
+                                e.preventDefault();
+                                currentPage = i;
+                                displayCards();
+                            });
+                            pageNumbersContainer.append(pageItem);
+                        }
+                    }
+                }
+                function updatePaginationInfo() {
+                    const totalFiltered = filteredCards.length;
+                    let startIndex = 0;
+                    let endIndex = 0;
+                    if (totalFiltered > 0) {
+                        startIndex = (currentPage - 1) * entriesPerPage + 1;
+                        endIndex = startIndex + entriesPerPage - 1;
+                        if (endIndex > totalFiltered || entriesPerPage === -1) { 
+                            endIndex = totalFiltered;
+                        }
+                    }
+                    if (entriesPerPage === -1) { 
+                        paginationInfo.text(`Mostrando 1 a ${totalFiltered} de ${totalFiltered} entradas`);
+                    } else {
+                        paginationInfo.text(`Mostrando ${startIndex} a ${endIndex} de ${totalFiltered} entradas`);
+                    }
+                }
+                function applyFilters() {
+                    const searchTerm = searchInput.val().toLowerCase().trim();
+                    filteredCards = allCards.filter(function() {
+                        const cardElement = $(this).find('.blog-item'); 
+                        const cardSearchTerm = cardElement.data('searchTerm'); 
+                        return (cardSearchTerm || '').includes(searchTerm);
+                    }).get(); 
+                    currentPage = 1; 
+                    displayCards();
+                }
+                searchInput.on('keyup', applyFilters);
+                entriesPerPageSelect.on('change', function() {
+                    entriesPerPage = parseInt($(this).val());
+                    currentPage = 1;
+                    applyFilters(); 
+                });
+                prevPageBtn.on('click', function(e) {
+                    e.preventDefault(); 
+                    if (!$(this).hasClass('disabled')) { 
+                        currentPage--;
+                        displayCards();
+                    }
+                });
+                nextPageBtn.on('click', function(e) {
+                    e.preventDefault(); 
+                    if (!$(this).hasClass('disabled')) { 
+                        currentPage++;
+                        displayCards();
+                    }
+                });
+                applyFilters(); 
+            }
+        });
+    </script>
 </body>
-
 </html>

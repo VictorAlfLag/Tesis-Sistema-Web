@@ -24,13 +24,13 @@
                 <tbody>
                     {% for caracteristicaServicioTemporal in caracteristicas_servicio %}
                     <tr>
-                        <td>{{ caracteristicaServicioTemporal.id }}</td>
+                        <td>{{ caracteristicaServicioTemporal.id_cas_mod1 }}</td>
                         <td>{{ caracteristicaServicioTemporal.nombre_cas_mod1 }}</td> 
                         <td>{{ caracteristicaServicioTemporal.descripcion_cas_mod1 }}</td> 
                         <td>{{ caracteristicaServicioTemporal.tipo_mantenimiento_cas_mod1.nombre_tim_mod1 }}</td> 
                         <td>
-                            <a href="{% url 'editar_caracteristica_servicio' caracteristicaServicioTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="{% url 'eliminar_caracteristica_servicio' caracteristicaServicioTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>
+                            <a href="{% url 'editar_caracteristica_servicio' caracteristicaServicioTemporal.id_cas_mod1 %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_caracteristica_servicio' caracteristicaServicioTemporal.id_cas_mod1 %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>
                         </td>
                     </tr>
                     {% endfor %}

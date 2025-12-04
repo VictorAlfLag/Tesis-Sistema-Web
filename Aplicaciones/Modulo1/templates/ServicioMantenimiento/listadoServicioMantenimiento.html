@@ -32,10 +32,8 @@
                         <td>{{ servicioMantenimientoTemporal.descripcion_corta_sem_mod1 }}</td>
                         <td>${{ servicioMantenimientoTemporal.precio_referencia_sem_mod1 }}</td>
                         <td>{{ servicioMantenimientoTemporal.duracion_estimada_horas_sem_mod1 }}</td>
-                        {# Accediendo al nombre del TipoMantenimiento a través de la relación #}
                         <td>{{ servicioMantenimientoTemporal.tipo_mantenimiento_sem_mod1.nombre_tim_mod1 }}</td>
-                        {# Muestra el valor directo del campo 'activo_sem_mod1' #}
-                        <td>{{ servicioMantenimientoTemporal.activo_sem_mod1|capfirst }}</td> {# 'activo' -> 'Activo', 'inactivo' -> 'Inactivo' #}
+                        <td>{{ servicioMantenimientoTemporal.activo_sem_mod1|capfirst }}</td> 
                         <td>
                             <a href="{% url 'editar_servicio_mantenimiento' servicioMantenimientoTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
                             <a href="{% url 'eliminar_servicio_mantenimiento' servicioMantenimientoTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>

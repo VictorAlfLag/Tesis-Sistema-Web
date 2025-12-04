@@ -27,8 +27,9 @@
                         <select name="vehiculo" id="vehiculo" class="form-select" required>
                             <option value="">Seleccione un vehículo</option>
                             {% for vehiculo in vehiculos %}
-                                <option value="{{ vehiculo.id }}" {% if vehiculo_anterior|stringformat:"s" == vehiculo.id|stringformat:"s" %}selected{% endif %}>
-                                    {{ vehiculo.marca.nombre }} {{ vehiculo.modelo.nombre }} - {{ vehiculo.anio_fabricacion }}
+                                <option value="{{ vehiculo.id_veh_mod3 }}" 
+                                        {% if vehiculo_anterior|stringformat:"s" == vehiculo.id_veh_mod3|stringformat:"s" %}selected{% endif %}>
+                                    {{ vehiculo.marca_veh_mod3.nombre_mar_mod1 }} {{ vehiculo.modelo_veh_mod3.nombre_mod_mod1 }} - {{ vehiculo.anio_fabricacion_veh_mod3 }}
                                 </option>
                             {% endfor %}
                         </select>

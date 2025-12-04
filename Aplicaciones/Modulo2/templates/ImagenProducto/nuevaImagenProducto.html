@@ -27,7 +27,10 @@
                         <select name="producto" id="producto" class="form-select" required>
                             <option value="">Seleccione un producto</option>
                             {% for prod in productos %}
-                                <option value="{{ prod.id }}" {% if prod.id == producto_seleccionado %}selected{% endif %}>{{ prod.nombre }}</option>
+                                <!-- CORREGIDO: Usar el nuevo ID y nombre del producto -->
+                                <option value="{{ prod.id_prod_mod2 }}" {% if prod.id_prod_mod2 == producto_seleccionado %}selected{% endif %}>
+                                    {{ prod.nombre_prod_mod2 }}
+                                </option>
                             {% endfor %}
                         </select>
                     </div>
@@ -38,12 +41,14 @@
                     </div>
 
                     <div class="mb-3 form-check">
+                        <!-- El nombre del campo y el valor de contexto no cambian -->
                         <input type="checkbox" name="es_principal" class="form-check-input" id="es_principal" {% if es_principal_anterior %}checked{% endif %}>
                         <label class="form-check-label text-white" for="es_principal">Es Imagen Principal</label>
                     </div>
 
                     <div class="mb-3">
                         <label for="orden" class="form-label text-white">Orden de visualización:</label>
+                        <!-- El nombre del campo y el valor de contexto no cambian -->
                         <input type="number" name="orden" class="form-control" id="orden" 
                                placeholder="Ingrese el orden (opcional)" min="0"
                                value="{{ orden_anterior|default:'' }}">
@@ -55,5 +60,6 @@
             </div>
         </div>
     </div>
+</div>
     
 {% endblock %}

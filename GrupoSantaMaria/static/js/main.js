@@ -49,3 +49,24 @@ $(document).ready(function() {
         }
     });
 });
+// CÓDIGO A REEMPLAZAR DENTRO DE main.js
+$('.header-carousel').owlCarousel({
+    // --- Configuración de velocidad y transición ---
+    autoplay: true,
+    autoplayTimeout: 15000, // <--- **15,000 milisegundos (15 segundos)**
+    autoplayHoverPause: true, // Pausa si el ratón está encima
+    smartSpeed: 1000,         // Velocidad de la animación
+    
+    // --- Efecto de Transición (Desvanecimiento) ---
+    // El mejor efecto tipo "diapositiva" que Owl Carousel ofrece.
+    animateOut: 'fadeOut', 
+    animateIn: 'fadeIn',  
+    
+    // --- Opciones de diseño ---
+    items: 1,
+    loop: true,
+    dots: false,
+    nav: false,
+    // (Asegúrate de dejar cualquier otra opción que ya estuviera aquí originalmente)
+});
+

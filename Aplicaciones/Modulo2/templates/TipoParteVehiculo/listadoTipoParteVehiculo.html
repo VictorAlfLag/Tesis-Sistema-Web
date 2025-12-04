@@ -23,12 +23,16 @@
                 <tbody>
                     {% for tipoParteTemporal in tipos_parte_vehiculo %}
                     <tr>
-                        <td>{{ tipoParteTemporal.id }}</td>
-                        <td>{{ tipoParteTemporal.nombre }}</td>
-                        <td>{{ tipoParteTemporal.descripcion }}</td>
+                        <!-- Aplicando sufijo a ID -->
+                        <td>{{ tipoParteTemporal.id_tpv_mod2 }}</td>
+                        <!-- Aplicando sufijo a nombre -->
+                        <td>{{ tipoParteTemporal.nombre_tpv_mod2 }}</td>
+                        <!-- Aplicando sufijo a descripción -->
+                        <td>{{ tipoParteTemporal.descripcion_tpv_mod2 }}</td>
                         <td>
-                            <a href="{% url 'editar_tipo_parte_vehiculo' tipoParteTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="{% url 'eliminar_tipo_parte_vehiculo' tipoParteTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>
+                            <!-- Aplicando sufijo a ID en URLs -->
+                            <a href="{% url 'editar_tipo_parte_vehiculo' tipoParteTemporal.id_tpv_mod2 %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_tipo_parte_vehiculo' tipoParteTemporal.id_tpv_mod2 %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>
                         </td>
                     </tr>
                     {% endfor %}

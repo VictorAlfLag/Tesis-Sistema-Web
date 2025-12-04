@@ -6,6 +6,15 @@
         <div class="card-title text-center">
             <h3 class="mb-0 text-white"><b>EDITAR CATEGORÍA</b></h3>
         </div>
+        <!-- Mensajes de Django -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 
     <div class="bg-secondary rounded p-4">
@@ -13,16 +22,16 @@
             <div class="col-md-12">
                 <form action="{% url 'proceso_actualizar_categoria' %}" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="id" value="{{CategoriaEditar.id}}">
+                    <input type="hidden" name="id" value="{{ CategoriaEditar.id_cat_mod2 }}">
 
                     <div class="mb-3">
                         <label for="nombre" class="form-label text-white">Nombre:</label>
-                        <input type="text" name="nombre" class="form-control" value="{{CategoriaEditar.nombre}}" id="nombre" placeholder="Ingrese el nombre de la categoría">
+                        <input type="text" name="nombre" class="form-control" value="{{ CategoriaEditar.nombre_cat_mod2 }}" id="nombre" placeholder="Ingrese el nombre de la categoría" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="descripcion" class="form-label text-white">Descripción:</label>
-                        <textarea name="descripcion" id="descripcion" class="form-control" rows="3" placeholder="Ingrese la descripción">{{CategoriaEditar.descripcion}}</textarea>
+                        <textarea name="descripcion" id="descripcion" class="form-control" rows="3" placeholder="Ingrese la descripción">{{ CategoriaEditar.descripcion_cat_mod2 }}</textarea>
                     </div>
 
                     <br>

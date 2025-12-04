@@ -67,17 +67,24 @@
                             <span class="d-inline-block h4 mb-3">{{ caracteristica.nombre_cas_mod1 }}</span>
                             <p class="text-warning">No hay servicio asociado para ver detalles.</p>
                         {% endif %}      
-                        <p class="mb-4">{{ caracteristica.descripcion_cas_mod1|truncatechars:100 }}</p> 
-                        <div class="d-flex justify-content-between align-items-center"> 
-                            {% if service_id %}
-                                <a href="{% url 'detalle_servicio_cliente' pk=service_id %}" class="btn btn-warning py-2 px-4 me-2">
-                                    <span>Ver Detalles</span>
-                                </a>
-                            {% else %}
-                                <button class="btn btn-warning py-2 px-4 me-2" disabled><span>Ver Detalles</span></button>
-                            {% endif %}
-                            <a href="{% url 'login_register_slider'%}" onclick="return confirm('¿Está seguro de registrarte para reservar?')" class="btn btn-danger py-2 px-4"> <span>Agendar</span></a>
-                        </div>
+                    <p class="mb-4">{{ caracteristica.descripcion_cas_mod1|truncatechars:100 }}</p> 
+                    <div class="d-flex justify-content-between align-items-center"> 
+                        
+                        {% if service_id %}
+                            <a href="{% url 'detalle_servicio_cliente' pk=service_id %}" class="btn btn-warning py-2 px-4 me-2">
+                                <span>Ver Detalles</span>
+                            </a>
+                        {% else %}
+                            <button class="btn btn-warning py-2 px-4 me-2" disabled><span>Ver Detalles</span></button>
+                        {% endif %}
+                        {% with next_url=caracteristica.id|stringformat:"/agendar/%s/" %}
+                        <a href="{% url 'login' %}?next={{ next_url }}" 
+                            onclick="return confirm('Debes iniciar sesión para agendar. ¿Continuar?')" 
+                            class="btn btn-danger py-2 px-4"> 
+                            <span>Agendar</span>
+                        </a>
+                        {% endwith %}
+                    </div>
                     </div>
                 </div>
             </div>

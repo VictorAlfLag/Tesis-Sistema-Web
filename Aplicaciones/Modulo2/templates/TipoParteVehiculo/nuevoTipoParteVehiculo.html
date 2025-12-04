@@ -24,15 +24,17 @@
                     
                     <div class="mb-3">
                         <label for="nombre" class="form-label text-white">Nombre:</label>
+                        <!-- Aplicando sufijo a nombre_anterior -->
                         <input type="text" name="nombre" class="form-control" id="nombre" 
                                placeholder="Ingrese el nombre del tipo de parte de vehículo" 
-                               value="{{ nombre_anterior|default:'' }}" required>
+                               value="{{ nombre_anterior_tpv_mod2|default:'' }}" required>
                     </div>
                     
                     <div class="mb-3">
                         <label for="descripcion" class="form-label text-white">Descripción:</label>
+                        <!-- Aplicando sufijo a descripcion_anterior -->
                         <textarea name="descripcion" id="descripcion" class="form-control" rows="3" 
-                                 placeholder="Ingrese la descripción">{{ descripcion_anterior|default:'' }}</textarea>
+                                 placeholder="Ingrese la descripción">{{ descripcion_anterior_tpv_mod2|default:'' }}</textarea>
                     </div>
                     
                     <button type="submit" class="btn btn-danger me-2">Guardar</button>

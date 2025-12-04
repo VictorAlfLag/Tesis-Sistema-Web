@@ -1,61 +1,144 @@
 {% extends 'plantilla.html' %}
 {% load static %}
 {% block body %}
-        <div class="container-fluid feature bg-light py-5">
-            <div class="container py-5">
-                <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                    <h4 class="text-primary">¿Por qué elegirnos?</h4>
-                    <h1 class="display-4 mb-4">Descubre Nuestros Servicios Destacados</h1>
-                    <p class="mb-0">En Automotores Santa María, nos dedicamos a ofrecerte soluciones integrales para tu vehículo. Conoce a continuación los pilares de nuestro servicio, diseñados para tu total satisfacción.
-                    </p>
+    
+    <style>
+        /* Fuerza la altura y posición para que el fondo (hero-bg-half) se posicione */
+        .header-carousel-item.hero-section {
+            position: relative !important;
+            min-height: 500px !important; 
+        }
+
+        /* FUERZA la capa de imagen (z-index: 1) a ser visible y cubrir el 100% */
+        .header-carousel-item .hero-bg-half {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 1 !important; 
+        }
+        
+        /* FUERZA la capa de texto (z-index: 2) a estar encima de la imagen */
+        .header-carousel-item .carousel-caption {
+            position: relative !important; 
+            z-index: 2 !important; 
+        }
+
+        /* 🟦 ESTILO FINAL: Contenedor con fondo azul oscuro del Navbar y borde de 8px 🟦 */
+        .carousel-wrapper-blue {
+            background-color: #1e253e !important; /* Color azul oscuro, similar al Navbar */
+            border: 8px solid #1e253e !important; /* Borde más grueso del mismo color */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6); /* Sombra para resaltar */
+            margin-bottom: 20px; /* Separación del contenido inferior */
+            /* IMPORTANTE: Quitamos la clase 'bg-dark' del HTML y la ponemos aquí para control total */
+        }
+    </style>
+    
+    <div class="carousel-wrapper-blue"> 
+        <div class="header-carousel owl-carousel overflow-hidden">
+        
+        {% for slide in slides %}
+            <div class="header-carousel-item hero-section">
+                
+                <div class="hero-bg-half" 
+                    style="background: url('{{ slide.image.url }}') center center no-repeat; background-size: cover; height: 100%;">
                 </div>
-                <div class="feature-carousel owl-carousel">
-                    <div class="feature-item wow fadeInUp" data-wow-delay="0.2s">
-                        <div class="feature-img">
-                            <img src="{% static 'plantilla/Fitness-1.0.0/img/santamariaTaller.jpg' %}" class="img-fluid w-100" alt="Imagen de Taller Mecánico">
-                        </div>
-                        <div class="feature-content p-4">
-                            <h4 class="mb-3">Taller Mecánico Profesional</h4>
-                            <p class="mb-4">Contamos con técnicos expertos y equipos de última generación para el mantenimiento y reparación de tu vehículo, garantizando un servicio de calidad y confianza.
-                            </p>
-                            <a href="#" class="btn btn-primary py-2 px-4"> <span>Saber Más</span></a>
-                        </div>
-                    </div>
-                    <div class="feature-item wow fadeInUp" data-wow-delay="0.4s">
-                        <div class="feature-img">
-                            <img src="{% static 'plantilla/Fitness-1.0.0/img/santamariaRepuestos.jpg' %}" class="img-fluid w-100" alt="Imagen de Venta de Repuestos">
-                        </div>
-                        <div class="feature-content p-4">
-                            <h4 class="mb-3">Venta de Repuestos Originales</h4>
-                            <p class="mb-4">Encuentra una amplia variedad de repuestos originales y de alta calidad para todas las marcas y modelos, asegurando el óptimo funcionamiento de tu automóvil.
-                            </p>
-                            <a href="#" class="btn btn-primary py-2 px-4"> <span>Ver Repuestos</span></a>
-                        </div>
-                    </div>
-                    <div class="feature-item wow fadeInUp" data-wow-delay="0.6s">
-                        <div class="feature-img">
-                            <img src="{% static 'plantilla/Fitness-1.0.0/img/santamariaVehiculo.jpg' %}" class="img-fluid w-100" alt="Imagen de Venta de Vehículos">
-                        </div>
-                        <div class="feature-content p-4">
-                            <h4 class="mb-3">Venta de Vehículos Nuevos y Usados</h4>
-                            <p class="mb-4">Descubre nuestra selección de vehículos, desde modelos nuevos con las últimas prestaciones hasta opciones usadas en excelente estado, ajustadas a tu presupuesto.
-                            </p>
-                            <a href="#" class="btn btn-primary py-2 px-4"> <span>Explorar Vehículos</span></a>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-img">
-                            <img src="{% static 'plantilla/Fitness-1.0.0/img/santamariaClientes.jpg' %}" class="img-fluid w-100" alt="Imagen de Cotización de Clientes">
-                        </div>
-                        <div class="feature-content p-4">
-                            <h4 class="mb-3">Cotización y Atención Personalizada</h4>
-                            <p class="mb-4">Obtén una cotización detallada y un asesoramiento personalizado para cualquiera de nuestros servicios o productos, sin compromiso. Estamos aquí para ayudarte.
-                            </p>
-                            <a href="#" class="btn btn-primary py-2 px-4"> <span>Solicitar Cotización</span></a>
+
+                <div class="carousel-caption">
+                    <div class="container">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-lg-7 animated fadeInLeft">
+                                <div class="text-sm-center text-md-start">
+                                    
+                                    <h4 class="text-primary text-uppercase fw-bold mb-4">{{ slide.subtitle }}</h4>
+                                    
+                                    <h1 class="display-1 text-white mb-4">{{ slide.title }}</h1>
+                                    
+                                    <p class="mb-5 fs-5">
+                                        {{ slide.description }} 
+                                    </p>
+                                    
+                                    <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
+                                        
+                                        <a class="btn btn-dark py-3 px-4 px-md-5 me-2" href="#"><i class="fas fa-play-circle me-2"></i> <span>Watch Video</span></a>
+                                        
+                                        <a class="btn btn-primary py-3 px-4 px-md-5 ms-2" href="{{ slide.button_link }}">
+                                            <span>{{ slide.button_text }}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="feature-shaps"></div>
             </div>
+            {% empty %}
+            <div class="p-5 text-center">
+                <p class="text-white">No hay promociones o slides activos en este momento.</p>
+            </div>
+        {% endfor %}
         </div>
-        {% endblock %}
+    </div>
+    <div class="container-fluid feature bg-light py-5">
+        </div>
+    </div>
+    <div class="container-fluid feature bg-light py-5">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <h4 class="text-primary">¿Por qué elegirnos?</h4>
+                <h1 class="display-4 mb-4">Descubre Nuestros Servicios Destacados</h1>
+                <p class="mb-0">En Automotores Santa María, nos dedicamos a ofrecerte soluciones integrales para tu vehículo. Conoce a continuación los pilares de nuestro servicio, diseñados para tu total satisfacción.
+                </p>
+            </div>
+            <div class="feature-carousel owl-carousel">
+                <div class="feature-item wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="feature-img">
+                        <img src="{% static 'img/vehiculo1.png' %}" class="img-fluid w-100" alt="Imagen de Taller Mecánico">
+                    </div>
+                    <div class="feature-content p-4">
+                        <h4 class="mb-3">Taller Mecánico Profesional</h4>
+                        <p class="mb-4">Contamos con técnicos expertos y equipos de última generación para el mantenimiento y reparación de tu vehículo, garantizando un servicio de calidad y confianza.
+                        </p>
+                        <a href="{% url 'catalogo_tipos_mantenimiento' %}" class="btn btn-primary py-2 px-4"> <span>Ver Mantenimientos</span></a>
+                    </div>
+                </div>
+                <div class="feature-item wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="feature-img">
+                        <img src="{% static 'img/vehiculo2.png' %}" class="img-fluid w-100" alt="Imagen de Venta de Repuestos">
+                    </div>
+                    <div class="feature-content p-4">
+                        <h4 class="mb-3">Venta de Repuestos Originales</h4>
+                        <p class="mb-4">Encuentra una amplia variedad de repuestos originales y de alta calidad para todas las marcas y modelos, asegurando el óptimo funcionamiento de tu automóvil.
+                        </p>
+                        <a href="{% url 'catalogo_repuestos_cliente' %}" class="btn btn-primary py-2 px-4"> <span>Ver Repuestos</span></a>
+                    </div>
+                </div>
+                <div class="feature-item wow fadeInUp" data-wow-delay="0.6s">
+                    <div class="feature-img">
+                        <img src="{% static 'img/vehiculo3.png' %}" class="img-fluid w-100" alt="Imagen de Venta de Vehículos">
+                    </div>
+                    <div class="feature-content p-4">
+                        <h4 class="mb-3">Venta de Vehículos Nuevos y Usados</h4>
+                        <p class="mb-4">Descubre nuestra selección de vehículos, desde modelos nuevos con las últimas prestaciones hasta opciones usadas en excelente estado.
+                        </p>
+                        <a href="{% url 'catalogo_vehiculos_cliente' %}" class="btn btn-primary py-2 px-4"> <span>Ver Vehículos</span></a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-img">
+                        <img src="{% static 'img/vehiculo4.png' %}" class="img-fluid w-100" alt="Imagen de Cotización de Clientes">
+                    </div>
+                    <div class="feature-content p-4">
+                        <h4 class="mb-3">Cotización y Atención Personalizada</h4>
+                        <p class="mb-4">Obtén una cotización detallada y un asesoramiento personalizado para cualquiera de nuestros servicios o productos, sin compromiso.
+                        </p>
+                        <a href="#" class="btn btn-primary py-2 px-4"> <span>Ver Convenio</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="feature-shaps"></div>
+        </div>
+    </div>
+    
+{% endblock %}

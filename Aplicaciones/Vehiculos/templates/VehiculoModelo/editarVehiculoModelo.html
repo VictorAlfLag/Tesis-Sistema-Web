@@ -9,44 +9,45 @@
         <form method="POST" action="{% url 'proceso_actualizar_vehiculo_modelo' %}">
             {% csrf_token %}
             
-            <input type="hidden" name="id" value="{{ VehiculoModeloEditar.id }}">
+            <input type="hidden" name="id_vmo_veh" value="{{ VehiculoModeloEditar.id_vmo_veh }}">
 
             <div class="mb-3">
-                <label for="marca" class="form-label text-white">Marca</label>
-                <select class="form-select" id="marca" name="marca" required>
+                <label for="marca_vmo_veh" class="form-label text-white">Marca</label>
+                <select class="form-select" id="marca_vmo_veh" name="marca_vmo_veh" required>
                     <option value="">Seleccione una marca</option>
                     {% for marca in vehiculo_marcas %}
-                        <option value="{{ marca.id }}" {% if marca.id == VehiculoModeloEditar.marca.id %}selected{% endif %}>
-                            {{ marca.nombre }}
+                        <option value="{{ marca.id_vma_veh }}" 
+                                {% if marca.id_vma_veh == VehiculoModeloEditar.marca_vmo_veh.id_vma_veh %}selected{% endif %}>
+                            {{ marca.nombre_vma_veh }}
                         </option>
                     {% endfor %}
                 </select>
             </div>
 
             <div class="mb-3">
-                <label for="nombre" class="form-label text-white">Nombre del Modelo</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" 
-                       value="{{ VehiculoModeloEditar.nombre }}" required>
+                <label for="nombre_vmo_veh" class="form-label text-white">Nombre del Modelo</label>
+                <input type="text" class="form-control" id="nombre_vmo_veh" name="nombre_vmo_veh" 
+                        value="{{ VehiculoModeloEditar.nombre_vmo_veh }}" required>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="anio_inicio_produccion" class="form-label text-white">Año Inicio Producción</label>
-                    <input type="number" class="form-control" id="anio_inicio_produccion" name="anio_inicio_produccion" 
-                           value="{{ VehiculoModeloEditar.anio_inicio_produccion|default_if_none:'' }}" 
-                           min="1900" max="2100">
+                    <label for="anio_inicio_produccion_vmo_veh" class="form-label text-white">Año Inicio Producción</label>
+                    <input type="number" class="form-control" id="anio_inicio_produccion_vmo_veh" name="anio_inicio_produccion_vmo_veh" 
+                            value="{{ VehiculoModeloEditar.anio_inicio_produccion_vmo_veh|default_if_none:'' }}" 
+                            min="1900" max="2100">
                 </div>
                 <div class="col-md-6">
-                    <label for="anio_fin_produccion" class="form-label text-white">Año Fin Producción</label>
-                    <input type="number" class="form-control" id="anio_fin_produccion" name="anio_fin_produccion" 
-                           value="{{ VehiculoModeloEditar.anio_fin_produccion|default_if_none:'' }}" 
-                           min="1900" max="2100">
+                    <label for="anio_fin_produccion_vmo_veh" class="form-label text-white">Año Fin Producción</label>
+                    <input type="number" class="form-control" id="anio_fin_produccion_vmo_veh" name="anio_fin_produccion_vmo_veh" 
+                            value="{{ VehiculoModeloEditar.anio_fin_produccion_vmo_veh|default_if_none:'' }}" 
+                            min="1900" max="2100">
                 </div>
             </div>
 
             <div class="mb-3">
-                <label for="descripcion" class="form-label text-white">Descripción del Modelo</label>
-                <textarea class="form-control" id="descripcion" name="descripcion" rows="3">{{ VehiculoModeloEditar.descripcion }}</textarea>
+                <label for="descripcion_vmo_veh" class="form-label text-white">Descripción del Modelo</label>
+                <textarea class="form-control" id="descripcion_vmo_veh" name="descripcion_vmo_veh" rows="3">{{ VehiculoModeloEditar.descripcion_vmo_veh }}</textarea>
             </div>
 
             <div class="d-flex justify-content-center mt-4">

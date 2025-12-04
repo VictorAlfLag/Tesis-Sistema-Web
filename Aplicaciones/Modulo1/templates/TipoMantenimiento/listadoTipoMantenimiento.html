@@ -1,15 +1,11 @@
 {% extends "plantilla_admin.html" %}
-
 {% block body %}
-
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded p-4">
         <h6 class="mb-4 text-white text-center">Listado de Tipos de Mantenimiento</h6>
-
         <div class="d-flex justify-content-center mb-3">
             <a href="{% url 'nuevo_tipo_mantenimiento' %}" class="btn btn-primary">Agregar Tipo de Mantenimiento</a>
         </div>
-
         <div class="table-responsive">
             <table class="table table-dark table-striped table-hover text-center" id="tbl-data">
                 <thead>
@@ -24,30 +20,31 @@
                 </thead>
                 <tbody>
                     {% for tipoMantenimientoTemporal in tipos_mantenimiento %}
-                    <tr>
-                        <td>{{ tipoMantenimientoTemporal.id }}</td>
-                        <td>{{ tipoMantenimientoTemporal.nombre_tim_mod1 }}</td>
-                        <td>{{ tipoMantenimientoTemporal.descripcion_corta_tim_mod1 }}</td>
-                        <td>
-                            {% if tipoMantenimientoTemporal.imagen_destacada_tim_mod1 %}
-                                <img src="{{ tipoMantenimientoTemporal.imagen_destacada_tim_mod1.url }}" alt="{{ tipoMantenimientoTemporal.nombre_tim_mod1 }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
-                            {% else %}
-                                No hay imagen
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ tipoMantenimientoTemporal.get_activo_tim_mod1_display }}
-                        </td>
-                        <td>
-                            <a href="{% url 'editar_tipo_mantenimiento' tipoMantenimientoTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="{% url 'eliminar_tipo_mantenimiento' tipoMantenimientoTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar el tipo de mantenimiento {{ tipoMantenimientoTemporal.nombre_tim_mod1 }}?')" class="btn btn-danger btn-sm">Eliminar</a>
-                        </td>
-                    </tr>
+                        {% if tipoMantenimientoTemporal.id_tim_mod1 %} 
+                            <tr>
+                                <td>{{ tipoMantenimientoTemporal.id_tim_mod1 }}</td>
+                                <td>{{ tipoMantenimientoTemporal.nombre_tim_mod1 }}</td>
+                                <td>{{ tipoMantenimientoTemporal.descripcion_corta_tim_mod1 }}</td>
+                                <td>
+                                    {% if tipoMantenimientoTemporal.imagen_destacada_tim_mod1 %}
+                                        <img src="{{ tipoMantenimientoTemporal.imagen_destacada_tim_mod1.url }}" alt="{{ tipoMantenimientoTemporal.nombre_tim_mod1 }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                    {% else %}
+                                        No hay imagen
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ tipoMantenimientoTemporal.get_activo_tim_mod1_display }}
+                                </td>
+                                <td>
+                                    <a href="{% url 'editar_tipo_mantenimiento' tipoMantenimientoTemporal.id_tim_mod1 %}" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="{% url 'eliminar_tipo_mantenimiento' tipoMantenimientoTemporal.id_tim_mod1 %}" onclick="return confirm('¿Está seguro de eliminar el tipo de mantenimiento {{ tipoMantenimientoTemporal.nombre_tim_mod1 }}?')" class="btn btn-danger btn-sm">Eliminar</a>
+                                </td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
 {% endblock %}

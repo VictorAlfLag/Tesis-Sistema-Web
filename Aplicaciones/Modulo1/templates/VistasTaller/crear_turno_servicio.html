@@ -1,0 +1,249 @@
+{% extends "plantilla.html" %} 
+{% load static %}
+
+{% block body %} 
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+            <h4 class="text-primary">Agendamiento de Turno para Servicio</h4>
+            <h1 class="display-4 mb-4">Reserva para el servicio de {{ servicio.nombre_cas_mod1 }}</h1>
+            <p class="mb-0">Selecciona la fecha y hora para agendar tu servicio de mantenimiento.</p>
+        </div>
+        
+        {% if messages %}
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} text-center" role="alert">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="bg-secondary rounded p-4">
+                    <h5 class="text-white mb-4">Seleccionar fecha y hora:</h5>
+                    
+                    <div class="mb-3 text-white">
+                        <p><strong>Servicio:</strong> {{ servicio.nombre_cas_mod1 }}</p>
+                        <p><strong>Tipo Mantenimiento:</strong> {{ servicio.tipo_mantenimiento_cas_mod1.nombre_tim_mod1 }}</p>
+                        <h5 class="text-warning mt-3 text-center">¡Estás agendando como {{ user.username }}!</h5>
+                    </div>
+
+                    <div class="calendar-navigation mb-3 d-flex justify-content-between align-items-center">
+                        <button id="prevMonth" class="btn btn-primary"><i class="fa fa-chevron-left"></i> Anterior</button>
+                        <h4 class="mb-0 text-white" id="currentMonthYear">Octubre 2025</h4> 
+                        <button id="nextMonth" class="btn btn-primary">Siguiente <i class="fa fa-chevron-right"></i></button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-dark table-bordered text-center calendar-table">
+                            <thead>
+                                <tr>
+                                    <th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th>
+                                </tr>
+                            </thead>
+                            <tbody id="calendarBody">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="calendar-legend mt-3 d-flex justify-content-around flex-wrap text-white">
+                        <span class="badge bg-success m-1">Disponible</span>
+                        <span class="badge bg-danger m-1">No disponible</span>
+                        <span class="badge bg-warning m-1">Reservado</span>
+                        <span class="badge bg-info m-1">Fecha actual</span>
+                    </div>
+
+                    <form id="reservationForm" method="post" action="{% url 'confirmar_reserva' servicio.id %}" class="mt-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="selected_date" id="selectedDate">
+                        <input type="hidden" name="selected_time" id="selectedTime">
+                        
+                        <div id="timeSlotsContainer" class="mt-4 mb-4" style="display: none;">
+                            <h6 class="text-white">Selecciona una hora:</h6>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'catalogo_caracteristicas_servicio' servicio.tipo_mantenimiento_cas_mod1.id %}" class="btn btn-secondary">Regresar al Catálogo</a>
+                            <button type="submit" class="btn btn-success" id="btnAgendar" disabled>Confirmar Turno</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarBody = document.getElementById('calendarBody');
+        const currentMonthYear = document.getElementById('currentMonthYear');
+        const prevMonthBtn = document.getElementById('prevMonth');
+        const nextMonthBtn = document.getElementById('nextMonth');
+        const selectedDateInput = document.getElementById('selectedDate');
+        const selectedTimeInput = document.getElementById('selectedTime');
+        const btnAgendar = document.getElementById('btnAgendar');
+        const timeSlotsContainer = document.getElementById('timeSlotsContainer'); 
+
+        let currentDate = new Date();
+        
+        // Función principal para renderizar el calendario
+        function renderCalendar(date) {
+            // ... (Mismo código JavaScript del calendario que proporcionaste, renderiza días) ...
+            calendarBody.innerHTML = '';
+            btnAgendar.disabled = true;
+            selectedDateInput.value = '';
+            selectedTimeInput.value = '';
+            timeSlotsContainer.style.display = 'none';
+
+            const year = date.getFullYear();
+            const month = date.getMonth(); 
+            const firstDayOfMonth = new Date(year, month, 1);
+            const lastDayOfMonth = new Date(year, month + 1, 0);
+            const today = new Date();
+            
+            // Asumiendo formato de fecha en español
+            currentMonthYear.textContent = new Date(year, month).toLocaleString('es-ES', { month: 'long', year: 'numeric' });
+            
+            let startDay = firstDayOfMonth.getDay();
+            if (startDay === 0) startDay = 7; 
+            startDay = startDay - 1; // Ajuste para que Lun sea 0
+
+            let dateCounter = 1;
+            let row = calendarBody.insertRow();
+            
+            for (let i = 0; i < startDay; i++) {
+                let cell = row.insertCell();
+                cell.classList.add('table-secondary', 'text-muted'); 
+            }
+            
+            while (dateCounter <= lastDayOfMonth.getDate()) {
+                if (row.cells.length === 7) {
+                    row = calendarBody.insertRow();
+                }
+
+                let cell = row.insertCell();
+                let day = dateCounter;
+                let fullDate = new Date(year, month, day);
+
+                cell.textContent = day;
+                cell.classList.add('calendar-day');
+                
+                // Marca el día actual
+                if (fullDate.toDateString() === today.toDateString()) {
+                    cell.classList.add('bg-info', 'text-white');
+                }
+                
+                // Días NO laborables (Domingo = 0, Sábado = 6)
+                if (fullDate.getDay() === 0) { 
+                     cell.classList.add('bg-danger', 'text-white'); 
+                     cell.title = "Día no disponible";
+                } 
+                // Ejemplo de día parcialmente disponible (Sábados)
+                else if (fullDate.getDay() === 6) { 
+                     cell.classList.add('bg-warning', 'text-dark');
+                     cell.title = "Horario limitado";
+                     // Asignar evento click solo si es un día laborable/limitado
+                     cell.style.cursor = 'pointer';
+                     cell.addEventListener('click', handleDayClick);
+                } 
+                // Días laborables (Lunes a Viernes)
+                else {
+                    cell.classList.add('bg-success'); 
+                    cell.style.cursor = 'pointer';
+                    cell.addEventListener('click', handleDayClick);
+                }
+                
+                function handleDayClick() {
+                    document.querySelectorAll('.calendar-day.selected').forEach(s => s.classList.remove('selected'));
+                    cell.classList.add('selected');
+                    
+                    // Formato YYYY-MM-DD
+                    const isoDate = new Date(fullDate.getTime() - (fullDate.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+                    selectedDateInput.value = isoDate; 
+                    selectedTimeInput.value = ''; 
+                    btnAgendar.disabled = true;
+
+                    renderTimeSlots(cell, fullDate); 
+                }
+                
+                dateCounter++;
+            }
+            
+            while (row.cells.length < 7) {
+                let cell = row.insertCell();
+                cell.classList.add('table-secondary', 'text-muted');
+            }
+        }
+        
+        // Función para renderizar los horarios (time slots)
+        function renderTimeSlots(dayCell, date) {
+            timeSlotsContainer.innerHTML = '<h6 class="text-white">Selecciona una hora:</h6>';
+            timeSlotsContainer.style.display = 'block'; 
+            
+            // Lógica dummy de horarios (DEBES REEMPLAZAR ESTO POR UNA LLAMADA AJAX REAL A LA BD)
+            let availableTimes = [];
+            
+            if (date.getDay() === 6) { // Sábado
+                availableTimes = [
+                    { time: '09:00', status: 'available' },
+                    { time: '10:00', status: 'booked' },
+                    { time: '11:00', status: 'available' }
+                ];
+            } else if (date.getDay() >= 1 && date.getDay() <= 5) { // Lunes a Viernes
+                 availableTimes = [
+                    { time: '09:00', status: 'available' },
+                    { time: '10:00', status: 'booked' },
+                    { time: '11:00', status: 'available' },
+                    { time: '12:00', status: 'available' },
+                    { time: '14:00', status: 'available' },
+                    { time: '15:00', status: 'available' }
+                ];
+            } else {
+                 timeSlotsContainer.innerHTML = '<h6 class="text-danger">Día no disponible.</h6>';
+                 return;
+            }
+            
+            availableTimes.forEach(slot => {
+                const timeDiv = document.createElement('button');
+                timeDiv.type = 'button'; 
+                timeDiv.classList.add('btn', 'm-1', 'time-slot');
+                timeDiv.textContent = slot.time;
+
+                if (slot.status === 'available') {
+                    timeDiv.classList.add('btn-outline-success');
+                    timeDiv.addEventListener('click', function() {
+                        document.querySelectorAll('.time-slot.selected').forEach(s => s.classList.remove('selected'));
+                        timeDiv.classList.add('selected');
+                        selectedTimeInput.value = slot.time;
+                        btnAgendar.disabled = false; 
+                    });
+                } else { 
+                    timeDiv.classList.add('btn-outline-warning'); // Usamos warning para reservado/booked
+                    timeDiv.disabled = true;
+                    timeDiv.title = 'Reservado';
+                }
+                timeSlotsContainer.appendChild(timeDiv);
+            });
+        }
+        
+        // Event listeners de navegación
+        prevMonthBtn.addEventListener('click', function() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        });
+
+        nextMonthBtn.addEventListener('click', function() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        });
+        
+        // Inicialización
+        renderCalendar(currentDate);
+    });
+</script>
+{% endblock %}

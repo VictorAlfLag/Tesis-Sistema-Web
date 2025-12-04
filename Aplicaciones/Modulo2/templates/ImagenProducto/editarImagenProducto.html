@@ -6,6 +6,15 @@
         <div class="card-title text-center">
             <h3 class="mb-0 text-white"><b>EDITAR IMAGEN DE PRODUCTO</b></h3>
         </div>
+        <!-- Mensajes de Django -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 
     <div class="bg-secondary rounded p-4">
@@ -13,35 +22,43 @@
             <div class="col-md-12">
                 <form action="{% url 'proceso_actualizar_imagen_producto' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" name="id" value="{{ImagenProductoEditar.id}}">
+                    <!-- CORREGIDO: Usar el nuevo ID de la imagen -->
+                    <input type="hidden" name="id" value="{{ ImagenProductoEditar.id_img_mod2 }}">
 
                     <div class="mb-3">
                         <label for="producto" class="form-label text-white">Producto:</label>
                         <select name="producto" id="producto" class="form-select" required>
                             <option value="">Seleccione un producto</option>
                             {% for prod in productos %}
-                                <option value="{{ prod.id }}" {% if prod.id == ImagenProductoEditar.producto.id %}selected{% endif %}>{{ prod.nombre }}</option>
+                                <!-- CORREGIDO: Usar el nuevo ID y nombre del producto -->
+                                <option value="{{ prod.id_prod_mod2 }}" 
+                                    {% if prod.id_prod_mod2 == ImagenProductoEditar.producto_img_mod2.id_prod_mod2 %}selected{% endif %}>
+                                    {{ prod.nombre_prod_mod2 }}
+                                </option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="imagen" class="form-label text-white">Imagen del Producto:</label>
-                        {% if ImagenProductoEditar.imagen %}
-                            <p class="text-white">Imagen actual: <a href="{{ ImagenProductoEditar.imagen.url }}" target="_blank">{{ ImagenProductoEditar.imagen.name }}</a></p>
+                        <!-- CORREGIDO: Usar el nuevo campo de imagen -->
+                        {% if ImagenProductoEditar.imagen_img_mod2 %}
+                            <p class="text-white">Imagen actual: <a href="{{ ImagenProductoEditar.imagen_img_mod2.url }}" target="_blank">{{ ImagenProductoEditar.imagen_img_mod2.name }}</a></p>
                         {% endif %}
                         <input type="file" name="imagen" class="form-control" id="imagen">
                         <small class="form-text text-muted">Deja en blanco para mantener la imagen actual.</small>
                     </div>
 
                     <div class="mb-3 form-check">
-                        <input type="checkbox" name="es_principal" class="form-check-input" id="es_principal" {% if ImagenProductoEditar.es_principal %}checked{% endif %}>
+                        <!-- CORREGIDO: Usar el nuevo campo booleano -->
+                        <input type="checkbox" name="es_principal" class="form-check-input" id="es_principal" {% if ImagenProductoEditar.es_principal_img_mod2 %}checked{% endif %}>
                         <label class="form-check-label text-white" for="es_principal">Es Imagen Principal</label>
                     </div>
 
                     <div class="mb-3">
                         <label for="orden" class="form-label text-white">Orden de visualización:</label>
-                        <input type="number" name="orden" class="form-control" value="{{ImagenProductoEditar.orden|default:''}}" id="orden" placeholder="Ingrese el orden (opcional)" min="0">
+                        <!-- CORREGIDO: Usar el nuevo campo de orden -->
+                        <input type="number" name="orden" class="form-control" value="{{ ImagenProductoEditar.orden_img_mod2|default:'' }}" id="orden" placeholder="Ingrese el orden (opcional)" min="0">
                     </div>
                     
                     <br>

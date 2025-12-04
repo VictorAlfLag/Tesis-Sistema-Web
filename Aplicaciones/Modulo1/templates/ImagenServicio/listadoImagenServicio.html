@@ -27,27 +27,22 @@
                     {% for imagenServicioTemporal in imagenes_servicio %}
                     <tr>
                         <td>{{ imagenServicioTemporal.id }}</td>
-                        {# CORRECCIÓN AQUÍ: Usar servicio_ims_mod1 y nombre_sem_mod1 #}
                         <td>{{ imagenServicioTemporal.servicio_ims_mod1.nombre_sem_mod1 }}</td> 
                         <td>
-                            {# CORRECCIÓN AQUÍ: Usar imagen_ims_mod1.url y descripcion_ims_mod1 #}
                             {% if imagenServicioTemporal.imagen_ims_mod1 %}
                                 <img src="{{ imagenServicioTemporal.imagen_ims_mod1.url }}" alt="{{ imagenServicioTemporal.descripcion_ims_mod1 }}" style="max-width: 100px; max-height: 100px;">
                             {% else %}
                                 No hay imagen
                             {% endif %}
                         </td>
-                        {# CORRECCIÓN AQUÍ: Usar descripcion_ims_mod1 #}
                         <td>{{ imagenServicioTemporal.descripcion_ims_mod1 }}</td>
                         <td>
-                            {# CORRECCIÓN AQUÍ: Usar es_principal_ims_mod1 #}
                             {% if imagenServicioTemporal.es_principal_ims_mod1 %}
                                 Sí
                             {% else %}
                                 No
                             {% endif %}
                         </td>
-                        {# CORRECCIÓN AQUÍ: Usar orden_ims_mod1 #}
                         <td>{{ imagenServicioTemporal.orden_ims_mod1 }}</td>
                         <td>
                             <a href="{% url 'editar_imagen_servicio' imagenServicioTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>

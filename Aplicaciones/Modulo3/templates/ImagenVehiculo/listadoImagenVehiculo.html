@@ -23,31 +23,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {# CAMBIO AQUI: Asumo que en la vista se pasa como 'imagenes' #}
                     {% for imagenTemporal in imagenes %}
                     <tr>
-                        <td>{{ imagenTemporal.id }}</td>
-                        <td>{{ imagenTemporal.vehiculo.marca.nombre }} {{ imagenTemporal.vehiculo.modelo.nombre }}</td>
+                        <td>{{ imagenTemporal.id_ive_mod3 }}</td>
                         <td>
-                            {% if imagenTemporal.imagen %}
-                                <a href="{{ imagenTemporal.imagen.url }}" target="_blank">
-                                    <img src="{{ imagenTemporal.imagen.url }}" alt="Imagen de {{ imagenTemporal.vehiculo }}" style="max-width: 100px; height: auto;">
+                            {{ imagenTemporal.vehiculo_ive_mod3.marca_veh_mod3.nombre_mar_mod1 }} 
+                            {{ imagenTemporal.vehiculo_ive_mod3.modelo_veh_mod3.nombre_mod_mod1 }}
+                        </td>
+                        <td>
+                            {% if imagenTemporal.imagen_ive_mod3 %}
+                                <a href="{{ imagenTemporal.imagen_ive_mod3.url }}" target="_blank">
+                                    <img src="{{ imagenTemporal.imagen_ive_mod3.url }}" alt="Imagen de Vehículo" style="max-width: 100px; height: auto;">
                                 </a>
                             {% else %}
                                 No hay imagen
                             {% endif %}
                         </td>
                         <td>
-                            {% if imagenTemporal.es_principal %}
+                            {% if imagenTemporal.es_principal_ive_mod3 %}
                                 <span class="badge bg-info">Sí</span>
                             {% else %}
                                 <span class="badge bg-secondary">No</span>
                             {% endif %}
                         </td>
-                        <td>{{ imagenTemporal.orden }}</td>
+                        <td>{{ imagenTemporal.orden_ive_mod3 }}</td>
                         <td>
-                            <a href="{% url 'editar_imagen_vehiculo' imagenTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="{% url 'eliminar_imagen_vehiculo' imagenTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar esta imagen?')" class="btn btn-danger btn-sm">Eliminar</a>
+                            <a href="{% url 'editar_imagen_vehiculo' imagenTemporal.id_ive_mod3 %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_imagen_vehiculo' imagenTemporal.id_ive_mod3 %}" onclick="return confirm('¿Está seguro de eliminar esta imagen?')" class="btn btn-danger btn-sm">Eliminar</a>
                         </td>
                     </tr>
                     {% endfor %}

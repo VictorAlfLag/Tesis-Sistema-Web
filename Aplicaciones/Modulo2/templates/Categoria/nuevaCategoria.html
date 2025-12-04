@@ -4,8 +4,9 @@
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded p-4 mb-4">
         <div class="card-title text-center">
-            <h3 class="mb-0 text-white"><b>Nueva Categorías</b></h3>
+            <h3 class="mb-0 text-white"><b>Nueva Categoría</b></h3>
         </div>
+        <!-- Mensajes de Django (para errores de validación) -->
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
@@ -24,6 +25,8 @@
                     
                     <div class="mb-3">
                         <label for="nombre" class="form-label text-white">Nombre:</label>
+                        <!-- NO es necesario cambiar el atributo 'name' (sigue siendo 'nombre') -->
+                        <!-- CORREGIDO: El valor de retorno debe usar los nombres de contexto de la vista (nombre_anterior) -->
                         <input type="text" name="nombre" class="form-control" id="nombre" 
                                placeholder="Ingrese el nombre de la categoría" 
                                value="{{ nombre_anterior|default:'' }}" required>
@@ -31,6 +34,8 @@
                     
                     <div class="mb-3">
                         <label for="descripcion" class="form-label text-white">Descripción:</label>
+                        <!-- NO es necesario cambiar el atributo 'name' (sigue siendo 'descripcion') -->
+                        <!-- CORREGIDO: El valor de retorno debe usar los nombres de contexto de la vista (descripcion_anterior) -->
                         <textarea name="descripcion" id="descripcion" class="form-control" rows="3" 
                                   placeholder="Ingrese la descripción">{{ descripcion_anterior|default:'' }}</textarea>
                         </div>

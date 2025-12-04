@@ -11,13 +11,15 @@ from .models import (
 from Aplicaciones.Vehiculos.models import VehiculoMarca, VehiculoModelo 
 def home_modulo1(request):
     return render(request, 'Modulo1/home_modulo1.html')  
+def plantilla_admin_Taller_view(request):
+    return render(request, 'plantilla_admin_Taller.html')
+
 def listado_tipo_mantenimiento(request):
     tipos_mantenimiento_bdd = TipoMantenimiento.objects.all()
     return render(request, "TipoMantenimiento/listadoTipoMantenimiento.html", {'tipos_mantenimiento': tipos_mantenimiento_bdd})
-
 def eliminar_tipo_mantenimiento(request, id):
     try:
-        tipo_mantenimiento_eliminar = get_object_or_404(TipoMantenimiento, id=id)
+        tipo_mantenimiento_eliminar = get_object_or_404(TipoMantenimiento, id_tim_mod1=id)
         tipo_mantenimiento_eliminar.delete()
         messages.success(request, "Tipo de Mantenimiento eliminado exitosamente.")
     except IntegrityError:
@@ -83,8 +85,9 @@ def guardar_tipo_mantenimiento(request):
     return redirect('nuevo_tipo_mantenimiento')
 
 def editar_tipo_mantenimiento(request, id):
-    tipo_mantenimiento_editar = get_object_or_404(TipoMantenimiento, id=id)
+    tipo_mantenimiento_editar = get_object_or_404(TipoMantenimiento, id_tim_mod1=id)
     return render(request, 'TipoMantenimiento/editarTipoMantenimiento.html', {'TipoMantenimientoEditar': tipo_mantenimiento_editar})
+    
 def proceso_actualizar_tipo_mantenimiento(request):
     if request.method == 'POST':
         id_tipo_mantenimiento = request.POST.get('id')
@@ -92,6 +95,7 @@ def proceso_actualizar_tipo_mantenimiento(request):
         descripcion_corta_tim_mod1 = request.POST.get('descripcion_corta_tim_mod1', '').strip()
         imagen_destacada_tim_mod1 = request.FILES.get('imagen_destacada_tim_mod1')
         activo_tim_mod1 = request.POST.get('activo_tim_mod1')
+        
         if not id_tipo_mantenimiento:
             messages.error(request, "No se proporcionó un ID de Tipo de Mantenimiento para actualizar.")
             return redirect('listado_tipo_mantenimiento')
@@ -100,17 +104,19 @@ def proceso_actualizar_tipo_mantenimiento(request):
             return redirect('editar_tipo_mantenimiento', id=id_tipo_mantenimiento)
         
         try:
-            tipo_mantenimiento_consultado = get_object_or_404(TipoMantenimiento, id=id_tipo_mantenimiento)
-            if TipoMantenimiento.objects.filter(nombre_tim_mod1__iexact=nombre_tim_mod1).exclude(id=id_tipo_mantenimiento).exists():
+            tipo_mantenimiento_consultado = get_object_or_404(TipoMantenimiento, id_tim_mod1=id_tipo_mantenimiento)
+            if TipoMantenimiento.objects.filter(nombre_tim_mod1__iexact=nombre_tim_mod1).exclude(id_tim_mod1=id_tipo_mantenimiento).exists():
                 messages.error(request, f"Ya existe otro Tipo de Mantenimiento con el nombre '{nombre_tim_mod1}'. Por favor, elija otro.")
                 return redirect('editar_tipo_mantenimiento', id=id_tipo_mantenimiento)
+            
             tipo_mantenimiento_consultado.nombre_tim_mod1 = nombre_tim_mod1
             tipo_mantenimiento_consultado.descripcion_corta_tim_mod1 = descripcion_corta_tim_mod1
             tipo_mantenimiento_consultado.activo_tim_mod1 = activo_tim_mod1
+            
             if imagen_destacada_tim_mod1: 
                 tipo_mantenimiento_consultado.imagen_destacada_tim_mod1 = imagen_destacada_tim_mod1
             elif 'imagen_destacada_tim_mod1-clear' in request.POST: 
-                 tipo_mantenimiento_consultado.imagen_destacada_tim_mod1 = None
+                tipo_mantenimiento_consultado.imagen_destacada_tim_mod1 = None
 
             tipo_mantenimiento_consultado.save()
 
@@ -126,47 +132,38 @@ def proceso_actualizar_tipo_mantenimiento(request):
 
     messages.warning(request, "Acceso inválido al proceso de actualización.")
     return redirect('listado_tipo_mantenimiento')
-    # --- CaracteristicaServicio Views ---
+   # --- CaracteristicaServicio Views ---
 def listado_caracteristica_servicio(request):
     caracteristicas_bdd = CaracteristicaServicio.objects.all()
-    # Pasa las características a la plantilla.
-    # El HTML ya ha sido ajustado para usar .nombre_cas_mod1 y .descripcion_cas_mod1
     return render(request, "CaracteristicaServicio/listadoCaracteristicaServicio.html", {'caracteristicas_servicio': caracteristicas_bdd})
 
 def eliminar_caracteristica_servicio(request, id):
     try:
-        caracteristica_eliminar = get_object_or_404(CaracteristicaServicio, id=id)
+        caracteristica_eliminar = get_object_or_404(CaracteristicaServicio, id_cas_mod1=id)
         caracteristica_eliminar.delete()
         messages.success(request, "Característica de Servicio eliminada exitosamente.")
-    except IntegrityError: # Puede ocurrir si hay FKs relacionadas
+    except IntegrityError: 
         messages.error(request, "No se puede eliminar la Característica de Servicio porque está asociada a uno o más servicios.")
     except Exception as e:
         messages.error(request, f"Error al eliminar la Característica de Servicio: {e}")
     return redirect('listado_caracteristica_servicio')
 
 def nueva_caracteristica_servicio(request):
-    # Obtén todos los Tipos de Mantenimiento para poblar el dropdown en el formulario
     tipos_mantenimiento = TipoMantenimiento.objects.all().order_by('nombre_tim_mod1')
     return render(request, 'CaracteristicaServicio/nuevoCaracteristicaServicio.html', {
-        'tipos_mantenimiento': tipos_mantenimiento # Pasa los tipos al contexto
+        'tipos_mantenimiento': tipos_mantenimiento
     })
 
 def guardar_caracteristica_servicio(request):
     if request.method == 'POST':
-        # Captura todos los datos del formulario, incluyendo el tipo de mantenimiento
         tipo_mantenimiento_id = request.POST.get('tipo_mantenimiento')
         nombre = request.POST.get('nombre', '').strip()
         descripcion = request.POST.get('descripcion', '').strip()
-
-        # Prepara los datos anteriores para volver a mostrarlos si hay errores
         nombre_anterior = nombre
         descripcion_anterior = descripcion
         tipo_mantenimiento_anterior = int(tipo_mantenimiento_id) if tipo_mantenimiento_id and tipo_mantenimiento_id.isdigit() else ''
-
-        # Obtén todos los Tipos de Mantenimiento para pasarlos de nuevo al template si hay un error
         tipos_mantenimiento = TipoMantenimiento.objects.all().order_by('nombre_tim_mod1')
-
-        # --- Validación de datos ---
+        
         if not tipo_mantenimiento_id:
             messages.error(request, "Debe seleccionar un Tipo de Mantenimiento.")
             return render(request, 'CaracteristicaServicio/nuevoCaracteristicaServicio.html', {
@@ -177,8 +174,8 @@ def guardar_caracteristica_servicio(request):
             })
         
         try:
-            # Intenta obtener la instancia del TipoMantenimiento seleccionado
-            tipo_mantenimiento_obj = TipoMantenimiento.objects.get(id=tipo_mantenimiento_id)
+            # CORREGIDO: Usar id_tim_mod1 para obtener el Tipo de Mantenimiento
+            tipo_mantenimiento_obj = TipoMantenimiento.objects.get(id_tim_mod1=tipo_mantenimiento_id)
         except TipoMantenimiento.DoesNotExist:
             messages.error(request, "El Tipo de Mantenimiento seleccionado no es válido.")
             return render(request, 'CaracteristicaServicio/nuevoCaracteristicaServicio.html', {
@@ -198,8 +195,6 @@ def guardar_caracteristica_servicio(request):
             })
 
         try:
-            # Comprueba si ya existe una Característica de Servicio con el mismo nombre
-            # Y EL MISMO TIPO DE MANTENIMIENTO (debido a unique_together en el modelo)
             if CaracteristicaServicio.objects.filter(
                 nombre_cas_mod1__iexact=nombre,
                 tipo_mantenimiento_cas_mod1=tipo_mantenimiento_obj
@@ -211,10 +206,8 @@ def guardar_caracteristica_servicio(request):
                     'tipos_mantenimiento': tipos_mantenimiento,
                     'tipo_mantenimiento_anterior': tipo_mantenimiento_anterior
                 })
-
-            # Crea la nueva Característica de Servicio con todos los campos
             CaracteristicaServicio.objects.create(
-                tipo_mantenimiento_cas_mod1=tipo_mantenimiento_obj, # Asigna el objeto TipoMantenimiento
+                tipo_mantenimiento_cas_mod1=tipo_mantenimiento_obj,
                 nombre_cas_mod1=nombre,
                 descripcion_cas_mod1=descripcion
             )
@@ -222,7 +215,6 @@ def guardar_caracteristica_servicio(request):
             return redirect('listado_caracteristica_servicio')
 
         except IntegrityError as e:
-            # Manejo de errores específicos de base de datos, como violaciones de unicidad
             messages.error(request, f"Error de base de datos (IntegrityError): {e}. Es posible que la combinación de nombre y tipo de mantenimiento ya exista.")
             return render(request, 'CaracteristicaServicio/nuevoCaracteristicaServicio.html', {
                 'nombre_anterior': nombre_anterior,
@@ -231,7 +223,6 @@ def guardar_caracteristica_servicio(request):
                 'tipo_mantenimiento_anterior': tipo_mantenimiento_anterior
             })
         except Exception as e:
-            # Manejo de cualquier otro error inesperado
             messages.error(request, f"Ocurrió un error inesperado al guardar la Característica de Servicio: {e}")
             return render(request, 'CaracteristicaServicio/nuevoCaracteristicaServicio.html', {
                 'nombre_anterior': nombre_anterior,
@@ -239,19 +230,15 @@ def guardar_caracteristica_servicio(request):
                 'tipos_mantenimiento': tipos_mantenimiento,
                 'tipo_mantenimiento_anterior': tipo_mantenimiento_anterior
             })
-
-    # Si la solicitud no es POST (por ejemplo, alguien intenta acceder a /guardar/ con GET)
     messages.warning(request, "Acceso inválido al proceso de guardar.")
     return redirect('nueva_caracteristica_servicio')
 
 def editar_caracteristica_servicio(request, id):
-    # Obtiene la Característica de Servicio a editar
-    caracteristica_editar = get_object_or_404(CaracteristicaServicio, id=id)
-    # Obtén todos los Tipos de Mantenimiento para poblar el dropdown
+    caracteristica_editar = get_object_or_404(CaracteristicaServicio, id_cas_mod1=id)
     tipos_mantenimiento = TipoMantenimiento.objects.all().order_by('nombre_tim_mod1')
     return render(request, 'CaracteristicaServicio/editarCaracteristicaServicio.html', {
         'CaracteristicaServicioEditar': caracteristica_editar,
-        'tipos_mantenimiento': tipos_mantenimiento # Pasa los tipos al contexto
+        'tipos_mantenimiento': tipos_mantenimiento 
     })
 
 def proceso_actualizar_caracteristica_servicio(request):
@@ -260,43 +247,35 @@ def proceso_actualizar_caracteristica_servicio(request):
         tipo_mantenimiento_id = request.POST.get('tipo_mantenimiento')
         nombre = request.POST.get('nombre', '').strip()
         descripcion = request.POST.get('descripcion', '').strip()
-
-        # Validación del ID de la característica
+        
         if not id_caracteristica:
             messages.error(request, "No se proporcionó un ID de Característica de Servicio para actualizar.")
             return redirect('listado_caracteristica_servicio')
-
-        # Validación del Tipo de Mantenimiento
         if not tipo_mantenimiento_id:
             messages.error(request, "Debe seleccionar un Tipo de Mantenimiento.")
             return redirect('editar_caracteristica_servicio', id=id_caracteristica)
         
         try:
-            tipo_mantenimiento_obj = TipoMantenimiento.objects.get(id=tipo_mantenimiento_id)
+            tipo_mantenimiento_obj = TipoMantenimiento.objects.get(id_tim_mod1=tipo_mantenimiento_id)
         except TipoMantenimiento.DoesNotExist:
             messages.error(request, "El Tipo de Mantenimiento seleccionado no es válido.")
             return redirect('editar_caracteristica_servicio', id=id_caracteristica)
-
-        # Validación del nombre
+            
         if not nombre:
             messages.error(request, "El nombre de la Característica de Servicio no puede estar vacío.")
             return redirect('editar_caracteristica_servicio', id=id_caracteristica)
 
         try:
-            # Obtiene la instancia de la Característica de Servicio a actualizar
-            caracteristica_consultada = get_object_or_404(CaracteristicaServicio, id=id_caracteristica)
-
-            # Comprueba unicidad: si ya existe otra Característica con el mismo nombre y TIPO
-            # excluyendo la característica que estamos editando actualmente
+            caracteristica_consultada = get_object_or_404(CaracteristicaServicio, id_cas_mod1=id_caracteristica)
+            
             if CaracteristicaServicio.objects.filter(
                 nombre_cas_mod1__iexact=nombre,
                 tipo_mantenimiento_cas_mod1=tipo_mantenimiento_obj
-            ).exclude(id=id_caracteristica).exists():
+            ).exclude(id_cas_mod1=id_caracteristica).exists():
                 messages.error(request, f"Ya existe otra Característica de Servicio con el nombre '{nombre}' para este Tipo de Mantenimiento.")
                 return redirect('editar_caracteristica_servicio', id=id_caracteristica)
 
-            # Actualiza los campos de la Característica de Servicio
-            caracteristica_consultada.tipo_mantenimiento_cas_mod1 = tipo_mantenimiento_obj # Asigna el objeto TipoMantenimiento
+            caracteristica_consultada.tipo_mantenimiento_cas_mod1 = tipo_mantenimiento_obj 
             caracteristica_consultada.nombre_cas_mod1 = nombre
             caracteristica_consultada.descripcion_cas_mod1 = descripcion
             caracteristica_consultada.save()
@@ -305,11 +284,9 @@ def proceso_actualizar_caracteristica_servicio(request):
             return redirect('listado_caracteristica_servicio')
 
         except IntegrityError as e:
-            # Manejo de errores específicos de base de datos
             messages.error(request, f"Error de base de datos (IntegrityError): {e}. Es posible que la combinación de nombre y tipo de mantenimiento ya exista.")
             return redirect('editar_caracteristica_servicio', id=id_caracteristica)
         except Exception as e:
-            # Manejo de cualquier otro error inesperado
             messages.error(request, f"Ocurrió un error inesperado al actualizar la Característica de Servicio: {e}")
             return redirect('editar_caracteristica_servicio', id=id_caracteristica)
     messages.warning(request, "Acceso inválido al proceso de actualización.")
@@ -332,11 +309,10 @@ def eliminar_servicio_mantenimiento(request, id):
     return redirect('listado_servicio_mantenimiento')
 
 def nuevo_servicio_mantenimiento(request):
-    # Asegúrate de que el filtro sea con el campo correcto de TipoMantenimiento
     tipos_mantenimiento = TipoMantenimiento.objects.filter(activo_tim_mod1='activo') 
     marcas = VehiculoMarca.objects.all()
     modelos = VehiculoModelo.objects.all()
-    caracteristicas = CaracteristicaServicio.objects.all() # Todas las características
+    caracteristicas = CaracteristicaServicio.objects.all()
 
     context = {
         'tipos_mantenimiento_disponibles': tipos_mantenimiento,
@@ -357,11 +333,7 @@ def guardar_servicio_mantenimiento(request):
         compatibilidad_marcas_ids = request.POST.getlist('compatibilidad_marcas')
         compatibilidad_modelos_ids = request.POST.getlist('compatibilidad_modelos')
         caracteristicas_detalladas_ids = request.POST.getlist('caracteristicas_detalladas')
-        
-        # El valor de 'activo_sem_mod1' se obtiene directamente del select, será 'activo' o 'inactivo'
-        activo_sem_mod1_valor = request.POST.get('activo_sem_mod1', 'activo') # Default 'activo' si no se envía
-
-        # Recargar datos para el contexto en caso de error
+        activo_sem_mod1_valor = request.POST.get('activo_sem_mod1', 'activo') 
         tipos_mantenimiento = TipoMantenimiento.objects.filter(activo_tim_mod1='activo')
         marcas = VehiculoMarca.objects.all()
         modelos = VehiculoModelo.objects.all()
@@ -377,7 +349,7 @@ def guardar_servicio_mantenimiento(request):
             'compatibilidad_marcas_anterior': compatibilidad_marcas_ids,
             'compatibilidad_modelos_anterior': compatibilidad_modelos_ids,
             'caracteristicas_detalladas_anterior': caracteristicas_detalladas_ids,
-            'activo_anterior': activo_sem_mod1_valor, # Pasa el valor correcto para repoblar el select
+            'activo_anterior': activo_sem_mod1_valor,
             'tipos_mantenimiento_disponibles': tipos_mantenimiento,
             'marcas_disponibles': marcas,
             'modelos_disponibles': modelos,
@@ -407,7 +379,7 @@ def guardar_servicio_mantenimiento(request):
                 precio_referencia_sem_mod1=precio_referencia,
                 duracion_estimada_horas_sem_mod1=duracion_estimada_horas,
                 tipo_mantenimiento_sem_mod1=tipo_mantenimiento_obj,
-                activo_sem_mod1=activo_sem_mod1_valor # Usa el valor del select
+                activo_sem_mod1=activo_sem_mod1_valor 
             )
 
             if compatibilidad_marcas_ids:
@@ -424,8 +396,6 @@ def guardar_servicio_mantenimiento(request):
 
             if caracteristicas_detalladas_ids:
                 caracteristicas_obj = CaracteristicaServicio.objects.filter(id__in=caracteristicas_detalladas_ids)
-                # Filtra las características para que solo se añadan las que realmente pertenecen al tipo de mantenimiento seleccionado
-                # Esto es una buena práctica para mantener la coherencia de los datos
                 caracteristicas_filtradas = caracteristicas_obj.filter(tipo_mantenimiento_cas_mod1=tipo_mantenimiento_obj)
                 servicio.caracteristicas_detalladas_sem_mod1.set(caracteristicas_filtradas)
             else:
@@ -441,14 +411,9 @@ def guardar_servicio_mantenimiento(request):
 
 def editar_servicio_mantenimiento(request, id):
     servicio_editar = get_object_or_404(ServicioMantenimiento, id=id)
-    # Asegúrate de que el filtro sea con el campo correcto de TipoMantenimiento
     tipos_mantenimiento = TipoMantenimiento.objects.filter(activo_tim_mod1='activo')
     marcas = VehiculoMarca.objects.all()
     modelos = VehiculoModelo.objects.all()
-    
-    # Filtra las características para que solo muestre las que pertenecen al tipo de mantenimiento del servicio que se está editando
-    # Opcional: Si quieres mostrar TODAS las características para que el usuario pueda cambiarlas libremente, quita este filtro.
-    # Pero por tu modelo, parece que las características están ligadas a un tipo de mantenimiento.
     caracteristicas = CaracteristicaServicio.objects.filter(tipo_mantenimiento_cas_mod1=servicio_editar.tipo_mantenimiento_sem_mod1)
 
     context = {
@@ -472,9 +437,7 @@ def proceso_actualizar_servicio_mantenimiento(request):
         compatibilidad_marcas_ids = request.POST.getlist('compatibilidad_marcas')
         compatibilidad_modelos_ids = request.POST.getlist('compatibilidad_modelos')
         caracteristicas_detalladas_ids = request.POST.getlist('caracteristicas_detalladas')
-        
-        # El valor de 'activo_sem_mod1' se obtiene directamente del select, será 'activo' o 'inactivo'
-        activo_sem_mod1_valor = request.POST.get('activo_sem_mod1', 'activo') # Default 'activo' si no se envía
+        activo_sem_mod1_valor = request.POST.get('activo_sem_mod1', 'activo') 
 
         if not id_servicio:
             messages.error(request, "No se proporcionó un ID de Servicio de Mantenimiento para actualizar.")
@@ -497,15 +460,13 @@ def proceso_actualizar_servicio_mantenimiento(request):
         try:
             servicio_consultado = get_object_or_404(ServicioMantenimiento, id=id_servicio)
             tipo_mantenimiento_obj = get_object_or_404(TipoMantenimiento, id=tipo_mantenimiento_id)
-
-            # Asigna los valores a los campos del modelo
             servicio_consultado.nombre_sem_mod1 = nombre
             servicio_consultado.descripcion_corta_sem_mod1 = descripcion_corta
             servicio_consultado.descripcion_larga_sem_mod1 = descripcion_larga
             servicio_consultado.precio_referencia_sem_mod1 = precio_referencia
             servicio_consultado.duracion_estimada_horas_sem_mod1 = duracion_estimada_horas
             servicio_consultado.tipo_mantenimiento_sem_mod1 = tipo_mantenimiento_obj
-            servicio_consultado.activo_sem_mod1 = activo_sem_mod1_valor # Usa el valor del select
+            servicio_consultado.activo_sem_mod1 = activo_sem_mod1_valor 
             servicio_consultado.save()
 
             if compatibilidad_marcas_ids:
@@ -522,7 +483,6 @@ def proceso_actualizar_servicio_mantenimiento(request):
 
             if caracteristicas_detalladas_ids:
                 caracteristicas_obj = CaracteristicaServicio.objects.filter(id__in=caracteristicas_detalladas_ids)
-                # Filtra las características para que solo se añadan las que realmente pertenecen al tipo de mantenimiento seleccionado
                 caracteristicas_filtradas = caracteristicas_obj.filter(tipo_mantenimiento_cas_mod1=tipo_mantenimiento_obj)
                 servicio_consultado.caracteristicas_detalladas_sem_mod1.set(caracteristicas_filtradas)
             else:
@@ -539,17 +499,12 @@ def proceso_actualizar_servicio_mantenimiento(request):
     # --- ImagenServicio Views ---
 
 def listado_imagen_servicio(request):
-    # Asegúrate de que esta consulta sea eficiente. Si tienes muchas imágenes,
-    # puedes usar select_related para evitar múltiples consultas a la base de datos.
     imagenes_bdd = ImagenServicio.objects.all().select_related('servicio_ims_mod1')
     return render(request, "ImagenServicio/listadoImagenServicio.html", {'imagenes_servicio': imagenes_bdd})
 
 def eliminar_imagen_servicio(request, id):
     try:
         imagen_eliminar = get_object_or_404(ImagenServicio, id=id)
-        # Opcional: Si quieres borrar el archivo físico del disco cuando se elimina el registro
-        # if imagen_eliminar.imagen:
-        #    imagen_eliminar.imagen.delete(save=False)
         imagen_eliminar.delete()
         messages.success(request, "Imagen de Servicio eliminada exitosamente.")
     except Exception as e:
@@ -565,7 +520,7 @@ def nueva_imagen_servicio(request):
 
 def guardar_imagen_servicio(request):
     if request.method == 'POST':
-        servicio_id = request.POST.get('servicio') # Este 'servicio' viene del name del select en el HTML
+        servicio_id = request.POST.get('servicio') 
         imagen_file = request.FILES.get('imagen')
         descripcion = request.POST.get('descripcion', '').strip()
         es_principal = request.POST.get('es_principal') == 'True'
@@ -588,14 +543,12 @@ def guardar_imagen_servicio(request):
         try:
             servicio_obj = get_object_or_404(ServicioMantenimiento, id=servicio_id)
             orden = int(orden) if orden else 0
-
-            # CORRECTO: Usamos servicio_ims_mod1 para asignar la clave foránea
             ImagenServicio.objects.create(
-                servicio_ims_mod1=servicio_obj, # <--- ¡Aquí la asignación correcta!
-                imagen_ims_mod1=imagen_file,   # <--- ¡Nombre de campo de imagen corregido!
-                descripcion_ims_mod1=descripcion, # <--- ¡Nombre de campo de descripción corregido!
-                es_principal_ims_mod1=es_principal, # <--- ¡Nombre de campo de es_principal corregido!
-                orden_ims_mod1=orden # <--- ¡Nombre de campo de orden corregido!
+                servicio_ims_mod1=servicio_obj, 
+                imagen_ims_mod1=imagen_file,   
+                descripcion_ims_mod1=descripcion, 
+                es_principal_ims_mod1=es_principal, 
+                orden_ims_mod1=orden 
             )
             messages.success(request, "Imagen de Servicio registrada exitosamente.")
             return redirect('listado_imagen_servicio')
@@ -610,7 +563,6 @@ def guardar_imagen_servicio(request):
 
 
 def editar_imagen_servicio(request, id):
-    # Aseguramos que se cargue la imagen con su servicio relacionado para acceso directo
     imagen_editar = get_object_or_404(ImagenServicio.objects.select_related('servicio_ims_mod1'), id=id)
     servicios = ServicioMantenimiento.objects.filter(activo_sem_mod1='activo')
     context = {
@@ -622,7 +574,7 @@ def editar_imagen_servicio(request, id):
 def proceso_actualizar_imagen_servicio(request):
     if request.method == 'POST':
         id_imagen = request.POST.get('id')
-        servicio_id = request.POST.get('servicio') # Este 'servicio' viene del name del select en el HTML
+        servicio_id = request.POST.get('servicio') 
         imagen_file = request.FILES.get('imagen')
         descripcion = request.POST.get('descripcion', '').strip()
         es_principal = request.POST.get('es_principal') == 'True'
@@ -631,8 +583,6 @@ def proceso_actualizar_imagen_servicio(request):
         if not id_imagen:
             messages.error(request, "No se proporcionó un ID de Imagen de Servicio para actualizar.")
             return redirect('listado_imagen_servicio')
-
-        # Manejo de errores para que no se pierdan los datos al re-renderizar
         def render_editar_error(msg, current_id_imagen):
             messages.error(request, msg)
             imagen_consultada = get_object_or_404(ImagenServicio.objects.select_related('servicio_ims_mod1'), id=current_id_imagen)
@@ -650,16 +600,13 @@ def proceso_actualizar_imagen_servicio(request):
             imagen_consultada = get_object_or_404(ImagenServicio, id=id_imagen)
             servicio_obj = get_object_or_404(ServicioMantenimiento, id=servicio_id)
             orden = int(orden) if orden else 0
-
-            # CORRECTO: Usamos los nombres de campo reales del modelo ImagenServicio
-            imagen_consultada.servicio_ims_mod1 = servicio_obj # <--- ¡Aquí la asignación correcta!
-            imagen_consultada.descripcion_ims_mod1 = descripcion # <--- ¡Nombre de campo de descripción corregido!
-            imagen_consultada.es_principal_ims_mod1 = es_principal # <--- ¡Nombre de campo de es_principal corregido!
-            imagen_consultada.orden_ims_mod1 = orden # <--- ¡Nombre de campo de orden corregido!
+            imagen_consultada.servicio_ims_mod1 = servicio_obj 
+            imagen_consultada.descripcion_ims_mod1 = descripcion 
+            imagen_consultada.es_principal_ims_mod1 = es_principal 
+            imagen_consultada.orden_ims_mod1 = orden 
 
             if imagen_file:
-                imagen_consultada.imagen_ims_mod1 = imagen_file # <--- ¡Nombre de campo de imagen corregido!
-
+                imagen_consultada.imagen_ims_mod1 = imagen_file 
             imagen_consultada.save()
 
             messages.success(request, "Imagen de Servicio actualizada correctamente.")
@@ -723,3 +670,4 @@ def detalle_servicio_cliente(request, pk):
         'imagenes_del_servicio': imagenes_del_servicio,
     }
     return render(request, 'VistasTaller/detalleServicioCliente.html', context)
+

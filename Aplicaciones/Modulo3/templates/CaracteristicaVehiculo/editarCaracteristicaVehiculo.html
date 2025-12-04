@@ -13,16 +13,20 @@
             <div class="col-md-12">
                 <form action="{% url 'proceso_actualizar_caracteristica_vehiculo' %}" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="id" value="{{ CaracteristicaVehiculoEditar.id }}">
+                    <input type="hidden" name="id" value="{{ CaracteristicaVehiculoEditar.id_cve_mod3 }}">
 
                     <div class="mb-3">
                         <label for="nombre" class="form-label text-white">Nombre:</label>
-                        <input type="text" name="nombre" class="form-control" value="{{ CaracteristicaVehiculoEditar.nombre }}" id="nombre" placeholder="Ingrese el nombre de la característica" required>
+                        <input type="text" name="nombre" class="form-control" 
+                               value="{{ CaracteristicaVehiculoEditar.nombre_cve_mod3 }}" 
+                               id="nombre" placeholder="Ingrese el nombre de la característica" required>
                     </div>
                     
                     <div class="mb-3">
                         <label for="icono" class="form-label text-white">Clase de Icono (ej. FontAwesome):</label>
-                        <input type="text" name="icono" class="form-control" value="{{ CaracteristicaVehiculoEditar.icono|default:'' }}" id="icono" placeholder="ej. fas fa-cogs o bi bi-gear-fill">
+                        <input type="text" name="icono" class="form-control" 
+                               value="{{ CaracteristicaVehiculoEditar.icono_cve_mod3|default:'' }}" 
+                               id="icono" placeholder="ej. fas fa-cogs o bi bi-gear-fill">
                         <small class="form-text text-muted">Puedes encontrar iconos en FontAwesome o Bootstrap Icons.</small>
                     </div>
 

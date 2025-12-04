@@ -1,0 +1,247 @@
+{% load static %}
+<div id="chatbot-container">
+    <div id="chatbot-button" class="animated-button">
+        <img src="{% static 'img/RobotChatBot.png' %}" alt="Carrito Juanito Santa Maria" id="chatbot-image">
+    </div>
+    
+    <div id="chatbot-window"> 
+        <div id="chatbot-header">
+            Carrito Juanito Santa Maria
+            <span id="chatbot-close-button">&times;</span>
+        </div>
+        <div id="chatbot-messages">
+            <div class="message bot-message">
+                ¡Bienvenido a <strong>Grupo Santa Maria</strong>! Soy su Asistente Virtual, Te brindamos soporte inmediato. Podemos ayudarte con <strong>Servicios de Taller</strong>, información sobre nuestra <strong>Venta de Vehículos</strong> o la búsqueda de <strong>Repuestos originales</strong>. ¿Cómo podemos optimizar tu experiencia hoy?
+            </div>
+        </div>
+        <div id="chatbot-input">
+            <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
+            <button id="send-button">Enviar</button>
+        </div>
+    </div>
+</div>
+
+<style>
+
+
+    #chatbot-container {
+        position: fixed;
+        bottom: 20px;
+        left: 20px; 
+        z-index: 1000;
+        font-family: Arial, sans-serif;
+    }
+
+    #chatbot-button {
+        width: 100px; 
+        height: 100px; 
+        background-color: transparent; 
+        border-radius: 0; 
+        box-shadow: none; 
+        border: none; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: transform 0.3s ease-in-out;
+        overflow: visible; 
+        padding: 0;
+    }
+    
+    #chatbot-image {
+        width: 100%; 
+        height: 100%; 
+        object-fit: contain; 
+        transform: scale(1); 
+    }
+
+    #chatbot-button:hover {
+        transform: scale(1.05); 
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
+    }
+
+    .animated-button {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    #chatbot-window {
+        display: none; 
+        position: absolute;
+        bottom: 120px; 
+        left: 0;
+        width: 350px;
+        height: 400px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        flex-direction: column;
+    }
+
+    #chatbot-header {
+        background-color: #dc3545; /* Rojo de tu marca */
+        color: white;
+        padding: 10px;
+        border-top-left-radius: 9px;
+        border-top-right-radius: 9px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+    }
+
+    #chatbot-close-button {
+        cursor: pointer;
+        font-size: 20px;
+    }
+
+    #chatbot-messages {
+        flex-grow: 1;
+        padding: 10px;
+        overflow-y: auto;
+        border-bottom: 1px solid #eee;
+        background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .message {
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        border-radius: 15px;
+        max-width: 80%;
+    }
+
+    /* 🟢 BURBUJA DEL USUARIO: AZUL OSCURO */
+    .user-message {
+        background-color: #1A237E; /* Azul Oscuro de tu marca */
+        color: white; /* Texto blanco para alto contraste */
+        align-self: flex-end;
+        margin-left: auto;
+    }
+
+    .bot-message {
+        background-color: #EFEFF4; /* Gris Claro sutil */
+        color: #333; /* Texto oscuro */
+        align-self: flex-start;
+        margin-right: auto;
+    }
+
+    #chatbot-input {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #eee;
+    }
+
+    #user-input {
+        flex-grow: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 5px;
+    }
+
+    #send-button {
+        background-color: #1A237E; /* Azul Oscuro de tu marca */
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    #send-button:hover {
+        background-color: #3F51B5; /* Un tono más claro de azul en hover */
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatbotButton = document.getElementById('chatbot-button');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const chatbotCloseButton = document.getElementById('chatbot-close-button');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+
+        chatbotButton.addEventListener('click', function() {
+            const isVisible = chatbotWindow.style.display === 'flex';
+            chatbotWindow.style.display = isVisible ? 'none' : 'flex';
+
+            if (!isVisible) {
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight; 
+                userInput.focus(); 
+            }
+        });
+
+        chatbotCloseButton.addEventListener('click', function() {
+            chatbotWindow.style.display = 'none';
+        });
+
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (message === '') return;
+
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'message user-message';
+            userMessageDiv.textContent = message;
+            chatbotMessages.appendChild(userMessageDiv);
+            userInput.value = ''; 
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight; 
+
+            fetch('{% url "chatbot:chatbot_api_response" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken') 
+                },
+                body: JSON.stringify({ 'message': message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const botMessageDiv = document.createElement('div');
+                botMessageDiv.className = 'message bot-message';
+                botMessageDiv.textContent = data.response;
+                chatbotMessages.appendChild(botMessageDiv);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight; 
+            })
+            .catch(error => {
+                console.error('Error al obtener respuesta del chatbot:', error);
+                const errorMessageDiv = document.createElement('div');
+                errorMessageDiv.className = 'message bot-message';
+                errorMessageDiv.textContent = 'Lo siento, hubo un error al procesar tu solicitud.';
+                chatbotMessages.appendChild(errorMessageDiv);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            });
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>

@@ -1,0 +1,61 @@
+{% extends "plantilla.html" %} 
+{% load static %} 
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <h1 class="text-white mb-4 text-center">Agendar Turno para Servicio</h1>
+            
+            <div class="card p-4 shadow-lg" style="background-color: #ffffff;">
+                <h3 class="card-title text-primary">{{ servicio.nombre_cas_mod1 }}</h3>
+                <p class="text-dark">Tipo de Mantenimiento: 
+                    <strong>{{ servicio.tipo_mantenimiento_cas_mod1.nombre_tim_mod1 }}</strong>
+                </p>
+                <p class="text-muted">{{ servicio.descripcion_cas_mod1|default:"Sin descripción detallada." }}</p>
+                <hr>
+
+                <form method="POST" action="{% url 'confirmar_reserva' service_id=servicio.id %}">
+                    {% csrf_token %}
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="id_selected_date" class="form-label">📅 Seleccione Fecha</label>
+                            <input type="date" 
+                                class="form-control" 
+                                id="id_selected_date" 
+                                name="selected_date" 
+                                required
+                                min="{{ now|date:'Y-m-d' }}">
+                            <small class="form-text text-muted">La fecha mínima es hoy.</small>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="id_selected_time" class="form-label">⏱️ Seleccione Hora</label>
+                            <input type="time" 
+                                class="form-control" 
+                                id="id_selected_time" 
+                                name="selected_time" 
+                                required
+                                min="08:00"
+                                max="17:00"
+                                step="1800"> {# Paso de 30 minutos (1800 segundos) #}
+                            <small class="form-text text-muted">Horario de atención: 08:00 - 17:00.</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-danger btn-lg w-100">
+                            Confirmar Agendamiento
+                        </button>
+                        <a href="{% url 'catalogo_tipos_mantenimiento' %}" class="btn btn-secondary mt-3 w-100">
+                            Volver al Catálogo
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+{% endblock %}

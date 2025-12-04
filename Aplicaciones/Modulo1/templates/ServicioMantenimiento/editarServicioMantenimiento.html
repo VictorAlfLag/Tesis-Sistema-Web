@@ -56,7 +56,7 @@
                         <label for="compatibilidad_marcas" class="form-label text-white">Marcas Compatibles:</label>
                         <select name="compatibilidad_marcas" id="compatibilidad_marcas" class="form-select" multiple>
                             {% for marca in marcas_disponibles %}
-                                {# Verifica si la marca está en las marcas ya seleccionadas del servicio #}
+                                
                                 <option value="{{ marca.id }}" {% if marca in ServicioMantenimientoEditar.compatibilidad_marcas_sem_mod1.all %}selected{% endif %}>
                                     {{ marca.nombre }}
                                 </option>
@@ -69,7 +69,7 @@
                         <label for="compatibilidad_modelos" class="form-label text-white">Modelos Compatibles:</label>
                         <select name="compatibilidad_modelos" id="compatibilidad_modelos" class="form-select" multiple>
                             {% for modelo in modelos_disponibles %}
-                                {# Verifica si el modelo está en los modelos ya seleccionados del servicio #}
+                                
                                 <option value="{{ modelo.id }}" {% if modelo in ServicioMantenimientoEditar.compatibilidad_modelos_sem_mod1.all %}selected{% endif %}>
                                     {{ modelo.nombre }} ({{ modelo.marca.nombre }})
                                 </option>
@@ -82,20 +82,18 @@
                         <label for="caracteristicas_detalladas" class="form-label text-white">Características Detalladas:</label>
                         <select name="caracteristicas_detalladas" id="caracteristicas_detalladas" class="form-select" multiple>
                             {% for caracteristica in caracteristicas_disponibles %}
-                                {# Verifica si la característica está en las características ya seleccionadas del servicio #}
+
                                 <option value="{{ caracteristica.id }}" {% if caracteristica in ServicioMantenimientoEditar.caracteristicas_detalladas_sem_mod1.all %}selected{% endif %}>
-                                    {{ caracteristica.nombre_cas_mod1 }} {# CORRECCIÓN: Accede al nombre correcto de CaracteristicaServicio #}
+                                    {{ caracteristica.nombre_cas_mod1 }} 
                                 </option>
                             {% endfor %}
                         </select>
                         <small class="text-white-50">Mantén 'Ctrl' (Windows) o 'Cmd' (Mac) para seleccionar múltiples.</small>
                     </div>
 
-                    {# Cambiamos el checkbox por un select para el estado 'Activo'/'Inactivo' #}
                     <div class="mb-3">
                         <label for="activo_sem_mod1" class="form-label text-white">Estado del Servicio en Catálogo:</label>
                         <select name="activo_sem_mod1" id="activo_sem_mod1" class="form-select">
-                            {# Marca la opción 'activo' o 'inactivo' según el valor actual del servicio #}
                             <option value="activo" {% if ServicioMantenimientoEditar.activo_sem_mod1 == 'activo' %}selected{% endif %}>Activo</option>
                             <option value="inactivo" {% if ServicioMantenimientoEditar.activo_sem_mod1 == 'inactivo' %}selected{% endif %}>Inactivo</option>
                         </select>

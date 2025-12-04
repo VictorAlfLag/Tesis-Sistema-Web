@@ -34,21 +34,21 @@
                 <tbody>
                     {% for vehiculoTemporal in vehiculos %}
                     <tr>
-                        <td>{{ vehiculoTemporal.id }}</td>
-                        <td>{{ vehiculoTemporal.marca.nombre }}</td>
-                        <td>{{ vehiculoTemporal.modelo.nombre }}</td>
-                        <td>{{ vehiculoTemporal.anio_fabricacion }}</td>
-                        <td>${{ vehiculoTemporal.precio|floatformat:2 }}</td>
-                        <td>{{ vehiculoTemporal.kilometraje|floatformat:0 }} km</td>
-                        <td>{{ vehiculoTemporal.tipo_combustible.nombre|default:"N/A" }}</td>
-                        <td>{{ vehiculoTemporal.tipo_transmision.nombre|default:"N/A" }}</td>
-                        <td>{{ vehiculoTemporal.tipo_carroceria.nombre|default:"N/A" }}</td>
-                        <td>{{ vehiculoTemporal.numero_chasis }}</td>
-                        <td>{{ vehiculoTemporal.placa|default:"N/A" }}</td>
-                        <td>{{ vehiculoTemporal.get_situacion_general_display }}</td>
-                        <td>{{ vehiculoTemporal.fecha_publicacion|date:"d M Y H:i" }}</td>
+                        <td>{{ vehiculoTemporal.id_vch_mod3 }}</td>
+                        <td>{{ vehiculoTemporal.marca_vch_mod3.nombre_mrc_mod3 }}</td>
+                        <td>{{ vehiculoTemporal.modelo_vch_mod3.nombre_mdl_mod3 }}</td>
+                        <td>{{ vehiculoTemporal.anio_fabricacion_vch_mod3 }}</td>
+                        <td>${{ vehiculoTemporal.precio_vch_mod3|floatformat:2 }}</td>
+                        <td>{{ vehiculoTemporal.kilometraje_vch_mod3|floatformat:0 }} km</td>
+                        <td>{{ vehiculoTemporal.tipo_combustible_vch_mod3.nombre_tco_mod3|default:"N/A" }}</td>
+                        <td>{{ vehiculoTemporal.tipo_transmision_vch_mod3.nombre_ttr_mod3|default:"N/A" }}</td>
+                        <td>{{ vehiculoTemporal.tipo_carroceria_vch_mod3.nombre_tca_mod3|default:"N/A" }}</td>
+                        <td>{{ vehiculoTemporal.numero_chasis_vch_mod3 }}</td>
+                        <td>{{ vehiculoTemporal.placa_vch_mod3|default:"N/A" }}</td>
+                        <td>{{ vehiculoTemporal.get_situacion_general_vch_mod3_display }}</td>
+                        <td>{{ vehiculoTemporal.fecha_publicacion_vch_mod3|date:"d M Y H:i" }}</td>
                         <td>
-                            {% if vehiculoTemporal.disponible_para_venta %}
+                            {% if vehiculoTemporal.disponible_para_venta_vch_mod3 %}
                                 <span class="badge bg-success">Sí</span>
                             {% else %}
                                 <span class="badge bg-danger">No</span>
@@ -56,8 +56,8 @@
                         </td>
                         <td>
                             
-                            <a href="{% url 'editar_vehiculo' vehiculoTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="{% url 'eliminar_vehiculo' vehiculoTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar este vehículo?')" class="btn btn-danger btn-sm">Eliminar</a>
+                            <a href="{% url 'editar_vehiculo' vehiculoTemporal.id_vch_mod3 %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_vehiculo' vehiculoTemporal.id_vch_mod3 %}" onclick="return confirm('¿Está seguro de eliminar este vehículo?')" class="btn btn-danger btn-sm">Eliminar</a>
                         </td>
                     </tr>
                     {% endfor %}

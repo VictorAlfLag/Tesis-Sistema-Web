@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.home_modulo3, name='home_modulo3'), 
+    path('panel-Vehiculo/', views.plantilla_admin_Vehiculo_view, name='plantillaVehiculo'),
     # --- URLs para TipoCombustible ---
     path('tipos_combustible/', views.listado_tipos_combustible, name='listado_tipos_combustible'),
     path('tipos_combustible/eliminar/<int:id>/', views.eliminar_tipo_combustible, name='eliminar_tipo_combustible'),
@@ -46,13 +47,11 @@ urlpatterns = [
     # --- URLs para ImagenVehiculo ---
     path('imagenes_vehiculo/', views.listado_imagenes_vehiculo, name='listado_imagenes_vehiculo'),
     path('imagenes_vehiculo/eliminar/<int:id>/', views.eliminar_imagen_vehiculo, name='eliminar_imagen_vehiculo'),
-    path('imagenes_vehiculo/nuevo/', views.nuevo_imagen_vehiculo, name='nuevo_imagen_vehiculo'),
+    path('imagenes_vehiculo/nuevo/', views.nueva_imagen_vehiculo, name='nuevo_imagen_vehiculo'),
     path('imagenes_vehiculo/guardar/', views.guardar_imagen_vehiculo, name='guardar_imagen_vehiculo'),
     path('imagenes_vehiculo/editar/<int:id>/', views.editar_imagen_vehiculo, name='editar_imagen_vehiculo'),
     path('imagenes_vehiculo/actualizar/', views.proceso_actualizar_imagen_vehiculo, name='proceso_actualizar_imagen_vehiculo'),
 
     path('catalogo/', views.catalogo_vehiculos_cliente, name='catalogo_vehiculos_cliente'), 
     path('vehiculo/<int:pk>/', views.detalle_vehiculo_cliente, name='ver_detalle_vehiculo_cliente'),
-    path('vehiculo/<int:pk>/reservar/', views.reservar_vehiculo, name='reservar_vehiculo'),
-     path('vehiculo/<int:vehiculo_id>/confirmar/', views.confirmar_reserva, name='confirmar_reserva'),
 ]

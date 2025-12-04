@@ -6,6 +6,16 @@
     <div class="bg-secondary rounded p-4">
         <h6 class="mb-4 text-white text-center">Listado de Productos</h6> 
         
+        <!-- Mensajes de Django -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <div class="d-flex justify-content-center mb-3"> 
             <a href="{% url 'nuevo_producto' %}" class="btn btn-primary">Agregar Producto</a> 
         </div>
@@ -29,18 +39,28 @@
                 <tbody>
                     {% for productoTemporal in productos %}
                     <tr>
-                        <td>{{ productoTemporal.id }}</td>
-                        <td>{{ productoTemporal.nombre }}</td>
-                        <td>${{ productoTemporal.precio|floatformat:2 }}</td>
-                        <td>{{ productoTemporal.stock }}</td>
-                        <td>{{ productoTemporal.categoria.nombre|default:"N/A" }}</td>
-                        <td>{{ productoTemporal.tipo_parte.nombre|default:"N/A" }}</td>
-                        <td>{{ productoTemporal.marca_fabricante|default:"N/A" }}</td>
-                        <td>{{ productoTemporal.sku|default:"N/A" }}</td>
-                        <td>{% if productoTemporal.activo %}Sí{% else %}No{% endif %}</td>
+                        <!-- CORREGIDO: ID y acciones -->
+                        <td>{{ productoTemporal.id_prod_mod2 }}</td>
+                        <!-- CORREGIDO: Nombre -->
+                        <td>{{ productoTemporal.nombre_prod_mod2 }}</td>
+                        <!-- CORREGIDO: Precio -->
+                        <td>${{ productoTemporal.precio_prod_mod2|floatformat:2 }}</td>
+                        <!-- CORREGIDO: Stock -->
+                        <td>{{ productoTemporal.stock_prod_mod2 }}</td>
+                        <!-- CORREGIDO: Categoría (FK) -->
+                        <td>{{ productoTemporal.categoria_prod_mod2.nombre|default:"N/A" }}</td>
+                        <!-- CORREGIDO: Tipo de Parte (FK) -->
+                        <td>{{ productoTemporal.tipo_parte_prod_mod2.nombre|default:"N/A" }}</td>
+                        <!-- CORREGIDO: Marca Fabricante -->
+                        <td>{{ productoTemporal.marca_fabricante_prod_mod2|default:"N/A" }}</td>
+                        <!-- CORREGIDO: SKU -->
+                        <td>{{ productoTemporal.sku_prod_mod2|default:"N/A" }}</td>
+                        <!-- CORREGIDO: Activo (Booleano) -->
+                        <td>{% if productoTemporal.activo_prod_mod2 %}Sí{% else %}No{% endif %}</td>
                         <td>
-                            <a href="{% url 'editar_producto' productoTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="{% url 'eliminar_producto' productoTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>
+                            <!-- CORREGIDO: Pasar el nuevo ID a las URLs de acción -->
+                            <a href="{% url 'editar_producto' productoTemporal.id_prod_mod2 %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'eliminar_producto' productoTemporal.id_prod_mod2 %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>
                         </td>
                     </tr>
                     {% endfor %}

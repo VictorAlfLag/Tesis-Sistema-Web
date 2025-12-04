@@ -9,19 +9,19 @@
         <form method="POST" action="{% url 'proceso_actualizar_vehiculo_marca' %}" enctype="multipart/form-data">
             {% csrf_token %}
             
-            <input type="hidden" name="id" value="{{ VehiculoMarcaEditar.id }}">
+            <input type="hidden" name="id_vma_veh" value="{{ VehiculoMarcaEditar.id_vma_veh }}">
 
             <div class="mb-3">
-                <label for="nombre" class="form-label text-white">Nombre de la Marca</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" 
-                       value="{{ VehiculoMarcaEditar.nombre }}" required>
+                <label for="nombre_vma_veh" class="form-label text-white">Nombre de la Marca</label>
+                <input type="text" class="form-control" id="nombre_vma_veh" name="nombre_vma_veh" 
+                        value="{{ VehiculoMarcaEditar.nombre_vma_veh }}" required>
             </div>
 
             <div class="mb-3">
-                <label for="logo" class="form-label text-white">Logo de la Marca</label>
-                <input type="file" class="form-control bg-dark text-white" id="logo" name="logo" accept="image/*">
-                {% if VehiculoMarcaEditar.logo %}
-                    <small class="form-text text-white-50 mt-2">Logo actual: <img src="{{ VehiculoMarcaEditar.logo.url }}" alt="Logo actual" style="max-width: 80px; max-height: 80px;"></small>
+                <label for="logo_vma_veh" class="form-label text-white">Logo de la Marca</label>
+                <input type="file" class="form-control bg-dark text-white" id="logo_vma_veh" name="logo_vma_veh" accept="image/*">
+                {% if VehiculoMarcaEditar.logo_vma_veh %}
+                    <small class="form-text text-white-50 mt-2">Logo actual: <img src="{{ VehiculoMarcaEditar.logo_vma_veh.url }}" alt="Logo actual" style="max-width: 80px; max-height: 80px;"></small>
                     <div class="form-check mt-2">
                         <input class="form-check-input" type="checkbox" id="clear_logo" name="clear_logo">
                         <label class="form-check-label text-white" for="clear_logo">Eliminar logo actual</label>
@@ -32,8 +32,8 @@
             </div>
 
             <div class="mb-3">
-                <label for="descripcion" class="form-label text-white">Descripción de la Marca</label>
-                <textarea class="form-control" id="descripcion" name="descripcion" rows="3">{{ VehiculoMarcaEditar.descripcion }}</textarea>
+                <label for="descripcion_vma_veh" class="form-label text-white">Descripción de la Marca</label>
+                <textarea class="form-control" id="descripcion_vma_veh" name="descripcion_vma_veh" rows="3">{{ VehiculoMarcaEditar.descripcion_vma_veh }}</textarea>
             </div>
 
             <div class="d-flex justify-content-center mt-4">

@@ -1,0 +1,100 @@
+{% extends 'plantilla_admin.html' %} 
+{% block body %}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4">
+        <h4 class="mb-4 text-center text-primary">Gestionar Convenios por Cliente</h4>
+        <p class="text-white-50 text-center">Selecciona un cliente para asignarle o modificar su convenio.</p>
+        {% if messages %}
+            <ul class="messages list-unstyled">
+                {% for message in messages %}
+                    <li class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="mb-3">
+            <form method="get" class="d-flex">
+                <input class="form-control bg-dark border-0 me-2" type="search" placeholder="Buscar por cédula, nombre o apellido" aria-label="Search" name="q" value="{{ search_query }}">
+                <button class="btn btn-primary" type="submit">Buscar</button>
+            </form>
+        </div>
+        {% if clientes %}
+            <div class="table-responsive">
+                <table class="table table-bordered text-start">
+                    <thead>
+                        <tr class="text-white">
+                            <th scope="col">Cédula</th>
+                            <th scope="col">Nombre Completo</th>
+                            <th scope="col">Convenio Asignado</th>
+                            <th scope="col">Descuento (%)</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cliente in clientes %}
+                        <tr class="text-white-50">
+                            <td>{{ cliente.usuario.cedula }}</td>
+                            <td>{{ cliente.usuario.first_name }} {{ cliente.usuario.last_name }}</td>
+                            <td>
+                                {% if cliente.convenio %}
+                                    Convenio Activo
+                                {% else %}
+                                    <span class="text-muted">Sin Convenio</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if cliente.convenio %}
+                                    {{ cliente.convenio.descuento_porcentaje|floatformat:2 }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if cliente.convenio and cliente.convenio.activo %}
+                                    <span class="badge bg-success">Activo</span>
+                                {% elif cliente.convenio and not cliente.convenio.activo %}
+                                    <span class="badge bg-warning">Inactivo</span>
+                                {% else %}
+                                    <span class="badge bg-info">No Aplica</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'editar_convenio_cliente' pk=cliente.pk %}" class="btn btn-sm btn-primary me-2">
+                                    {% if cliente.convenio %}Editar Convenio{% else %}Asignar Convenio{% endif %}
+                                </a>
+                                {% if cliente.convenio %}
+                                    <form action="{% url 'eliminar_convenio_cliente' pk=cliente.pk %}" method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar el convenio para {{ cliente.usuario.first_name }} {{ cliente.usuario.last_name }}?');">Eliminar</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-white-50">No se encontraron clientes registrados en el sistema.</p>
+        {% endif %}
+        {% if is_paginated %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}">&laquo;</a></li>
+                    {% endif %}
+                    {% for i in page_obj.paginator.page_range %}
+                        <li class="page-item {% if page_obj.number == i %}active{% endif %}"><a class="page-link" href="?page={{ i }}{% if search_query %}&q={{ search_query }}{% endif %}">{{ i }}</a></li>
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

@@ -28,7 +28,7 @@
                             <select name="marca" id="marca" class="form-select" required>
                                 <option value="">Seleccione una marca</option>
                                 {% for marca in marcas %}
-                                    <option value="{{ marca.id }}" {% if marca_anterior|stringformat:"s" == marca.id|stringformat:"s" %}selected{% endif %}>{{ marca.nombre }}</option>
+                                    <option value="{{ marca.id_mrc_mod3 }}" {% if marca_anterior|stringformat:"s" == marca.id_mrc_mod3|stringformat:"s" %}selected{% endif %}>{{ marca.nombre_mrc_mod3 }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -37,7 +37,7 @@
                             <select name="modelo" id="modelo" class="form-select" required>
                                 <option value="">Seleccione un modelo</option>
                                 {% for modelo in modelos %}
-                                    <option value="{{ modelo.id }}" {% if modelo_anterior|stringformat:"s" == modelo.id|stringformat:"s" %}selected{% endif %}>{{ modelo.nombre }}</option>
+                                    <option value="{{ modelo.id_mdl_mod3 }}" {% if modelo_anterior|stringformat:"s" == modelo.id_mdl_mod3|stringformat:"s" %}selected{% endif %}>{{ modelo.nombre_mdl_mod3 }}</option>
                                 {% endfor %}
                             </select>
                             <small class="form-text text-muted">Asegúrate de que el modelo corresponda a la marca seleccionada.</small>
@@ -72,7 +72,7 @@
                             <select name="tipo_combustible" id="tipo_combustible" class="form-select">
                                 <option value="">Seleccione un tipo</option>
                                 {% for tipo_combustible in tipos_combustible %}
-                                    <option value="{{ tipo_combustible.id }}" {% if tipo_combustible_anterior|stringformat:"s" == tipo_combustible.id|stringformat:"s" %}selected{% endif %}>{{ tipo_combustible.nombre }}</option>
+                                    <option value="{{ tipo_combustible.id_tco_mod3 }}" {% if tipo_combustible_anterior|stringformat:"s" == tipo_combustible.id_tco_mod3|stringformat:"s" %}selected{% endif %}>{{ tipo_combustible.nombre_tco_mod3 }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -81,7 +81,7 @@
                             <select name="tipo_transmision" id="tipo_transmision" class="form-select">
                                 <option value="">Seleccione un tipo</option>
                                 {% for tipo_transmision in tipos_transmision %}
-                                    <option value="{{ tipo_transmision.id }}" {% if tipo_transmision_anterior|stringformat:"s" == tipo_transmision.id|stringformat:"s" %}selected{% endif %}>{{ tipo_transmision.nombre }}</option>
+                                    <option value="{{ tipo_transmision.id_ttr_mod3 }}" {% if tipo_transmision_anterior|stringformat:"s" == tipo_transmision.id_ttr_mod3|stringformat:"s" %}selected{% endif %}>{{ tipo_transmision.nombre_ttr_mod3 }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -90,7 +90,7 @@
                             <select name="tipo_carroceria" id="tipo_carroceria" class="form-select">
                                 <option value="">Seleccione un tipo</option>
                                 {% for tipo_carroceria in tipos_carroceria %}
-                                    <option value="{{ tipo_carroceria.id }}" {% if tipo_carroceria_anterior|stringformat:"s" == tipo_carroceria.id|stringformat:"s" %}selected{% endif %}>{{ tipo_carroceria.nombre }}</option>
+                                    <option value="{{ tipo_carroceria.id_tca_mod3 }}" {% if tipo_carroceria_anterior|stringformat:"s" == tipo_carroceria.id_tca_mod3|stringformat:"s" %}selected{% endif %}>{{ tipo_carroceria.nombre_tca_mod3 }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -133,10 +133,10 @@
                             {% for caracteristica in caracteristicas_adicionales %}
                                 <div class="col-md-4 col-sm-6">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="caracteristicas_adicionales" value="{{ caracteristica.id }}" id="caracteristica_{{ caracteristica.id }}"
-                                            {% if caracteristicas_adicionales_anterior and caracteristica.id|stringformat:"s" in caracteristicas_adicionales_anterior %}checked{% endif %}>
-                                        <label class="form-check-label text-white" for="caracteristica_{{ caracteristica.id }}">
-                                            {% if caracteristica.icono %}<i class="{{ caracteristica.icono }} me-2"></i>{% endif %} {{ caracteristica.nombre }}
+                                        <input class="form-check-input" type="checkbox" name="caracteristicas_adicionales" value="{{ caracteristica.id_cad_mod3 }}" id="caracteristica_{{ caracteristica.id_cad_mod3 }}"
+                                            {% if caracteristicas_adicionales_anterior and caracteristica.id_cad_mod3|stringformat:"s" in caracteristicas_adicionales_anterior %}checked{% endif %}>
+                                        <label class="form-check-label text-white" for="caracteristica_{{ caracteristica.id_cad_mod3 }}">
+                                            {% if caracteristica.icono %}<i class="{{ caracteristica.icono }} me-2"></i>{% endif %} {{ caracteristica.nombre_cad_mod3 }}
                                         </label>
                                     </div>
                                 </div>
@@ -159,7 +159,6 @@
                         <label for="situacion_general" class="form-label text-white">Situación General del Vehículo:</label>
                         <select name="situacion_general" id="situacion_general" class="form-select" required>
                             <option value="">Seleccione una situación</option>
-                            {# Asume que VEHICULO_SITUACION_CHOICES se pasa desde la vista #}
                             {% for choice_value, choice_label in VEHICULO_SITUACION_CHOICES %}
                                 <option value="{{ choice_value }}" {% if situacion_general_anterior|stringformat:"s" == choice_value|stringformat:"s" %}selected{% endif %}>{{ choice_label }}</option>
                             {% endfor %}
@@ -203,21 +202,22 @@
 </div>
 
 <script>
+    // Script de toggle para el detalle de siniestros (Se mantiene el original para compatibilidad en el formulario Nuevo)
     document.addEventListener('DOMContentLoaded', function() {
         const tieneSiniestrosCheckbox = document.getElementById('tiene_historial_siniestros');
         const detalleSiniestrosDiv = document.getElementById('detalle_siniestros_div');
 
-        function toggleDetalleSiniestros() {
-            if (tieneSiniestrosCheckbox.checked) {
+        tieneSiniestrosCheckbox.addEventListener('change', function() {
+            if (this.checked) {
                 detalleSiniestrosDiv.style.display = 'block';
             } else {
                 detalleSiniestrosDiv.style.display = 'none';
                 detalleSiniestrosDiv.querySelector('textarea').value = ''; 
             }
-        }
-
-        tieneSiniestrosCheckbox.addEventListener('change', toggleDetalleSiniestros);
-        toggleDetalleSiniestros(); // Call on load to set initial state
+        });
+        
+        // El estado inicial debe reflejar el valor de tiene_historial_siniestros_anterior (manejado por Django en el style, pero se deja el JS para una experiencia completa)
     });
 </script>
+
 {% endblock %}

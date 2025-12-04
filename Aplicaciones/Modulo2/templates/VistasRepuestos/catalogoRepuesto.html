@@ -34,7 +34,7 @@
             {% for producto_temporal in productos_disponibles %}
             <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
                 <div class="blog-item"
-                     data-search-term="{{ producto_temporal.nombre|lower }} {{ producto_temporal.marca_fabricante|default_if_none:''|lower }} {{ producto_temporal.categoria.nombre|lower }} {{ producto_temporal.tipo_parte.nombre|lower }}">
+                     data-search-term="{{ producto_temporal.nombre|lower }} {{ producto_temporal.marca_fabricante|default_if_none:''|lower }} {{ producto_temporal.categoria.nombre|lower }} {{ producto_temporal.tipo_parte.nombre_tpv_mod2|lower }}">
                     <div class="blog-img p-4 pb-0">
                         <a href="{% url 'ver_detalle_producto_cliente' producto_temporal.id %}">
                             {% if producto_temporal.imagen_principal_del_producto %}
@@ -51,7 +51,8 @@
                     <div class="blog-content p-4">
                         <div class="blog-comment d-flex justify-content-between py-2 px-3 mb-4">
                             <div class="small"><span class="fa fa-folder text-primary me-2"></span> {{ producto_temporal.categoria.nombre|default_if_none:"N/A" }}</div>
-                            <div class="small"><span class="fa fa-wrench text-primary me-2"></span> {{ producto_temporal.tipo_parte.nombre|default_if_none:"N/A" }}</div>
+                            <!-- Aplicando sufijo a tipo_parte.nombre -->
+                            <div class="small"><span class="fa fa-wrench text-primary me-2"></span> {{ producto_temporal.tipo_parte.nombre_tpv_mod2|default_if_none:"N/A" }}</div>
                         </div>
                         <a href="{% url 'ver_detalle_producto_cliente' producto_temporal.id %}" class="h4 d-inline-block mb-3">
                             {{ producto_temporal.nombre }}
@@ -66,7 +67,7 @@
                                 <span class="me-2">Ver Detalles</span> <i class="fa fa-info-circle"></i>
                             </a>
                             <a href="" class="btn btn-dark py-2 px-4 ms-2">
-                                <span class="me-2">Añadir al Carrito</span> <i class="fa fa-info-circle"></i>
+                                <span class="me-2">Añadir al Carrito</span> <i class="fa fa-shopping-cart"></i> 
                             </a>
                         </div>
                     </div>

@@ -1,0 +1,79 @@
+{% extends "plantilla_admin.html" %}
+{% block body %}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4 mb-4">
+        <div class="card-title text-center">
+            <h3 class="mb-0 text-white"><b>AGREGAR NUEVO SLIDE AL CARRUSEL</b></h3>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="bg-secondary rounded p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'guardar_carrucel' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="image" class="form-label text-white">Imagen del Slide:</label>
+                        <input type="file" name="image" class="form-control bg-dark text-white" id="image" required>
+                        <small class="text-info">Subir una imagen para el carrusel.</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="order" class="form-label text-white">Orden de Aparición:</label>
+                        <input type="number" name="order" class="form-control" id="order" 
+                               placeholder="Ej: 1" value="{{ order_anterior|default:'0' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="subtitle" class="form-label text-white">Subtítulo (Línea pequeña):</label>
+                        <input type="text" name="subtitle" class="form-control" id="subtitle" 
+                               placeholder="Ej: ¡Bienvenidos!" value="{{ subtitle_anterior|default:'' }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="title" class="form-label text-white">Título Principal:</label>
+                        <input type="text" name="title" class="form-control" id="title" 
+                               placeholder="Ej: Las mejores promociones" value="{{ title_anterior|default:'' }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label text-white">Descripción Detallada:</label>
+                        <textarea name="description" id="description" class="form-control" rows="3" 
+                                  placeholder="Detalles de la promoción...">{{ description_anterior|default:'' }}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="button_text" class="form-label text-white">Texto del Botón:</label>
+                        <input type="text" name="button_text" class="form-control" id="button_text" 
+                               value="{{ button_text_anterior|default:'Ver Oferta' }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="button_link" class="form-label text-white">Enlace del Botón (URL):</label>
+                        <input type="url" name="button_link" class="form-control" id="button_link" 
+                               placeholder="Ej: /productos/ofertas/" value="{{ button_link_anterior|default:'' }}">
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="is_active" class="form-check-input" id="is_active" checked>
+                        <label class="form-check-label text-white" for="is_active">Mostrar Slide (Activo)</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger me-2">Guardar Slide</button>
+                    <a href="{% url 'listado_carrucel' %}" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

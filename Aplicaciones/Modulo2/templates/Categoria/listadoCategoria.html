@@ -6,6 +6,16 @@
     <div class="bg-secondary rounded p-4">
         <h6 class="mb-4 text-white text-center">Listado de Categorías</h6> 
         
+        <!-- Mensajes de Django (para eliminación o éxito) -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <div class="d-flex justify-content-center mb-3"> 
             <a href="{% url 'nueva_categoria' %}" class="btn btn-primary">Agregar Categoría</a> 
         </div>
@@ -23,12 +33,15 @@
                 <tbody>
                     {% for categoriaTemporal in categorias %}
                     <tr>
-                        <td>{{ categoriaTemporal.id }}</td>
-                        <td>{{ categoriaTemporal.nombre }}</td>
-                        <td>{{ categoriaTemporal.descripcion }}</td>
+                        <!-- CORREGIDO: Usar los nuevos nombres de campo en la tabla -->
+                        <td>{{ categoriaTemporal.id_cat_mod2 }}</td> 
+                        <td>{{ categoriaTemporal.nombre_cat_mod2 }}</td>
+                        <td>{{ categoriaTemporal.descripcion_cat_mod2 }}</td>
                         <td>
-                            <a href="{% url 'editar_categoria' categoriaTemporal.id %}" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="{% url 'eliminar_categoria' categoriaTemporal.id %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>
+                            <!-- CORREGIDO: Pasar el nuevo ID en las URLs -->
+                            <a href="{% url 'editar_categoria' categoriaTemporal.id_cat_mod2 %}" class="btn btn-warning btn-sm">Editar</a>
+                            <!-- CORREGIDO: Pasar el nuevo ID en las URLs -->
+                            <a href="{% url 'eliminar_categoria' categoriaTemporal.id_cat_mod2 %}" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger btn-sm">Eliminar</a>
                         </td>
                     </tr>
                     {% endfor %}

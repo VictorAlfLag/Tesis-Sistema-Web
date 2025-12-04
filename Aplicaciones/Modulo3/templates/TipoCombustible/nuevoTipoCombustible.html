@@ -24,6 +24,7 @@
                     
                     <div class="mb-3">
                         <label for="nombre" class="form-label text-white">Nombre:</label>
+                        <!-- El name="nombre" está bien para la captura de datos en el POST -->
                         <input type="text" name="nombre" class="form-control" id="nombre" 
                                placeholder="Ingrese el nombre del tipo de combustible" 
                                value="{{ nombre_anterior|default:'' }}" required>
